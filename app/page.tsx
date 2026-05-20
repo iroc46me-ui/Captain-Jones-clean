@@ -78,11 +78,11 @@ function AlphaLaunchBanner() {
 function Hero() {
   const slogans = ["Not All Treasure Is Buried.", "Where Forgotten Things Find New Shores.", "Real Treasure. Real Sellers. Real Stories."];
   return (
-    <section id="home" className="relative overflow-hidden bg-cover bg-center text-white"
+    <section id="home" className="relative min-h-screen text-white flex items-center justify-center"
       style={{ 
-      backgroundImage: "url'/('harbor-hero.png')",
-    }}
-      >
+      backgroundImage: "url'/('harbor-hero.png')", backgroundSize: "cover", backgroundPosition "center", backgroundRepeat: "no-repeat",
+    }}>
+      
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(250,204,21,0.2),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(8,145,178,0.3),transparent_40%)]" />
       <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(circle_at_center,rgba(255,255,255,0.9)_1px,transparent_1px)] [background-size:32px_32px]" />
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-28">
