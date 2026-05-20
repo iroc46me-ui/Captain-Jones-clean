@@ -9,7 +9,7 @@ import {
   Coins,
   Crown,
   Database,
-  Treasure,
+  Gem,
   ImagePlus,
   LockKeyhole,
   Menu,
