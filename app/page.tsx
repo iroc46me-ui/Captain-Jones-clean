@@ -19,7 +19,7 @@ import {
   ShipWheel,
   Sparkles,
   Store,
-  Treasure,
+  
   UploadCloud,
   Users,
   WalletCards,
@@ -29,7 +29,7 @@ import {
 const sampleItems = [
   { title: "Vintage Brass Ship Lantern", price: "$68", category: "Antiques", tag: "Captain's Pick", seller: "Old Harbor Finds" },
   { title: "Desert Nugget Digger", price: "$75", category: "Gold & Prospecting", tag: "Handmade Tool", seller: "Davey's Workshop" },
-  { title: "Old Coin & Relic Lot", price: "$42", category: "Collectibles", tag: "Treasure Bin", seller: "Relic Rider" },
+  { title: "Old Coin & Relic Lot", price: "$42", category: "Collectibles", tag: "Gem Bin", seller: "Relic Rider" },
   { title: "RV Parts Mystery Box", price: "$35", category: "RV & Auto", tag: "Useful Junk", seller: "Road Dog Salvage" },
 ];
 
