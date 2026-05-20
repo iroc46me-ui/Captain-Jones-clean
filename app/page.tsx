@@ -78,7 +78,7 @@ function AlphaLaunchBanner() {
 function Hero() {
   const slogans = ["Not All Treasure Is Buried.", "Where Forgotten Things Find New Shores.", "Real Treasure. Real Sellers. Real Stories."];
   return (
-    <section id="home" className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(8,145,178,0.28),transparent_38%),linear-gradient(135deg,#020617_0%,#0f172a_45%,#11827_100%)] text-white">
+    <section id="home" className="relative overflow-hidden bg-cover bg-center text-white"
       style={{ 
       backgroundimage: "url'/('harbor-hero.png')",
     }}
