@@ -80,7 +80,7 @@ function Hero() {
   return (
     <section id="home" className="relative min-h-screen text-white flex items-center justify-center"
       style={{ 
-      backgroundImage: "url'/'harbor-hero.png')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
+      backgroundImage: "url('/harbor-hero.png')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
     }}>
       
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(250,204,21,0.2),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(8,145,178,0.3),transparent_40%)]" />
