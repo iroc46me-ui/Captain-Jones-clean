@@ -41,7 +41,7 @@ function LogoBust() {
     <div className="relative mx-auto flex h-48 w-48 items-center justify-center rounded-full border border-amber-300/30 bg-gradient-to-b from-slate-700 via-slate-950 to-cyan-950 shadow-2xl shadow-cyan-950/70">
       <div className="absolute inset-2 rounded-full border border-cyan-200/10" />
       <div className="absolute bottom-4 h-10 w-32 rounded-t-full bg-amber-800/90 shadow-lg" />
-      <div className="absolute bottom-6 flex h-14 w-36 items-center justify-center rounded-xl border border-amber-200/40 bg-gradient-to-b from-amber-500 to-amber-950 shadow-xl"><Treasure className="h-6 w-6 text-cyan-100" /></div>
+      <div className="absolute bottom-6 flex h-14 w-36 items-center justify-center rounded-xl border border-amber-200/40 bg-gradient-to-b from-amber-500 to-amber-950 shadow-xl"><Gem className="h-6 w-6 text-cyan-100" /></div>
       <div className="absolute bottom-20 h-20 w-24 rounded-t-3xl rounded-b-xl bg-stone-300 shadow-xl" />
       <div className="absolute bottom-[106px] h-16 w-28 rounded-full bg-stone-200" />
       <div className="absolute bottom-[132px] h-7 w-40 rounded-full bg-slate-950" />
