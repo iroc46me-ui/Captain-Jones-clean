@@ -80,7 +80,7 @@ function Hero() {
   return (
     <section id="home" className="relative overflow-hidden bg-cover bg-center text-white"
       style={{ 
-      backgroundimage: "url'/('harbor-hero.png')",
+      backgroundImage: "url'/('harbor-hero.png')",
     }}
       >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(250,204,21,0.2),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(8,145,178,0.3),transparent_40%)]" />
