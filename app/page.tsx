@@ -86,9 +86,7 @@ function Hero() {
       
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 text-center lg:px-8 lg:py-28">
         <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-300/30 bg-amber-300/10 px-4 py-2 text-sm font-semibold text-amber-100"><Sparkles className="h-4 w-4" />A lower-fee marketplace for useful junk, rare finds, and honest Treasure.</div>
-          <h1 className="max-w-4xl text-5xl font-black leading-tight tracking-tight sm:text-6xl lg:text-7xl">Where junk goes overboard and Treasure rises.</h1>
-          <div className="mt-6 flex flex-wrap gap-3">{slogans.map((slogan) => <span key={slogan} className="rounded-full border border-amber-200/20 bg-black/20 px-4 py-2 text-sm font-semibold text-amber-100 backdrop-blur-sm">{slogan}</span>)}</div>
+          
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">DaveyJonesJunkNTreasure.com is a seller-friendly discovery marketplace concept for tools, antiques, gold gear, collectibles, oddities, RV finds, handmade goods, and anything with a story worth selling.</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row"><a href="#sell" className="rounded-full bg-amber-300 px-7 py-4 text-center font-black text-slate-950 shadow-xl transition hover:bg-amber-200">Open a Seller Chest</a><a href="#marketplace" className="rounded-full border border-white/15 bg-white/5 px-7 py-4 text-center font-black text-white transition hover:bg-white/10">Explore the Treasure Deck</a></div>
         
