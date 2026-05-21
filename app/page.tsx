@@ -72,7 +72,12 @@ function Header() {
 }
 
 function AlphaLaunchBanner() {
-  return <section className="border-b border-amber-200/10 bg-gradient-to-r from-amber-950 via-slate-950 to-cyan-950 px-4 py-4 text-white sm:px-6 lg:px-8"><div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 md:flex-row"><div><p className="text-sm font-black uppercase tracking-[0.28em] text-amber-200">Harbor Alpha Launch Phase</p><p className="mt-1 text-slate-300">Early seller invitations are now open for antiques, prospecting gear, collectibles, oddities, RV finds, and rare Treasure.</p></div><div className="flex flex-wrap gap-3"><a href="#join" className="rounded-full bg-amber-300 px-6 py-3 font-black text-slate-950 shadow-xl transition hover:bg-amber-200">Request Seller Access</a><a href="#join" className="rounded-full border border-white/15 bg-white/5 px-6 py-3 font-black text-white transition hover:bg-white/10">Join Harbor Updates</a></div></div></section>;
+  return (
+    <section className="border-b border-amber-200/10 bg-gradient-to-r from-amber-950 via-slate-950 to-cyan-950 px-4 py-4 text-white sm:px-6 lg:px-8">
+    </section>
+    );
+}
+      
 }
 
 function Hero() {
