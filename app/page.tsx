@@ -91,10 +91,9 @@ function Hero() {
           <div className="mt-6 flex flex-wrap gap-3">{slogans.map((slogan) => <span key={slogan} className="rounded-full border border-amber-200/20 bg-black/20 px-4 py-2 text-sm font-semibold text-amber-100 backdrop-blur-sm">{slogan}</span>)}</div>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">DaveyJonesJunkNTreasure.com is a seller-friendly discovery marketplace concept for tools, antiques, gold gear, collectibles, oddities, RV finds, handmade goods, and anything with a story worth selling.</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row"><a href="#sell" className="rounded-full bg-amber-300 px-7 py-4 text-center font-black text-slate-950 shadow-xl transition hover:bg-amber-200">Open a Seller Chest</a><a href="#marketplace" className="rounded-full border border-white/15 bg-white/5 px-7 py-4 text-center font-black text-white transition hover:bg-white/10">Explore the Treasure Deck</a></div>
-        </motion.div>
-        <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15, duration: 0.7 }} className="relative"><div className="absolute -inset-8 rounded-full bg-cyan-500/10 blur-3xl" /><div className="relative rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur"><LogoBust /><div className="mt-6 rounded-3xl border border-amber-200/20 bg-slate-950/65 p-5 text-center backdrop-blur-md"><p className="text-2xl font-black text-amber-200">The Captain’s Cut</p><p className="mt-2 text-slate-300">A modest seller percentage designed to feel fairer than premium marketplace fees.</p></div></div></motion.div>
-      </div>
-    </section>
+        
+        </motion.div>  
+    <</section>
   );
 }
 
