@@ -93,7 +93,7 @@ function Hero() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row"><a href="#sell" className="rounded-full bg-amber-300 px-7 py-4 text-center font-black text-slate-950 shadow-xl transition hover:bg-amber-200">Open a Seller Chest</a><a href="#marketplace" className="rounded-full border border-white/15 bg-white/5 px-7 py-4 text-center font-black text-white transition hover:bg-white/10">Explore the Treasure Deck</a></div>
         
         </motion.div>  
-    <</section>
+    </section>
   );
 }
 
