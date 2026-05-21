@@ -84,7 +84,7 @@ function Hero() {
     }}>
       
       
-      <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-28">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 text-center lg:px-8 lg:py-28">
         <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-300/30 bg-amber-300/10 px-4 py-2 text-sm font-semibold text-amber-100"><Sparkles className="h-4 w-4" />A lower-fee marketplace for useful junk, rare finds, and honest Treasure.</div>
           <h1 className="max-w-4xl text-5xl font-black leading-tight tracking-tight sm:text-6xl lg:text-7xl">Where junk goes overboard and Treasure rises.</h1>
