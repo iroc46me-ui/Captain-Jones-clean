@@ -87,7 +87,7 @@ function Hero() {
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 text-center lg:px-8 lg:py-28">
         <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
           
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">DaveyJonesJunkNTreasure.com is a seller-friendly discovery marketplace concept for tools, antiques, gold gear, collectibles, oddities, RV finds, handmade goods, and anything with a story worth selling.</p>
+          <p className="mt-6 max-w-2xl text-sm leading-6 text-slate-300">DaveyJonesJunkNTreasure.com is a seller-friendly discovery marketplace concept for tools, antiques, gold gear, collectibles, oddities, RV finds, handmade goods, and anything with a story worth selling.</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row"><a href="#sell" className="rounded-full bg-amber-300 px-7 py-4 text-center font-black text-slate-950 shadow-xl transition hover:bg-amber-200">Open a Seller Chest</a><a href="#marketplace" className="rounded-full border border-white/15 bg-white/5 px-7 py-4 text-center font-black text-white transition hover:bg-white/10">Explore the Treasure Deck</a></div>
         
         </motion.div> 
