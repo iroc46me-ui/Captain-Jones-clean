@@ -96,7 +96,7 @@ function Header() {
       </div>
     </header>
   );
-}  
+}
 
 function Hero() {
   const slogans = ["Not All Treasure Is Buried.", "Where Forgotten Things Find New Shores.", "Real Treasure. Real Sellers. Real Stories."];
