@@ -57,6 +57,7 @@ function LogoBust() {
 }
 
 function Header() {
+  function Header() {
   const links = ["Marketplace", "Sell", "Drops", "Identity", "Build", "Join"];
 
   return (
@@ -97,7 +98,6 @@ function Header() {
     </header>
   );
 }
-
 function Hero() {
   const slogans = ["Not All Treasure Is Buried.", "Where Forgotten Things Find New Shores.", "Real Treasure. Real Sellers. Real Stories."];
   return (
