@@ -73,7 +73,7 @@ function Header() {
 
 function AlphaLaunchBanner() {
   return (
-    <section className="border-b border-amber-200/10 bg-gradient-to-r from-amber-950 via-slate-950 to-cyan-950 px-4 py-4 text-white sm:px-6 lg:px-8">
+    <section className="border-b border-amber-200/10 bg-gradient-to-r from-amber-950 via-slate-950 to-cyan-950 px-4 py-2 text-white sm:px-6 lg:px-8">
     <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 text-center sm:flex-row">
         <p className="text-sm font-semiblold tracking-wide text-amber-100">
           Harbor Apha Launch Phase
