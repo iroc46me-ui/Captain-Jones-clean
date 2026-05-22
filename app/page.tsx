@@ -57,29 +57,46 @@ function LogoBust() {
 }
 
 function Header() {
-  const [open, setOpen] = useState(false);
   const links = ["Marketplace", "Sell", "Drops", "Identity", "Build", "Join"];
+
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/85 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/90 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <a href="#home" className="flex items-center gap-3">
-  <div className="text-amber-300 text-2xl">⚓</div>
+          <div className="text-amber-300 text-2xl">⚓</div>
 
-  <div>
-    <h1 className="text-lg font-bold tracking-[0.2em] text-amber-100 uppercase">
-      Davey Jones
-    </h1>
+          <div>
+            <h1 className="text-lg font-bold tracking-[0.2em] text-amber-100 uppercase">
+              Davey Jones
+            </h1>
+            <p className="text-xs tracking-[0.35em] text-slate-300 uppercase">
+              Junk N Treasure
+            </p>
+          </div>
+        </a>
 
-    <p className="text-xs tracking-[0.35em] text-slate-300 uppercase">
-      Junk N Treasure
-    </p>
-  </div>
-</a>
- </div>
+        <nav className="hidden items-center gap-3 md:flex">
+          {links.map((link) => (
+            <a
+              key={link}
+              href={`#${link.toLowerCase()}`}
+              className="rounded-full px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-amber-200 hover:text-slate-950"
+            >
+              {link}
+            </a>
+          ))}
+        </nav>
+
+        <a
+          href="#join"
+          className="hidden rounded-full border border-amber-300/40 px-5 py-2 text-sm font-bold text-amber-100 transition hover:bg-amber-300 hover:text-slate-950 md:inline-flex"
+        >
+          Join Harbor
+        </a>
+      </div>
     </header>
-    );
-}
-      
+  );
+}  
 
 function Hero() {
   const slogans = ["Not All Treasure Is Buried.", "Where Forgotten Things Find New Shores.", "Real Treasure. Real Sellers. Real Stories."];
