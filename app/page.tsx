@@ -62,23 +62,20 @@ function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <a href="#home" className="flex items-center gap-3"><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-300 to-amber-700 text-slate-950 shadow-lg"><ShipWheel className="h-6 w-6" /></div><div><p className="text-lg font-black tracking-tight text-white">Davey Jones</p><p className="-mt-1 text-xs uppercase tracking-[0.22em] text-amber-200">Junk N Treasure</p></div></a>
-        <nav className="hidden items-center gap-7 md:flex">{links.map((link) => <a key={link} href={`#${link.toLowerCase()}`} className="text-sm font-semibold text-slate-200 transition hover:text-amber-200">{link}</a>)}<a href="#join" className="rounded-full bg-amber-300 px-5 py-2.5 text-sm font-black text-slate-950 shadow-lg transition hover:bg-amber-200">Start Selling</a></nav>
-        <button className="rounded-xl p-2 text-white md:hidden" onClick={() => setOpen(!open)} aria-label="Toggle menu">{open ? <X /> : <Menu />}</button>
-      </div>
-      {open && <div className="border-t border-white/10 bg-slate-950 px-4 py-4 md:hidden">{links.map((link) => <a key={link} href={`#${link.toLowerCase()}`} className="block rounded-xl px-3 py-3 font-semibold text-slate-200 hover:bg-white/5">{link}</a>)}</div>}
-    </header>
-  );
-}
+        <a href="#home" className="flex items-center gap-3">
+  <div className="text-amber-300 text-2xl">⚓</div>
 
-function AlphaLaunchBanner() {
-  return (
-    <section className="border-b border-amber-200/10 bg-gradient-to-r from-amber-950 via-slate-950 to-cyan-950 px-4 py-2 text-white sm:px-6 lg:px-8">
-    <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 text-center sm:flex-row">
-        <p className="text-sm font-semiblold tracking-wide text-amber-100">
-          Harbor Apha Launch Phase
-        </p>
-    </div>
+  <div>
+    <h1 className="text-lg font-bold tracking-[0.2em] text-amber-100 uppercase">
+      Davey Jones
+    </h1>
+
+    <p className="text-xs tracking-[0.35em] text-slate-300 uppercase">
+      Junk N Treasure
+    </p>
+  </div>
+</a>
+ </div>
     </section>
     );
 }
