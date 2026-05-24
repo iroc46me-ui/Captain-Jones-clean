@@ -66,7 +66,7 @@ function Header() {
        <a href="#home" className="flex items-center gap-3 no-underline">
   <div className="text-amber-300 text-2xl">⚓</div>
 
-  <div
+  <div>
     <h1 className="text-lg font-bold tracking-[0.2em] text-amber-100 uppercase">
       Davey Jones
     </h1>
