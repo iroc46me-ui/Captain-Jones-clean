@@ -79,12 +79,7 @@ function Header() {
           
         </nav>
 
-        <a
-          href="#join"
-          className="hidden rounded-full border border-amber-300/40 px-5 py-2 text-sm font-bold text-amber-100 transition hover:bg-amber-300 hover:text-slate-950 md:inline-flex"
-        >
-          Join Harbor
-        </a>
+        
       </div>
     </header>
   );
