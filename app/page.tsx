@@ -95,6 +95,7 @@ function LogoBust() {
   </a>
 
 </div>
+    </header>
   );
 }
 function Hero() {
