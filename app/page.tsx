@@ -64,15 +64,7 @@ function LogoBust() {
     <div className="flex items-center gap-3">
     <span className="text-3xl text-amber-300">⚓</span>
 
-    <div>
-      <h1 className="text-3xl font-bold text-amber-200">
-        Davey Jones
-      </h1>
-
-      <span className="text-sm tracking-[0.3em] text-amber-100 uppercase">
-        Junk N Treasure
-      </span>
-    </div>
+   
   </div>
 
   <nav className="hidden md:flex items-center gap-8">
