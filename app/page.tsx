@@ -60,9 +60,43 @@ function LogoBust() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/90 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1 sm:px-6 lg:px-8">
-        </div>
-    </header>
+      
+    </header><div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1 sm:px-6 lg:px-8">
+
+  <div className="flex items-center gap-3">
+    <span className="text-3xl text-amber-300">⚓</span>
+
+    <div>
+      <h1 className="text-3xl font-bold text-amber-200">
+        Davey Jones
+      </h1>
+
+      <span className="text-sm tracking-[0.3em] text-amber-100 uppercase">
+        Junk N Treasure
+      </span>
+    </div>
+  </div>
+
+  <nav className="hidden md:flex items-center gap-8">
+    {["Open a Chest","Treasure Deck","The Captain's Cut","Live Events","About"].map((item) => (
+      <a
+        key={item}
+        href="#"
+        className="text-sm text-slate-200 hover:text-amber-300 hover:drop-shadow-[0_0_8px_rgba(251,191,36,0.6)] transition-all duration-300"
+      >
+        {item}
+      </a>
+    ))}
+  </nav>
+
+  <a
+    href="#join"
+    className="rounded-md border border-amber-400/30 bg-amber-500/10 px-5 py-2 text-sm text-amber-100 hover:bg-amber-500/20 transition-all duration-300"
+  >
+    Join Harbor
+  </a>
+
+</div>
   );
 }
 function Hero() {
