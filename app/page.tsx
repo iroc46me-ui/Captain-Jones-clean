@@ -76,7 +76,7 @@ function Header() {
     </span>
   </div>
 </a>
-          ))}
+          
         </nav>
 
         <a
