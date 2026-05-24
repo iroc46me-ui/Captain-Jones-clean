@@ -69,7 +69,7 @@ function LogoBust() {
 
   <nav className="hidden md:flex items-center gap-8">
     {["Open a Chest","Treasure Deck","The Captain's Cut","Live Events","About"].map((item) => (
-      <a
+      <a style={{ cursor: "pointer" }}
         key={item}
         href={item === "live-events " ? "#live-events" : "#"
         }
