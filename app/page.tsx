@@ -55,8 +55,6 @@ function LogoBust() {
     </div>
   );
 }
-
-function Header() {
   function Header() {
   const links = ["Marketplace", "Sell", "Drops", "Identity", "Build", "Join"];
 
