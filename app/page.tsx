@@ -69,10 +69,10 @@ function LogoBust() {
 
   <nav className="relative z-[10000] hidden md:flex items-center gap-8 pointer-events-auto bg-red-500">
   <a
-    href="#live-events"
+    href="#live events"
     className="relative z-[10000] pointer-events-auto text-sm text-slate-200 hover:text-amber-300 cursor-pointer"
   >
-    Live Events
+    Live Test
   </a>
 
   <a
