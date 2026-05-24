@@ -76,11 +76,7 @@ function Header() {
     </span>
   </div>
 </a>
-          
-        </nav>
-
-        
-      </div>
+  </div>
     </header>
   );
 }
