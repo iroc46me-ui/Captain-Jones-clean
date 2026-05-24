@@ -83,7 +83,7 @@ function Hero() {
   return (
     <section id="home" className="relative min-h-screen text-white flex items-center justify-center"
       style={{ 
-      backgroundImage: "url('/harbor-hero.png')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
+      backgroundImage: "url('/harbor-hero.png')", backgroundSize: "cover", backgroundPosition: "center top", backgroundRepeat: "no-repeat",
     }}>
       
      <div className="absolute inset-0 bg-black/35" /> 
