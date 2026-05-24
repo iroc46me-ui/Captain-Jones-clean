@@ -67,24 +67,24 @@ function LogoBust() {
    
   </div>
 
-  <nav className="hidden md:flex items-center gap-8">
+  <nav className="relative z-[10000] hidden md:flex items-center gap-8 pointer-events-auto">
   <a
     href="#live-events"
-    className="text-sm text-slate-200 hover:text-amber-300 cursor-pointer"
+    className="relative z-[10000] pointer-events-auto text-sm text-slate-200 hover:text-amber-300 cursor-pointer"
   >
     Live Events
   </a>
 
   <a
     href="#marketplace"
-    className="text-sm text-slate-200 hover:text-amber-300 cursor-pointer"
+    className="relative z-[10000] pointer-events-auto text-sm text-slate-200 hover:text-amber-300 cursor-pointer"
   >
     Treasure Deck
   </a>
 
   <a
     href="#about"
-    className="text-sm text-slate-200 hover:text-amber-300 cursor-pointer"
+    className="relative z-[10000] pointer-events-auto text-sm text-slate-200 hover:text-amber-300 cursor-pointer"
   >
     About
   </a>
