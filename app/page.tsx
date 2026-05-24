@@ -63,19 +63,19 @@ function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/90 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        <a href="#home" className="flex items-center gap-3 no-underline"> <span className="text-amber-300 text-2xl">⚓</span>
-          <span className="flex flex-col leading-tight"> <span className="text-lg font-bold tracking-[0.22em] text-amber-100 uppercase"> Davey Jones </span> 
-            <span className="text-xs tracking-[0.35em] text-slate-300 uppercase"> Junk N Treasure </span> </span> </a>
+       <a href="#home" className="flex items-center gap-3">
+  <div className="text-amber-300 text-2xl">⚓</div>
 
-        <nav className="hidden items-center gap-3 md:flex">
-          {links.map((link) => (
-            <a
-              key={link}
-              href={`#${link.toLowerCase()}`}
-              className="rounded-full px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-amber-200 hover:text-slate-950"
-            >
-              {link}
-            </a>
+  <div>
+    <h1 className="text-lg font-bold tracking-[0.2em] text-amber-100 uppercase">
+      Davey Jones
+    </h1>
+
+    <span className="text-xs tracking-[0.35em] text-slate-300 uppercase">
+      Junk N Treasure
+    </span>
+  </div>
+</a>
           ))}
         </nav>
 
