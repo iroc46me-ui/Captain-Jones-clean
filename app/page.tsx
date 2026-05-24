@@ -71,7 +71,7 @@ function LogoBust() {
     {["Open a Chest","Treasure Deck","The Captain's Cut","Live Events","About"].map((item) => (
       <a
         key={item}
-        href="#"
+        href={`#${item.toLowerCase().replace(/\s+/g, "-")}`}
         className="text-sm text-slate-200 hover:text-amber-300 hover:drop-shadow-[0_0_8px_rgba(251,191,36,0.6)] transition-all duration-300"
       >
         {item}
