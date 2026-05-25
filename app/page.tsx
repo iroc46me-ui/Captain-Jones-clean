@@ -124,8 +124,8 @@ function LiveBanner() {
     <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-amber-200/20 bg-gradient-to-r from-slate-950 via-cyan-950 to-slate-950 shadow-2xl">
       <div className="grid gap-3 p-3 lg:grid-cols-[1fr_auto] lg:items-center lg:p-4"><div>
         <p className="text-sm font-black uppercase tracking-[0.3em] text-red-500">Live Treasure Event</p>
-        <h2 className="mt-3 text-4xl font-black tracking-tight">The Captain's Midnight Treasure Drop</h2>
-        <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">A rotating live event featuring rare listings, strange finds, collectible lots, estate discoveries, and featured sellers from around the harbor.</p></div><div className="flex flex-col gap-4"><a href="#join" className="rounded-full bg-amber-300 px-8 py-4 text-center font-black text-slate-950 shadow-xl transition hover:bg-amber-200">Enter the Drop</a><a href="#join" className="rounded-full border border-white/15 bg-white/5 px-8 py-4 text-center font-black text-white transition hover:bg-white/10">Become Featured Seller</a></div></div></div></section>;
+        <h2 className="mt-1 text-2xl md:text-3xl font-bold tracking-tight text-white">The Captain's Midnight Treasure Drop</h2>
+        <p className="mt-3 max-w-2xl text-base leading-6 tes-slate-300"></p><A rotating live event featuring rare listings, strange finds, collectible lots, estate discoveries, and featured sellers from around the harbor.</p></div><div className="flex flex-col gap-4"><a href="#join" className="rounded-full bg-amber-300 px-8 py-4 text-center font-black text-slate-950 shadow-xl transition hover:bg-amber-200">Enter the Drop</a><a href="#join" className="rounded-full border border-white/15 bg-white/5 px-8 py-4 text-center font-black text-white transition hover:bg-white/10">Become Featured Seller</a></div></div></div></section>;
 }
 
 function Marketplace() {
