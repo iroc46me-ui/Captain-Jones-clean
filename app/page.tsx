@@ -109,7 +109,7 @@ function Hero() {
       backgroundImage: "url('/harbor-hero.png')", backgroundSize: "cover", backgroundPosition: "center top", backgroundRepeat: "no-repeat",
     }}>
       
-     <div className="absolute inset-0 bg-black/35 pointer-events-none"/> 
+      {/* overlay removed for testing */} 
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 text-center lg:px-8 lg:py-28">
         <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
           
