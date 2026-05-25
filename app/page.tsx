@@ -120,7 +120,7 @@ function Hero() {
 }
 
 function LiveBanner() {
-  return <section id="live-events" className="bg-slate-950 px-4 py-8 text-white sm:px-6 lg:px-8">
+  return <section id="live-events" className="scroll-mt-24 bg-slate-950 px-4 py-8 text-white sm:px-6 lg:px-8">
     <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-amber-200/20 bg-gradient-to-r from-slate-950 via-cyan-950 to-slate-950 shadow-2xl">
       <div className="grid gap-6 p-8 lg:grid-cols-[1fr_auto] lg:items-center lg:p-12"><div>
         <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">Live Treasure Event</p>
