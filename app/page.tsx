@@ -70,7 +70,7 @@ function LogoBust() {
   <nav className="relative z-[10000] hidden md:flex items-center gap-8 pointer-events-auto bg-red-500">
   <a
     href="#live-events"
-    className="relative z-[10000] pointer-events-auto text-sm text-slate-200 hover:text-amber-300 cursor-pointer"
+    className="relative z-[10000] pointer-events-auto rounded-md px-2 py-1 text-sm text-slate-200 transition-all hover:bg-amber-300/20 hover:text-amber-200 hover:underline cursor-pointer"
   >
     Live Test
   </a>
