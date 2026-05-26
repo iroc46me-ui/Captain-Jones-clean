@@ -134,7 +134,7 @@ function Marketplace() {
   const [query, setQuery] = useState("");
   const visibleItems = useMemo(() => sampleItems.filter((item) => `${item.title} ${item.category} ${item.seller}`.toLowerCase().includes(query.toLowerCase())), [query]);
   return (
-    <section id="marketplace" className="bg-gradient-to-b from-cyan-950 to-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8">
+    <section id="marketplace" className="bg-gradient-to-b from-cyan-950 to-slate-950 px-4 py-6 text-white sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl"><div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div><p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">Marketplace Preview</p>
           <h2 className="mt-0 text-xl font-black tracking-tight text-red-500"> Treasure by category</h2>
