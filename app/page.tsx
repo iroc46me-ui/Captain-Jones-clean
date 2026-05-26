@@ -150,7 +150,8 @@ function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: strin
 
 function Cards({ items }: { items: [string, string, React.ReactNode?][] }) {
   return <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{items.map(([title, text, icon]) => 
-    <div key={title} className="rounded-[2rem] border border-white/10 bg-white/[0.06] p-7 shadow-xl">{icon}<h3 className="mt-4 text-2xl font-black text-amber-200">{title}</h3><p className="mt-4 leading-7 text-slate-300">{text}</p></div>)}</div>;
+    <div key={title} className="rounded-[2rem] border border-white/10 bg-white/[0.06] p-3 shadow-xl">{icon}
+      <h3 className="mt-4 text-2xl font-black text-amber-200">{title}</h3><p className="mt-4 leading-7 text-slate-300">{text}</p></div>)}</div>;
 }
 
 function IdentityAndBuild() {
