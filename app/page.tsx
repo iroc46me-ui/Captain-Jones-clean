@@ -114,10 +114,10 @@ function Hero() {
 
 <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
   <div className="mt-[30.5rem] flex justify-center gap-4">
-    <a href="#join" className="rounded-md border border-transparent px-30 py-5 text-sm font-bold text-white hover:bg-amber-300/10">
+    <a href="#join" className="rounded-md border border-transparent px-28 py-5 text-sm font-bold text-white hover:bg-amber-300/10">
       
     </a>
-    <a href="#marketplace" className="rounded-md border border-transparent px-30 py-5 text-sm font-bold text-white hover:bg-amber-300/10">
+    <a href="#marketplace" className="rounded-md border border-transparent px-32 py-5 text-sm font-bold text-white hover:bg-amber-300/10">
       
     </a>
   </div>
