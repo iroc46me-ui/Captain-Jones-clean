@@ -122,7 +122,7 @@ function Hero() {
 function LiveBanner() {
   return <section id="live-events" className="scroll-mt-24 bg-slate-950 px-4 py-4 text-white sm:px-6 lg:px-8">
     <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-amber-200/20 bg-gradient-to-r from-slate-950 via-cyan-950 to-slate-950 shadow-2xl">
-      <div className="grid gap-3 p-3 lg:grid-cols-[1fr_auto] lg:items-center lg:p-4"><div>
+      <div className="grid gap-2 p-2 lg:grid-cols-[1fr_auto] lg:items-center lg:p-2"><div>
         <p className="text-sm font-black uppercase tracking-[0.3em] text-red-500">Live Treasure Event</p>
         <h2 className="mt-1 text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight text-white">The Captain's Midnight Treasure Drop</h2>
         <p className="mt-3 max-w-2xl text-base leading-6 text-slate-300">
