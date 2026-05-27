@@ -113,7 +113,7 @@ function Hero() {
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 text-center lg:px-8 lg:py-28">
 
 <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-  <div className="mt-[30.5rem] flex justify-center gap-4">
+  <div className="mt-[30.5rem] flex justify-center gap-3">
     <a href="#join" className="rounded-md border border-transparent px-27 py-5 text-sm font-bold text-white hover:bg-amber-300/10">
       
     </a>
