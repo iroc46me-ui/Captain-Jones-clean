@@ -104,7 +104,7 @@ function LogoBust() {
 function Hero() {
   const slogans = ["Not All Treasure Is Buried.", "Where Forgotten Things Find New Shores.", "Real Treasure. Real Sellers. Real Stories."];
   return (
-    <section id="home" className="relative min-h-screen text-white flex items-center justify-center"
+    <section id="home" className="relative min-h-screen pb-24 text-white flex items-center justify-center"
       style={{ 
       backgroundImage: "url('/harbor-hero.png')", backgroundSize: "cover", backgroundPosition: "center top", backgroundRepeat: "no-repeat",
     }}>
