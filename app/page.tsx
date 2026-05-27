@@ -117,7 +117,7 @@ function Hero() {
     <a href="#join" className="rounded-md border border-transparent px-28 py-5 text-sm font-bold text-white hover:bg-amber-300/10">
       
     </a>
-    <a href="#marketplace" className="rounded-md border border-transparent px-31 py-5 text-sm font-bold text-white hover:bg-amber-300/10">
+    <a href="#marketplace" className="rounded-md border border-transparent px-30 py-5 text-sm font-bold text-white hover:bg-amber-300/10">
       
     </a>
   </div>
