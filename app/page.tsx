@@ -56,48 +56,29 @@ function LogoBust() {
   );
 }
   function Header() {
-  const links = ["Marketplace", "Sell", "Drops", "Identity", "Build", "Join"];
+  const navLink =
+    "rounded-md px-3 py-2 text-sm font-bold text-white transition hover:bg-amber-300/20 hover:text-amber-200";
 
   return (
     <header className="sticky top-0 z-[9999] border-b border-white/10 bg-slate-950/90 backdrop-blur-xl">
-    <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1 sm:px-6 lg:px-8">
-    <div className="flex items-center gap-3">
-    <span className="text-3xl text-amber-300">⚓</span>
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
+        <div className="text-3xl text-amber-300">⚓</div>
 
-   
-  </div>
+        <nav className="hidden md:flex items-center gap-2">
+          <a href="#join" className={navLink}>Open a Chest</a>
+          <a href="#marketplace" className={navLink}>Treasure Deck</a>
+          <a href="#captains-cut" className={navLink}>The Captain&apos;s Cut</a>
+          <a href="#live-events" className={navLink}>Live Events</a>
+          <a href="#about" className={navLink}>About</a>
+        </nav>
 
-  <nav className="relative z-[10000] hidden md:flex items-center gap-8 pointer-events-auto bg-red-500">
-  <a
-    href="#live-events"
-    className="relative z-[10000] pointer-events-auto rounded-md px-2 py-1 text-sm text-slate-200 transition-all hover:bg-amber-300/20 hover:text-amber-200 hover:underline cursor-pointer"
-  >
-    Live Test
-  </a>
-
-  <a
-    href="#marketplace"
-    className="relative z-[10000] pointer-events-auto text-sm text-slate-200 hover:text-amber-300 cursor-pointer"
-  >
-    Treasure Deck
-  </a>
-
-  <a
-    href="#about"
-    className="relative z-[10000] pointer-events-auto text-sm text-slate-200 hover:text-amber-300 cursor-pointer"
-  >
-    About
-  </a>
-</nav>
-
-  <a
-    href="#join"
-    className="rounded-md border border-amber-400/30 bg-amber-500/10 px-5 py-2 text-sm text-amber-100 hover:bg-amber-500/20 transition-all duration-300"
-  >
-    Join Harbor
-  </a>
-
-</div>
+        <a
+          href="#join"
+          className="rounded-md border border-amber-400/30 bg-amber-500/10 px-5 py-2 text-sm font-bold text-amber-100 transition hover:bg-amber-500/20"
+        >
+          Join Harbor
+        </a>
+      </div>
     </header>
   );
 }
