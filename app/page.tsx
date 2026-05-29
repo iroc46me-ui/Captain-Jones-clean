@@ -83,28 +83,69 @@ function LogoBust() {
   );
 }
 function Hero() {
-  const slogans = ["Not All Treasure Is Buried.", "Where Forgotten Things Find New Shores.", "Real Treasure. Real Sellers. Real Stories."];
-  return (
-    <section id="home" className="relative min-h-screen pb-24 text-white flex items-center justify-center"
-      style={{ 
-      backgroundImage: "url('/harbor-hero.png')", backgroundSize: "cover", backgroundPosition: "center center", backgroundRepeat: "no-repeat",
-    }}>
-       <div className="absolute inset-O bg black/35 pointer-events-none"/> 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 text-center lg:px-8 lg:py-28">
+  const slogans = [
+    "Not All Treasure Is Buried.",
+    "Where Forgotten Things Find New Shores.",
+    "Real Treasure. Real Sellers. Real Stories.",
+  ];
 
-<motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-  <div className="mt-[30.5rem] flex justify-center gap-4">
-    <a href="#join" className="-ml-1 rounded-md border border-transparent px-27 py-5 hover:bg-amber-300/10">
-      
-    </a>
-    <a href="#marketplace" className="rounded-md border border-transparent px-31 py-5 text-sm font-bold text-white hover:bg-amber-300/10">
-      
-    </a>
-  </div>
-</motion.div>
+  return (
+    <section
+      id="home"
+      className="relative min-h-screen text-white flex items-center justify-center overflow-hidden"
+      style={{
+        backgroundImage: "url('/harbor-hero.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+
+      <div className="relative z-10 mx-auto max-w-5xl px-4 py-24 text-center sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 22 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+        >
+          <div className="mb-6 flex flex-wrap justify-center gap-3">
+            {slogans.map((slogan) => (
+              <span
+                key={slogan}
+                className="rounded-full border border-amber-200/30 bg-black/35 px-4 py-2 text-sm font-semibold text-amber-100 backdrop-blur"
+              >
+                {slogan}
+              </span>
+            ))}
+          </div>
+
+          <h1 className="text-4xl font-black tracking-tight text-white sm:text-6xl lg:text-7xl">
+            Davey Jones Junk N Treasure
+          </h1>
+
+          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-200">
+            A cinematic harbor marketplace for rare finds, useful junk, estate discoveries, handmade tools, and treasure with a story.
+          </p>
+
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a
+              href="#join"
+              className="rounded-md bg-amber-300 px-8 py-4 text-sm font-black text-slate-950 shadow-lg shadow-amber-950/40 transition hover:bg-amber-200"
+            >
+              Open a Seller Chest
+            </a>
+
+            <a
+              href="#marketplace"
+              className="rounded-md border border-amber-200/60 bg-black/35 px-8 py-4 text-sm font-black text-white backdrop-blur transition hover:bg-amber-300/20"
+            >
+              Explore the Treasure Deck
+            </a>
+          </div>
+        </motion.div>
       </div>
     </section>
-    );
+  );
 }
 
 function LiveBanner() {
