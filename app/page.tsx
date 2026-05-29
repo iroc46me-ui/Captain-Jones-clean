@@ -67,7 +67,7 @@ function LogoBust() {
         <nav className="hidden md:flex items-center gap-2">
           <a href="#join" className={navLink}>Open a Chest</a>
           <a href="#marketplace" className={navLink}>Treasure Deck</a>
-          <a href="#captains-cut" className={navLink}>The Captain&apos;s Cut</a>
+          <a href="#identity" className={navLink}>The Captain&apos;s Cut</a>
           <a href="#live-events" className={navLink}>Live Events</a>
           <a href="#about" className={navLink}>About</a>
         </nav>
