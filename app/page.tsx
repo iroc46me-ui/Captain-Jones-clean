@@ -86,7 +86,7 @@ function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen text-white flex items-center justify-center overflow-hidden"
+      className="relative min-h-[75vh] screen text-white flex items-center justify-center overflow-hidden"
       style={{
         backgroundImage: "url('/harbor-hero.png')",
         backgroundSize: "cover",
