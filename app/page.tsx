@@ -102,7 +102,7 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          <div className="mt-[22.5rem] flex justify-center gap-2">
+          <div className="mt-[24.5rem] flex justify-center gap-2">
             <a
               href="#join"
               className="-ml-1 rounded-md border border-transparent px-20 py-1 text-transparent hover:bg-amber-300/10"
