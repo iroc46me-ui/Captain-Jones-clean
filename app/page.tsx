@@ -102,17 +102,17 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          <div className="mt-[30.5rem] flex justify-center gap-4">
+          <div className="mt-[28.5rem] flex justify-center gap-3">
             <a
               href="#join"
-              className="-ml-1 rounded-md border border-transparent px-27 py-5 text-transparent hover:bg-amber-300/10"
+              className="-ml-1 rounded-md border border-transparent px-20 py-3 text-transparent hover:bg-amber-300/10"
             >
               Open a Seller Chest
             </a>
 
             <a
               href="#marketplace"
-              className="rounded-md border border-transparent px-31 py-5 text-transparent hover:bg-amber-300/10"
+              className="rounded-md border border-transparent px-22 py-3 text-transparent hover:bg-amber-300/10"
             >
               Explore the Treasure Deck
             </a>
