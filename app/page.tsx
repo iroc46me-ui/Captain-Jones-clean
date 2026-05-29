@@ -102,10 +102,10 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          <div className="mt-[20.5rem] flex justify-center gap-3">
+          <div className="mt-[15.5rem] flex justify-center gap-2">
             <a
               href="#join"
-              className="-ml-1 rounded-md border border-transparent px-18 py-1 text-transparent hover:bg-amber-300/10"
+              className="-ml-1 rounded-md border border-transparent px-20 py-1 text-transparent hover:bg-amber-300/10"
             >
               Open a Seller Chest
             </a>
