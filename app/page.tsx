@@ -105,14 +105,14 @@ function Hero() {
           <div className="mt-[24.5rem] flex justify-center gap-2">
             <a
               href="#join"
-              className="-ml-1 rounded-md border border-transparent px-14 py-2 text-transparent hover:bg-amber-300/10"
+              className="-ml-1 rounded-md border border-transparent px-12 py-2 text-transparent hover:bg-amber-300/10"
             >
               Open a Seller Chest
             </a>
 
             <a
               href="#marketplace"
-              className="rounded-md border border-transparent px-14 py-2 text-transparent hover:bg-amber-300/10"
+              className="rounded-md border border-transparent px-12 py-2 text-transparent hover:bg-amber-300/10"
             >
               Explore the Treasure Deck
             </a>
