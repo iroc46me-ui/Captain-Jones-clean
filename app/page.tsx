@@ -112,7 +112,7 @@ function Hero() {
 
             <a
               href="#marketplace"
-              className="rounded-md border border-transparent px-10 py-2 text-transparent hover:bg-amber-300/10"
+              className="rounded-md border border-transparent px-8 py-2 text-transparent hover:bg-amber-300/10"
             >
               Explore the Treasure Deck
             </a>
