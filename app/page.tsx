@@ -89,7 +89,7 @@ function Hero() {
       style={{ 
       backgroundImage: "url('/harbor-hero.png')", backgroundSize: "cover", backgroundPosition: "center center", backgroundRepeat: "no-repeat",
     }}>
-   <div className="absolute top-16 left-0 right-0 h-10 bg-slate-950/90 z-10 pointer-events-none"></div>   
+   <div className="absolute top-14 left-0 right-0 h-20 bg-slate-950/90 z-20 pointer-events-none"></div>   
       <div className="absolute inset-O bg black/35 pointer-events-none"/> 
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 text-center lg:px-8 lg:py-28">
 
