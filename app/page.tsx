@@ -27,15 +27,51 @@ import {
 } from "lucide-react";
 
 const sampleItems = [
-  { title: "Vintage Brass Ship Lantern", price: "$68", category: "Antiques", tag: "Captain's Pick", seller: "Old Harbor Finds" },
-  { title: "Desert Nugget Digger", price: "$75", category: "Gold & Prospecting", tag: "Handmade Tool", seller: "Davey's Workshop" },
-  { title: "Old Coin & Relic Lot", price: "$42", category: "Collectibles", tag: "Treasure Bin", seller: "Relic Rider" },
-  { title: "RV Parts Mystery Box", price: "$35", category: "RV & Auto", tag: "Useful Junk", seller: "Road Dog Salvage" },
+  
+const sampleItems = [
+  {
+    title: "Vintage Brass Ship Lantern",
+    price: "$68",
+    category: "Antiques",
+    tag: "Captain's Pick",
+    seller: "Old Harbor Finds",
+  },
+  {
+    title: "Desert Nugget Digger",
+    price: "$75",
+    category: "Gold & Prospecting",
+    tag: "Handmade Tool",
+    seller: "Davey's Workshop",
+  },
+  {
+    title: "Old Coin & Relic Lot",
+    price: "$42",
+    category: "Collectibles",
+    tag: "Treasure Bin",
+    seller: "Relic Rider",
+  },
+  {
+    title: "RV Parts Mystery Box",
+    price: "$35",
+    category: "RV & Auto",
+    tag: "Useful Junk",
+    seller: "Road Dog Salvage",
+  },
+  {
+    title: "Prospector’s Brass Scale",
+    price: "$58",
+    category: "Gold & Prospecting",
+    tag: "Field Gear",
+    seller: "Quartzsite Cache",
+  },
+  {
+    title: "Estate Drawer Oddities",
+    price: "$29",
+    category: "Estate Finds",
+    tag: "Oddities",
+    seller: "Second Drawer Co.",
+  },
 ];
-
-const categories = ["Gold & Prospecting", "Antiques", "Tools", "RV & Auto", "Collectibles", "Handmade", "Estate Finds", "Oddities", "Local Pickup", "Captain's Picks"];
-const brandButtons = ["Browse Treasure", "Become a Seller", "Captain's Picks", "Live Treasure Drops", "Explore Categories", "Trusted Captains", "Join the Harbor", "Request Seller Invite"];
-
 function LogoBust() {
   return (
     <div className="relative mx-auto flex h-48 w-48 items-center justify-center rounded-full border border-amber-300/30 bg-gradient-to-b from-slate-700 via-slate-950 to-cyan-950 shadow-2xl shadow-cyan-950/70">
