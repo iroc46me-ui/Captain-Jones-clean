@@ -88,6 +88,18 @@ const categories = [
   "Local Pickup",
   "Captain's Picks",
 ];
+const categoryImages = {
+  "Gold & Prospecting": "gold",
+  "Antiques": "wheel",
+  "RV & Auto": "compass",
+  "Collectibles": "chest",
+  "Handmade": "hammer",
+  "Estate Finds": "scroll",
+  "Oddities": "kraken",
+  "Local Pickup": "anchor",
+  "Captain's Picks": "flag",
+}
+
 const brandButtons = [
   "Browse Treasure",
   "Become a Seller",
