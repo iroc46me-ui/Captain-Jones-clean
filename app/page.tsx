@@ -195,6 +195,9 @@ export default function Home() {
       <Hero />
       <LiveBanner />
       <Marketplace />
+      <identityAndBuild/>
+      <SellerInviteForm/>
+      <Footer/>
     </div>
   );
 }
