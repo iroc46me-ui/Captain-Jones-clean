@@ -209,8 +209,17 @@ function Marketplace() {
           <input value={query} onChange={(e) => setQuery(e.target.value)} 
             placeholder="Search the Treasure deck..." className="relative -top-4 w-full rounded-2xl border border-white/10 bg-white/10 py-4 pl-12 pr-4 text-white placeholder:text-slate-400 outline-none focus:border-amber-200"/></div>
       </div>
-<div className="mt-2 flex flex-wrap gap-3">{categories.map((category) => <span key={category} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-slate-200">{category}</span>)}</div><div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{visibleItems.map((item) => <div key={item.title} className="group rounded-3xl border border-white/10 bg-white/[0.06] p-5 shadow-xl transition hover:-translate-y-1 hover:bg-white/[0.09]">
-        <div className="flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-800 to-cyan-900">
+<div className="mt-2 flex flex-wrap gap-3">{categories.map((category) => <span key={category} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-slate-200">{category}</span>)}</div><div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{visibleItems.map((item) => 
+
+<a
+  key={item.title}
+  href={`#item-${item.slug}`}
+  className="group block rounded-[2rem] border border-white/10 bg-white/[0.06] p-5 shadow-xl transition hover:border-amber-200/40 hover:bg-white/[0.09]"
+
+<a/>
+       
+
+ <div className="flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-800 to-cyan-900">
           <Gem className="h-16 w-16 text-amber-200 transition group-hover:scale-110" /></div>
         <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-cyan-200">{item.tag}</p>
         <h3 className="mt-2 text-xl font-black">{item.title}</h3><div className="mt-4 flex items-center justify-between">
