@@ -27,8 +27,6 @@ import {
 } from "lucide-react";
 
 const sampleItems = [
-  
-const sampleItems = [
   {
     title: "Vintage Brass Ship Lantern",
     price: "$68",
