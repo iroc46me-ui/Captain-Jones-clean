@@ -29,6 +29,7 @@ import {
 const sampleItems = [
   {
     title: "Vintage Brass Ship Lantern",
+    slug: "Vintage Brass Ship Lantern",
     price: "$68",
     category: "Antiques",
     tag: "Captain's Pick",
@@ -36,6 +37,7 @@ const sampleItems = [
   },
   {
     title: "Desert Nugget Digger",
+    slug: "Desert Nugget Digger",
     price: "$75",
     category: "Gold & Prospecting",
     tag: "Handmade Tool",
@@ -43,6 +45,7 @@ const sampleItems = [
   },
   {
     title: "Old Coin & Relic Lot",
+     slug: "Old Coun & Relic Lot",
     price: "$42",
     category: "Collectibles",
     tag: "Treasure Bin",
@@ -50,6 +53,7 @@ const sampleItems = [
   },
   {
     title: "RV Parts Mystery Box",
+     slug: "RV Parts Mystery Box",
     price: "$35",
     category: "RV & Auto",
     tag: "Useful Junk",
@@ -57,6 +61,7 @@ const sampleItems = [
   },
   {
     title: "Prospector’s Brass Scale",
+     slug: "Prospector's Brass Scale",
     price: "$58",
     category: "Gold & Prospecting",
     tag: "Field Gear",
@@ -64,6 +69,7 @@ const sampleItems = [
   },
   {
     title: "Estate Drawer Oddities",
+     slug: "Estate Drawer Oddities ",
     price: "$29",
     category: "Estate Finds",
     tag: "Oddities",
@@ -202,7 +208,8 @@ function Marketplace() {
           <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
           <input value={query} onChange={(e) => setQuery(e.target.value)} 
             placeholder="Search the Treasure deck..." className="relative -top-4 w-full rounded-2xl border border-white/10 bg-white/10 py-4 pl-12 pr-4 text-white placeholder:text-slate-400 outline-none focus:border-amber-200"/></div>
-      </div><div className="mt-2 flex flex-wrap gap-3">{categories.map((category) => <span key={category} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-slate-200">{category}</span>)}</div><div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{visibleItems.map((item) => <div key={item.title} className="group rounded-3xl border border-white/10 bg-white/[0.06] p-5 shadow-xl transition hover:-translate-y-1 hover:bg-white/[0.09]">
+      </div>
+<div className="mt-2 flex flex-wrap gap-3">{categories.map((category) => <span key={category} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-slate-200">{category}</span>)}</div><div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{visibleItems.map((item) => <div key={item.title} className="group rounded-3xl border border-white/10 bg-white/[0.06] p-5 shadow-xl transition hover:-translate-y-1 hover:bg-white/[0.09]">
         <div className="flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-800 to-cyan-900">
           <Gem className="h-16 w-16 text-amber-200 transition group-hover:scale-110" /></div>
         <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-cyan-200">{item.tag}</p>
