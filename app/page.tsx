@@ -195,7 +195,7 @@ export default function Home() {
       <Hero />
       <LiveBanner />
       <Marketplace />
-      <identityAndBuild/>
+      <IdentityAndBuild/>
       <SellerInviteForm/>
       <Footer/>
     </div>
