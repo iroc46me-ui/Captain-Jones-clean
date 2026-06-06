@@ -243,6 +243,7 @@ function Marketplace() {
   {categoryImages[item.category] === "anchor" && "⚓"}
   {categoryImages[item.category] === "flag" && "🏴‍☠️"}
 </span>
+</div>
         <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-cyan-200">{item.tag}</p>
         <h3 className="mt-2 text-xl font-black">{item.title}</h3><div className="mt-4 flex items-center justify-between">
           <span className="text-2xl font-black text-amber-200">{item.price}</span>
