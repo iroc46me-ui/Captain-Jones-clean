@@ -178,7 +178,31 @@ function IdentityAndBuild() {
 function SellerInviteForm() {
   return <section id="join" className="bg-gradient-to-b from-cyan-950 to-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-2xl lg:p-12"><p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">Seller Harbor Intake</p><h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">Apply to become an early harbor seller.</h2><p className="mt-5 text-lg leading-8 text-slate-300">During Harbor Alpha, sellers are curated carefully to help establish trust, atmosphere, quality listings, and discovery culture.</p><div className="mt-10 grid gap-5 md:grid-cols-2"><input placeholder="Full name or seller name" className="rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none focus:border-amber-200" /><input placeholder="Email address" className="rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none focus:border-amber-200" /><input placeholder="What do you primarily sell?" className="rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none focus:border-amber-200" /><input placeholder="Website or social media (optional)" className="rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none focus:border-amber-200" /><textarea placeholder="Tell the harbor about your Treasure, story, or specialties..." className="min-h-40 rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none focus:border-amber-200 md:col-span-2" /></div><div className="mt-8 flex flex-col gap-4 sm:flex-row"><button className="rounded-full bg-amber-300 px-8 py-4 font-black text-slate-950 shadow-xl transition hover:bg-amber-200">Submit Harbor Application</button><button className="rounded-full border border-white/15 bg-white/5 px-8 py-4 font-black text-white transition hover:bg-white/10">Learn About Seller Benefits</button></div></div></section>;
 }
+function About() {
+  return (
+    <section id="about" className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl">
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
+          About the Harbor
+        </p>
 
+        <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+          Built for useful junk, rare finds, and honest treasure.
+        </h2>
+
+        <p className="mt-5 text-lg leading-8 text-slate-300">
+          Davey Jones Junk N Treasure is a harbor-style marketplace for sellers, collectors,
+          prospectors, estate finds, handmade tools, RV parts, oddities, and stories worth keeping.
+        </p>
+
+        <p className="mt-4 text-lg leading-8 text-slate-300">
+          The goal is simple: lower fees, real sellers, trusted listings, and a marketplace with
+          character instead of a cold corporate catalog.
+        </p>
+      </div>
+    </section>
+  );
+}
 function Footer() {
   return (
     <footer className="border-t border-white/10 bg-slate-950 px-4 py-10 text-center text-sm text-slate-400">
@@ -197,6 +221,7 @@ export default function Home() {
       <Marketplace />
       <IdentityAndBuild/>
       <SellerInviteForm/>
+      <About/>
       <Footer/>
     </div>
   );
