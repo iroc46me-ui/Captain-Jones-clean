@@ -291,7 +291,7 @@ export default function Home() {
       <Hero />
       <LiveBanner />
       <Marketplace />
-      <ListingDetails/>
+    
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
