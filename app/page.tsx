@@ -64,7 +64,7 @@ function LogoBust() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
         <div className="text-3xl text-amber-300">⚓</div>
 
-        <nav className="hidden md:flex items-center gap-2">
+        <nav className="flex overflow-x-auto items-center gap-2 text-xs">
           <a href="#join" className={navLink}>Open a Chest</a>
           <a href="#marketplace" className={navLink}>Treasure Deck</a>
           <a href="#identity" className={navLink}>The Captain&apos;s Cut</a>
