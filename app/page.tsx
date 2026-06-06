@@ -216,7 +216,7 @@ function Marketplace() {
   href={`#item-${item.slug}`}
   className="group block rounded-[2rem] border border-white/10 bg-white/[0.06] p-5 shadow-xl transition hover:border-amber-200/40 hover:bg-white/[0.09]"
 
-<a/>
+>
        
 
  <div className="flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-800 to-cyan-900">
