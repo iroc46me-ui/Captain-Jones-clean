@@ -232,7 +232,17 @@ function Marketplace() {
        
 
  <div className="flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-800 to-cyan-900">
-          <ShipWheel className="h-16 w-16 text-amber-200 transition group-hover:scale-110" /></div>
+          <span className="text-5xl">
+  {categoryImages[item.category] === "gold" && "⛏️"}
+  {categoryImages[item.category] === "wheel" && "⚙️"}
+  {categoryImages[item.category] === "compass" && "🧭"}
+  {categoryImages[item.category] === "chest" && "🧰"}
+  {categoryImages[item.category] === "hammer" && "🔨"}
+  {categoryImages[item.category] === "scroll" && "📜"}
+  {categoryImages[item.category] === "kraken" && "🐙"}
+  {categoryImages[item.category] === "anchor" && "⚓"}
+  {categoryImages[item.category] === "flag" && "🏴‍☠️"}
+</span>
         <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-cyan-200">{item.tag}</p>
         <h3 className="mt-2 text-xl font-black">{item.title}</h3><div className="mt-4 flex items-center justify-between">
           <span className="text-2xl font-black text-amber-200">{item.price}</span>
