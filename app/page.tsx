@@ -225,7 +225,7 @@ function Marketplace() {
         <h3 className="mt-2 text-xl font-black">{item.title}</h3><div className="mt-4 flex items-center justify-between">
           <span className="text-2xl font-black text-amber-200">{item.price}</span>
           <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-bold text-slate-300">{item.category}</span></div>
-        <p className="mt-3 text-sm font-semibold text-slate-400">Seller: {item.seller}</p></div>)}</div></div></section>
+        <p className="mt-3 text-sm font-semibold text-slate-400">Seller: {item.seller}</p></a>)}</div></div></section>
   );
 }
 
