@@ -233,15 +233,15 @@ function Marketplace() {
 
  <div className="flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-800 to-cyan-900">
           <span className="text-5xl">
-  {categoryImages[item.category] === "gold" && "⛏️"}
-  {categoryImages[item.category] === "wheel" && "⚙️"}
-  {categoryImages[item.category] === "compass" && "🧭"}
-  {categoryImages[item.category] === "chest" && "🧰"}
-  {categoryImages[item.category] === "hammer" && "🔨"}
-  {categoryImages[item.category] === "scroll" && "📜"}
-  {categoryImages[item.category] === "kraken" && "🐙"}
-  {categoryImages[item.category] === "anchor" && "⚓"}
-  {categoryImages[item.category] === "flag" && "🏴‍☠️"}
+  {categoryImages[item.category as keyof typeof categoryImages] === "gold" && "⛏️"}
+  {categoryImages[item.category as keyof typeof categoryImages] === "wheel" && "⚙️"}
+  {categoryImages[item.category as keyof typeof categoryImages] === "compass" && "🧭"}
+  {categoryImages[item.category as keyof typeof categoryImages] === "chest" && "🧰"}
+  {categoryImages[item.category as keyof typeof categoryImages] === "hammer" && "🔨"}
+  {categoryImages[item.category as keyof typeof categoryImages] === "scroll" && "📜"}
+  {categoryImages[item.category as keyof typeof categoryImages] === "kraken" && "🐙"}
+  {categoryImages[item.category as keyof typeof categoryImages] === "anchor" && "⚓"}
+  {categoryImages[item.category as keyof typeof categoryImages] === "flag" && "🏴‍☠️"}
 </span>
 </div>
         <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-cyan-200">{item.tag}</p>
