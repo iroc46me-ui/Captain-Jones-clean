@@ -70,6 +70,18 @@ const sampleItems = [
     seller: "Second Drawer Co.",
   },
 ];
+const categories = [
+  "Gold & Prospecting",
+  "Antiques",
+  "Tools",
+  "RV & Auto",
+  "Collectibles",
+  "Handmade",
+  "Estate Finds",
+  "Oddities",
+  "Local Pickup",
+  "Captain's Picks",
+];
 function LogoBust() {
   return (
     <div className="relative mx-auto flex h-48 w-48 items-center justify-center rounded-full border border-amber-300/30 bg-gradient-to-b from-slate-700 via-slate-950 to-cyan-950 shadow-2xl shadow-cyan-950/70">
