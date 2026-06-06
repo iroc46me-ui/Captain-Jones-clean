@@ -82,6 +82,15 @@ const categories = [
   "Local Pickup",
   "Captain's Picks",
 ];
+const brandButtons = [
+  "Browse Treasure",
+  "Become a Seller",
+  "Captain's Picks",
+  "Live Treasure Drops",
+  "Explore Categories",
+  "Trusted Captain's Cut",
+];
+
 function LogoBust() {
   return (
     <div className="relative mx-auto flex h-48 w-48 items-center justify-center rounded-full border border-amber-300/30 bg-gradient-to-b from-slate-700 via-slate-950 to-cyan-950 shadow-2xl shadow-cyan-950/70">
