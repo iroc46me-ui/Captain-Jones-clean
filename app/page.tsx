@@ -251,6 +251,53 @@ function Marketplace() {
         <p className="mt-3 text-sm font-semibold text-slate-400">Seller: {item.seller}</p></a>)}</div></div></section>
   );
 }
+function ListingDetails() {
+  return (
+    <section className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
+          Treasure Details
+        </p>
+
+        <div className="mt-8 grid gap-6">
+          {sampleItems.map((item) => (
+            <div
+              key={item.title}
+              id={`item-${item.slug}`}
+              className="scroll-mt-28 rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl"
+            >
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-cyan-200">
+                {item.tag}
+              </p>
+
+              <h3 className="mt-3 text-3xl font-black text-amber-200">
+                {item.title}
+              </h3>
+
+              <p className="mt-3 text-2xl font-black">{item.price}</p>
+
+              <p className="mt-4 text-slate-300">Seller: {item.seller}</p>
+              <p className="mt-2 text-slate-300">Category: {item.category}</p>
+
+              <p className="mt-5 max-w-3xl leading-7 text-slate-300">
+                This is an early Harbor Alpha listing preview. Full photos,
+                condition notes, shipping options, seller profile, and contact
+                tools will be added as the marketplace grows.
+              </p>
+
+              <a
+                href="#join"
+                className="mt-6 inline-block rounded-full bg-amber-300 px-6 py-3 font-black text-slate-950 hover:bg-amber-200"
+              >
+                Ask About This Treasure
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
@@ -314,7 +361,7 @@ export default function Home() {
       <Hero />
       <LiveBanner />
       <Marketplace />
-    
+      <ListingDetails/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
