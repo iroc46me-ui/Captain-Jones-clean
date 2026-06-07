@@ -300,7 +300,7 @@ href="#marketplace"
  Back to Treasure Deck
 </a>
           ))}
-        </div>
+        
       </div>
     </section>
   );
