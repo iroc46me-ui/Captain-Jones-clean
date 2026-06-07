@@ -292,7 +292,8 @@ function ListingDetails() {
                 Ask About This Treasure
               </a>
             </div>
-           <a
+  
+  <a       
   href="#marketplace"
   className="ml-3 mt-6 inline-block rounded-full border border-white/20 px-6 py-3 font-black text-white hover:bg-white/10"
 >
