@@ -251,6 +251,7 @@ function Marketplace() {
         <p className="mt-3 text-sm font-semibold text-slate-400">Seller: {item.seller}</p></a>)}</div></div></section>
   );
 }
+
 function ListingDetails() {
   return (
     <section className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8">
@@ -266,7 +267,9 @@ function ListingDetails() {
               id={`item-${item.slug}`}
               className="scroll-mt-28 rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl"
             >
-              <p className="text-xs font-black uppercase tracking-[0.3em] text-cyan-200">
+             
+     
+      <p <div className="mb-8 h-72 rounded-[2rem] border border-white/10 bg-gradient-to-br from-amber-900/30 to-slate-900" /> font-black uppercase tracking-[0.3em] text-cyan-200">
                 {item.tag}
               </p>
 
