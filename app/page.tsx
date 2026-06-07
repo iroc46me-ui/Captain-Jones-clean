@@ -284,9 +284,26 @@ function ListingDetails() {
                 condition notes, shipping options, seller profile, and contact
                 tools will be added as the marketplace grows.
               </p>
+       <p className="mt-6 text-slate-300">
+Forged and assembled for desert prospectors. Designed for scraping bedrock cracks,
+caliche seams, and hard-packed washes where gold likes to hide.
+Hand-built in Arizona.
+</p>
+<div className="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
+  <h3 className="text-lg font-black text-amber-200">
+    Harbor Notes
+  </h3>
 
-              <a
-                href="#join"
+  <ul className="mt-4 space-y-2 text-slate-300">
+    <li>• Handmade Tool</li>
+    <li>• Arizona Built</li>
+    <li>• Small Batch Production</li>
+    <li>• Ships from Seller Location</li>
+  </ul>
+</div>
+            
+  <a
+     href="#join"
                 className="mt-6 inline-block rounded-full bg-amber-300 px-6 py-3 font-black text-slate-950 hover:bg-amber-200"
               >
                 Ask About This Treasure
