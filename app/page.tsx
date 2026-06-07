@@ -269,9 +269,11 @@ function ListingDetails() {
             >
              
      
-      <p <div className="mb-8 h-72 rounded-[2rem] border border-white/10 bg-gradient-to-br from-amber-900/30 to-slate-900" /> font-black uppercase tracking-[0.3em] text-cyan-200">
-                {item.tag}
-              </p>
+      <div className="mb-8 h-72 rounded-[2rem] border border-white/10 bg-gradient-to-br from-amber-900/30 to-slate-900" />
+
+<p className="text-xs font-black uppercase tracking-[0.3em] text-cyan-200">
+  {item.tag}
+</p>
 
               <h3 className="mt-3 text-3xl font-black text-amber-200">
                 {item.title}
