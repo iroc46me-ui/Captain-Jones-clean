@@ -297,6 +297,7 @@ function ListingDetails() {
 >
  Back to Treasure Deck
 </a>
+ </div>             
   ))}
   </div>
     </section>
