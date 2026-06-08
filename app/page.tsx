@@ -362,7 +362,14 @@ function SellerProfiles() {
               className="scroll-mt-28 rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl"
             >
               <h3 className="text-3xl font-black text-amber-200">{seller}</h3>
-              <p className="mt-3 text-slate-300">Harbor seller profile coming online.</p>
+              
+     <div className="mt-4 space-y-2 text-slate-300">
+  <p>📍 Arizona</p>
+  <p>⚒️ Gold Prospecting Tools & Field Equipment</p>
+  <p>⭐ Trusted Harbor Seller</p>
+  <p>📦 Ships Throughout the United States</p>
+  <p>🏴‍☠️ Harbor Member Since 2026</p>
+</div>
               <p className="mt-2 text-slate-300">
                 Listings: {sampleItems.filter((item) => item.seller === seller).length}
               </p>
