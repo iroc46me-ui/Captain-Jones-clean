@@ -28,7 +28,7 @@ import {
 
 const sampleItems = [
  
-  {
+   {
     title: "Vintage Brass Ship Lantern",
     slug: "vintage-brass-ship-lantern",
     price: "$68",
