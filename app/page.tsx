@@ -373,7 +373,9 @@ function SellerProfiles() {
 </div>
 
               <h3 className="text-3xl font-black text-amber-200">{seller}</h3>
-              
+              <p className="text-red-400">
+  DEBUG: {seller}
+</p>
      <div className="mt-4 space-y-2 text-slate-300">
   <p>📍 Arizona</p>
   <p>⚒️ Gold Prospecting Tools & Field Equipment</p>
