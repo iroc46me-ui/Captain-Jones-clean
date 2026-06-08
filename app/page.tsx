@@ -359,7 +359,27 @@ function SellerProfiles() {
             <div
               key={seller}
               id={`seller-${seller.replaceAll(" ", "-").toLowerCase()}`}
-              className="scroll-mt-28 rounded-[2rem] border border-white/10 bg
+              className="scroll-mt-28 rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl"
+            >
+              <h3 className="text-3xl font-black text-amber-200">{seller}</h3>
+              <p className="mt-3 text-slate-300">Harbor seller profile coming online.</p>
+              <p className="mt-2 text-slate-300">
+                Listings: {sampleItems.filter((item) => item.seller === seller).length}
+              </p>
+
+              <a
+                href="#marketplace"
+                className="mt-6 inline-block rounded-full border border-white/20 px-6 py-3 font-black text-white hover:bg-white/10"
+              >
+                View Treasure Deck
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
