@@ -435,6 +435,66 @@ function SellerProfiles() {
   );
 }
 
+function SellerHarbors() {
+  const sellers = Array.from(new Set(sampleItems.map((item) => item.seller)));
+
+  return (
+    <section id="seller-harbors" className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-cyan-200">
+          Seller Harbors
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black tracking-tight text-amber-200 sm:text-5xl">
+          Storefronts inside the Harbor
+        </h2>
+
+        <div className="mt-10 grid gap-8">
+          {sellers.map((seller) => (
+            <div
+              key={seller}
+              id={`harbor-${seller.replaceAll(" ", "-").toLowerCase()}`}
+              className="scroll-mt-28 rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl"
+            >
+              <h3 className="text-3xl font-black text-amber-200">{seller}</h3>
+
+              <p className="mt-4 max-w-3xl text-slate-300">
+                This seller harbor is a storefront preview for {seller}. Full seller stories,
+                photos, ratings, policies, and verified inventory will be added as the marketplace grows.
+              </p>
+
+              <div className="mt-6 rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
+                <h4 className="font-black text-amber-200">Current Harbor Inventory</h4>
+
+                <div className="mt-4 space-y-3">
+                  {sampleItems
+                    .filter((item) => item.seller === seller)
+                    .map((item) => (
+                      <a
+                        key={item.title}
+                        href={`#item-${item.slug}`}
+                        className="block rounded-xl border border-white/10 bg-white/[0.04] p-4 font-bold text-white hover:bg-white/[0.08]"
+                      >
+                        {item.title} — {item.price}
+                      </a>
+                    ))}
+                </div>
+              </div>
+
+              <a
+                href="#sellers"
+                className="mt-6 inline-block rounded-full border border-white/20 px-6 py-3 font-black text-white hover:bg-white/10"
+              >
+                Back to Seller Profiles
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
     <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">{eyebrow}</p>
