@@ -367,6 +367,8 @@ function SellerProfiles() {
   {seller === "Road Dog Salvage" && "🚐"}
   {seller === "Relic Rider" && "🪙"}
   {seller === "Old Harbor Finds" && "🏮"}
+  {seller === "Quartzsite Cache" && "⛏️"}
+{seller === "Second Drawer Co." && "🗃️"}
 </div>
 
               <h3 className="text-3xl font-black text-amber-200">{seller}</h3>
