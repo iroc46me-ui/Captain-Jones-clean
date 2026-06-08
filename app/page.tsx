@@ -559,6 +559,7 @@ export default function Home() {
       <Marketplace />
       <ListingDetails/>
       <SellerProfiles/>
+      <SellerHarbors/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
