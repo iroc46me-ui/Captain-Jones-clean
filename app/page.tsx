@@ -444,7 +444,7 @@ export default function Home() {
       <LiveBanner />
       <Marketplace />
       <ListingDetails/>
-      <sellerProfiles/>
+      <SellerProfiles/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
