@@ -362,7 +362,7 @@ function SellerProfiles() {
               className="scroll-mt-28 rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl"
             >
        
-<div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-5xl">
+<div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full border-4 border-red-500 bg-red-900 text-5xl">
   {seller === "Davey's Workshop" && "⚒️"}
   {seller === "Road Dog Salvage" && "🚐"}
   {seller === "Relic Rider" && "🏺"}
