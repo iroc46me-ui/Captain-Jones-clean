@@ -380,7 +380,12 @@ function SellerProfiles() {
 </div>
 
               <h3 className="text-3xl font-black text-amber-200">{seller}</h3>
-              
+      <a
+  href={`#harbor-${seller.replaceAll(" ", "-").toLowerCase()}`}
+  className="mt-3 inline-block rounded-full border border-amber-300/30 px-4 py-2 text-sm font-black text-amber-200 hover:bg-amber-300/10"
+>
+  Visit Seller Harbor
+</a>        
      <div className="mt-4 space-y-2 text-slate-300">
   <p>📍 Arizona</p>
   <p>⚒️ Gold Prospecting Tools & Field Equipment</p>
