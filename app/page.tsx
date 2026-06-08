@@ -373,7 +373,27 @@ function SellerProfiles() {
               <p className="mt-2 text-slate-300">
                 Listings: {sampleItems.filter((item) => item.seller === seller).length}
               </p>
+             
+<div className="mt-6">
+  <h4 className="font-black text-amber-200">
+    Seller Inventory
+  </h4>
 
+  <div className="mt-3 space-y-2">
+    {sampleItems
+      .filter((item) => item.seller === seller)
+      .map((item) => (
+        <a
+          key={item.title}
+          href={`#item-${item.slug}`}
+          className="block rounded-xl border border-white/10 bg-white/[0.04] p-3 font-bold text-white hover:bg-white/[0.08]"
+        >
+          {item.title} — {item.price}
+        </a>
+      ))}
+  </div>
+</div>
+      
               <a
                 href="#marketplace"
                 className="mt-6 inline-block rounded-full border border-white/20 px-6 py-3 font-black text-white hover:bg-white/10"
