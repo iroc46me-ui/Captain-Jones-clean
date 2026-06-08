@@ -27,53 +27,60 @@ import {
 } from "lucide-react";
 
 const sampleItems = [
+ 
   {
     title: "Vintage Brass Ship Lantern",
-    slug: "Vintage Brass Ship Lantern",
+    slug: "vintage-brass-ship-lantern",
     price: "$68",
     category: "Antiques",
     tag: "Captain's Pick",
     seller: "Old Harbor Finds",
+    description: "A weathered brass-style ship lantern with old harbor character, perfect for collectors, nautical décor, cabins, RVs, or treasure-room display.",
   },
   {
     title: "Desert Nugget Digger",
-    slug: "Desert Nugget Digger",
+    slug: "desert-nugget-digger",
     price: "$75",
     category: "Gold & Prospecting",
     tag: "Handmade Tool",
     seller: "Davey's Workshop",
+    description: "A rugged handmade prospecting tool built for scraping bedrock cracks, caliche seams, and hard-packed desert washes where gold likes to hide.",
   },
   {
     title: "Old Coin & Relic Lot",
-     slug: "Old Coun & Relic Lot",
+    slug: "old-coin-relic-lot",
     price: "$42",
     category: "Collectibles",
     tag: "Treasure Bin",
     seller: "Relic Rider",
+    description: "A small mystery-style relic lot with old coins, metal finds, and forgotten drawer treasures for collectors who enjoy the hunt.",
   },
   {
     title: "RV Parts Mystery Box",
-     slug: "RV Parts Mystery Box",
+    slug: "rv-parts-mystery-box",
     price: "$35",
     category: "RV & Auto",
     tag: "Useful Junk",
     seller: "Road Dog Salvage",
+    description: "A useful mixed box of RV and road-life parts, hardware, fittings, and odd spares for tinkerers, travelers, and repair-minded treasure hunters.",
   },
   {
-    title: "Prospector’s Brass Scale",
-     slug: "Prospector's Brass Scale",
+    title: "Prospector's Brass Scale",
+    slug: "prospectors-brass-scale",
     price: "$58",
     category: "Gold & Prospecting",
     tag: "Field Gear",
     seller: "Quartzsite Cache",
+    description: "A compact brass-style field scale made for weighing small finds, gold flakes, relics, and other tiny treasures from the trail.",
   },
   {
     title: "Estate Drawer Oddities",
-     slug: "Estate Drawer Oddities ",
+    slug: "estate-drawer-oddities",
     price: "$29",
     category: "Estate Finds",
     tag: "Oddities",
     seller: "Second Drawer Co.",
+    description: "A curious estate drawer bundle filled with small forgotten objects, unusual keepsakes, and conversation pieces from another life.",
   },
 ];
 const categories = [
