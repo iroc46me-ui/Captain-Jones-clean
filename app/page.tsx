@@ -294,8 +294,12 @@ function ListingDetails() {
 
               <p className="mt-3 text-2xl font-black">{item.price}</p>
 
-              <p className="mt-4 text-slate-300">Seller: {item.seller}</p>
-              <p className="mt-2 text-slate-300">Category: {item.category}</p>
+              <p className="mt-4 text-slate-300">
+  Seller:{" "}
+  <a href={`#seller-${item.seller.replaceAll(" ", "-").toLowerCase()}`} className="font-bold text-amber-200 hover:underline">
+    {item.seller}
+  </a>
+</p>
 
               <p className="mt-5 max-w-3xl leading-7 text-slate-300">
                 This is an early Harbor Alpha listing preview. Full photos,
