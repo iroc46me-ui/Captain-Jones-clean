@@ -344,7 +344,22 @@ Hand-built in Arizona.
   );
 }
 
+function SellerProfiles() {
+  const sellers = Array.from(new Set(sampleItems.map((item) => item.seller)));
 
+  return (
+    <section id="sellers" className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
+          Harbor Sellers
+        </p>
+
+        <div className="mt-8 grid gap-6 md:grid-cols-2">
+          {sellers.map((seller) => (
+            <div
+              key={seller}
+              id={`seller-${seller.replaceAll(" ", "-").toLowerCase()}`}
+              className="scroll-mt-28 rounded-[2rem] border border-white/10 bg
 
 function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
