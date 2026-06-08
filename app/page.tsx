@@ -269,7 +269,19 @@ function ListingDetails() {
             >
              
      
-      <div className="mb-8 h-72 rounded-[2rem] border border-white/10 bg-gradient-to-br from-amber-900/30 to-slate-900" />
+      <div className="mb-8 flex h-72 items-center justify-center rounded-[2rem] border border-white/10 bg-gradient-to-br from-amber-900/30 to-slate-900">
+  <span className="text-8xl">
+    {categoryImages[item.category as keyof typeof categoryImages] === "gold" && "⛏️"}
+    {categoryImages[item.category as keyof typeof categoryImages] === "wheel" && "⚙️"}
+    {categoryImages[item.category as keyof typeof categoryImages] === "compass" && "🧭"}
+    {categoryImages[item.category as keyof typeof categoryImages] === "chest" && "🧰"}
+    {categoryImages[item.category as keyof typeof categoryImages] === "hammer" && "🔨"}
+    {categoryImages[item.category as keyof typeof categoryImages] === "scroll" && "📜"}
+    {categoryImages[item.category as keyof typeof categoryImages] === "kraken" && "🐙"}
+    {categoryImages[item.category as keyof typeof categoryImages] === "anchor" && "⚓"}
+    {categoryImages[item.category as keyof typeof categoryImages] === "flag" && "🏴‍☠️"}
+  </span>
+</div>
 
 <p className="text-xs font-black uppercase tracking-[0.3em] text-cyan-200">
   {item.tag}
