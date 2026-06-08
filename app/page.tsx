@@ -381,7 +381,11 @@ function SellerProfiles() {
   <p>📦 Ships Throughout the United States</p>
   <p>🏴‍☠️ Harbor Member Since 2026</p>
 </div>
-              <p className="mt-2 text-slate-300">
+     <p>⭐⭐⭐⭐⭐ 5.0 Harbor Rating</p>
+<p>⚡ Replies Within 24 Hours</p>
+<p>🎯 Specialty: Curated Treasure Finds</p>         
+
+<p className="mt-2 text-slate-300">
                 Listings: {sampleItems.filter((item) => item.seller === seller).length}
               </p>
              
