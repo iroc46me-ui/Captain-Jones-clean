@@ -269,7 +269,8 @@ function ListingDetails() {
             >
              
      
-     <div className="mb-6 flex h-40 items-center justify-center rounded-[2rem] border border-white/10 bg-gradient-to-br from-amber-900/30 to-slate-900 sm:h-56" </div>
+     <div className="mb-6 flex h-40 items-center justify-center rounded-[2rem] border border-white/10 bg-gradient-to-br from-amber-900/30 to-slate-900 sm:h-56" 
+
   <span className="text-8xl">
     {categoryImages[item.category as keyof typeof categoryImages] === "gold" && "⛏️"}
     {categoryImages[item.category as keyof typeof categoryImages] === "wheel" && "⚙️"}
