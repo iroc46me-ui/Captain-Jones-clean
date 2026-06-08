@@ -365,7 +365,7 @@ function SellerProfiles() {
 <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-5xl">
   {seller === "Davey's Workshop" && "⚒️"}
   {seller === "Road Dog Salvage" && "🚐"}
-  {seller === "Relic Rider" && "🪙"}
+  {seller === "Relic Rider" && "🏺"}
   {seller === "Old Harbor Finds" && "🏮"}
   {seller === "Quartzsite Cache" && "⛏️"}
   {seller === "Second Drawer Co." && "🗃️"}
@@ -373,9 +373,7 @@ function SellerProfiles() {
 </div>
 
               <h3 className="text-3xl font-black text-amber-200">{seller}</h3>
-              <p className="text-red-400">
-  DEBUG: {seller}
-</p>
+              
      <div className="mt-4 space-y-2 text-slate-300">
   <p>📍 Arizona</p>
   <p>⚒️ Gold Prospecting Tools & Field Equipment</p>
