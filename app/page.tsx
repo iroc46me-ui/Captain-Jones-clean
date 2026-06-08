@@ -368,7 +368,8 @@ function SellerProfiles() {
   {seller === "Relic Rider" && "🪙"}
   {seller === "Old Harbor Finds" && "🏮"}
   {seller === "Quartzsite Cache" && "⛏️"}
-{seller === "Second Drawer Co." && "🗃️"}
+  {seller === "Second Drawer Co." && "🗃️"}
+  {!["Davey's Workshop", "Road Dog Salvage", "Relic Rider", "Old Harbor Finds", "Quartzsite Cache", "Second Drawer Co."].includes(seller) && "⚓"}
 </div>
 
               <h3 className="text-3xl font-black text-amber-200">{seller}</h3>
