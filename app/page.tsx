@@ -703,7 +703,7 @@ export default function Home() {
       <SellerHarbors/>
       <MessageBottles/>
       <HarborRules/>
-      <Safe Harbor/>
+      <SafeHarbor/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
