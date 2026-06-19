@@ -649,6 +649,7 @@ export default function Home() {
       <SellerProfiles/>
       <SellerHarbors/>
       <MessageBottles/>
+      <HarborRules/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
