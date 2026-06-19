@@ -831,6 +831,54 @@ function HarborReputation() {
   );
 }
 
+
+function TreasureChest() {
+  return (
+    <section
+      id="treasure-chest"
+      className="scroll-mt-24 bg-gradient-to-b from-slate-950 via-cyan-950 to-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"
+    >
+      <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl">
+
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
+          Treasure Chest
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+          Keep track of treasures worth revisiting.
+        </h2>
+
+        <div className="mt-8 space-y-5 text-slate-300">
+
+          <p>❤️ Save favorite treasures for future voyages.</p>
+
+          <p>❤️ Follow trusted captains and their harbors.</p>
+
+          <p>❤️ Watch treasures before committing to purchase.</p>
+
+          <p>❤️ Return to recently viewed items.</p>
+
+          <p>❤️ Build a personal collection of interesting finds.</p>
+
+        </div>
+
+        <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
+
+          <h3 className="font-black text-amber-200">
+            Captain's Reminder
+          </h3>
+
+          <p className="mt-3 text-slate-200">
+            Not every treasure must be claimed immediately.
+            Some are worth keeping close until the time is right.
+          </p>
+
+        </div>
+
+      </div>
+    </section>
+  );
+}
 function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
     <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">{eyebrow}</p>
@@ -903,6 +951,7 @@ export default function Home() {
       <HarborFees/>
       <ShippingReturns/>
       <HarborReputation/>
+      <TreasureChest/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
