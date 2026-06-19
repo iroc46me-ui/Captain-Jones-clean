@@ -879,6 +879,103 @@ function TreasureChest() {
     </section>
   );
 }
+function HarborRanks() {
+  return (
+    <section
+      id="harbor-ranks"
+      className="scroll-mt-24 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"
+    >
+      <div className="mx-auto max-w-6xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl">
+
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-cyan-200">
+          Harbor Ranks
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black tracking-tight text-amber-200 sm:text-5xl">
+          Every sailor begins somewhere.
+        </h2>
+
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
+
+          <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
+            ⚓ <span className="font-black text-amber-200">Swabby</span>
+            <p className="mt-3 text-slate-300">
+              New arrival. Learning the ropes.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
+            🏮 <span className="font-black text-amber-200">Deckhand</span>
+            <p className="mt-3 text-slate-300">
+              First successful voyages.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
+            🧭 <span className="font-black text-amber-200">Able Seaman</span>
+            <p className="mt-3 text-slate-300">
+              Reliable and steady.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
+            ⚓⚓ <span className="font-black text-amber-200">Boatswain</span>
+            <p className="mt-3 text-slate-300">
+              Trusted crew member.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
+            💎 <span className="font-black text-amber-200">Quartermaster</span>
+            <p className="mt-3 text-slate-300">
+              Keeper of cargo and trade.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
+            🌟 <span className="font-black text-amber-200">First Mate</span>
+            <p className="mt-3 text-slate-300">
+              Veteran sailor and trusted hand.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-amber-300/30 bg-amber-300/10 p-6">
+            🏴‍☠️ <span className="font-black text-amber-200">Captain</span>
+            <p className="mt-3 text-slate-200">
+              Master merchant and proven leader.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-cyan-300/30 bg-cyan-300/10 p-6">
+            ⚓⚓⚓ <span className="font-black text-cyan-200">Commodore</span>
+            <p className="mt-3 text-slate-200">
+              Distinguished among the fleet.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-purple-300/30 bg-purple-300/10 p-6">
+            👑 <span className="font-black text-purple-200">Admiral</span>
+            <p className="mt-3 text-slate-200">
+              Hall of Legends status.
+            </p>
+          </div>
+
+        </div>
+
+        <div className="mt-10 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
+          <h3 className="font-black text-amber-200">
+            Harbor Master's Wisdom
+          </h3>
+
+          <p className="mt-3 text-slate-200">
+            Gold may buy treasure, but only honesty, service, and successful voyages earn a sailor his rank.
+          </p>
+        </div>
+
+      </div>
+    </section>
+  );
+}
 function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
     <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">{eyebrow}</p>
@@ -952,6 +1049,7 @@ export default function Home() {
       <ShippingReturns/>
       <HarborReputation/>
       <TreasureChest/>
+      <HarborRanks/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
