@@ -902,8 +902,8 @@ export default function Home() {
       <CaptainsPromise/>
       <HarborFees/>
       <ShippingReturns/>
-      <HaborReputation/>
-      <IdentityAndBuild/>
+      <HarborReputation/>
+      <IdwentityAndBuild/>
       <SellerInviteForm/>
       <About/>
       <Footer/>
