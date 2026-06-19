@@ -636,6 +636,45 @@ function SafeHarbor() {
   );
 }
 
+
+function CaptainsPromise() {
+  return (
+    <section
+      id="captains-promise"
+      className="scroll-mt-24 bg-gradient-to-b from-slate-950 via-cyan-950 to-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"
+    >
+      <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl">
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
+          Captain’s Promise
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+          We protect the crew before the trade.
+        </h2>
+
+        <div className="mt-8 space-y-5 text-slate-300">
+          <p>⚓ Buyer and seller contact information stays private before purchase.</p>
+          <p>⚓ Harbor messages remain inside the site to protect both sides.</p>
+          <p>⚓ Payment details are handled through secure payment providers, not stored openly by Harbor.</p>
+          <p>⚓ Seller payout information should be handled by approved payment systems, not manually collected by Harbor.</p>
+          <p>⚓ Harbor may review messages or listings when safety, fraud, or rule violations are suspected.</p>
+          <p>⚓ Personal information should only be released when needed to complete a paid transaction.</p>
+        </div>
+
+        <div className="mt-8 rounded-[2rem] border border-cyan-300/20 bg-cyan-300/10 p-6">
+          <h3 className="font-black text-cyan-200">
+            Privacy Note
+          </h3>
+
+          <p className="mt-3 text-slate-200">
+            This is an early privacy promise for Harbor Alpha. A formal privacy policy
+            will be written before public launch.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
 function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
     <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">{eyebrow}</p>
@@ -704,6 +743,7 @@ export default function Home() {
       <MessageBottles/>
       <HarborRules/>
       <SafeHarbor/>
+      <CaptiansPromise/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
