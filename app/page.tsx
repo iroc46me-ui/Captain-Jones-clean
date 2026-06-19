@@ -903,7 +903,7 @@ export default function Home() {
       <HarborFees/>
       <ShippingReturns/>
       <HarborReputation/>
-      <IdwentityAndBuild/>
+      <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
       <Footer/>
