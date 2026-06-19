@@ -1050,6 +1050,7 @@ export default function Home() {
       <HarborReputation/>
       <TreasureChest/>
       <HarborRanks/>
+      <FeaturedCaptains/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
