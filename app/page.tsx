@@ -734,6 +734,45 @@ function HarborFees() {
     </section>
   );
 }
+
+function ShippingReturns() {
+  return (
+    <section
+      id="shipping-returns"
+      className="scroll-mt-24 bg-gradient-to-b from-slate-950 via-cyan-950 to-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"
+    >
+      <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl">
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
+          Shipping & Returns
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+          Every seller ships their own cargo.
+        </h2>
+
+        <div className="mt-8 space-y-5 text-slate-300">
+          <p>⚓ Harbor does not own, store, inspect, pack, or ship seller items.</p>
+          <p>⚓ Sellers are responsible for accurate descriptions, item condition, packaging, shipping, pickup, and fulfillment.</p>
+          <p>⚓ Buyers should review listings carefully and ask questions through Message Bottles before purchase.</p>
+          <p>⚓ Shipping costs, pickup options, timelines, and return policies are set by the individual seller unless Harbor later creates site-wide rules.</p>
+          <p>⚓ Harbor does not issue refunds directly unless a future payment policy specifically allows it.</p>
+          <p>⚓ Disputes may be reviewed by Harbor when fraud, misrepresentation, or Harbor Code violations are suspected.</p>
+        </div>
+
+        <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
+          <h3 className="font-black text-amber-200">
+            Captain’s Reminder
+          </h3>
+
+          <p className="mt-3 text-slate-200">
+            Ask before you buy. Every treasure has a story, and every voyage should begin with clear expectations.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
     <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">{eyebrow}</p>
@@ -804,6 +843,7 @@ export default function Home() {
       <SafeHarbor/>
       <CaptainsPromise/>
       <HarborFees/>
+      <ShippingReturns/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
