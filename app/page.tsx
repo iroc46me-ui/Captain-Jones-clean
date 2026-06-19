@@ -976,6 +976,52 @@ function HarborRanks() {
     </section>
   );
 }
+function FeaturedCaptains() {
+  return (
+    <section id="featured-captains" className="scroll-mt-24 bg-gradient-to-b from-slate-950 via-cyan-950 to-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl">
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
+          Featured Captains
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+          Captains worth following.
+        </h2>
+
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
+            <p className="text-5xl">⚒️</p>
+            <h3 className="mt-4 text-2xl font-black text-amber-200">Davey&apos;s Workshop</h3>
+            <p className="mt-3 text-slate-300">Captain of handmade prospecting tools and field gear.</p>
+            <p className="mt-4 font-bold text-cyan-200">Rank: First Mate</p>
+          </div>
+
+          <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
+            <p className="text-5xl">🏮</p>
+            <h3 className="mt-4 text-2xl font-black text-amber-200">Old Harbor Finds</h3>
+            <p className="mt-3 text-slate-300">Keeper of brass, lanterns, relics, and maritime curiosities.</p>
+            <p className="mt-4 font-bold text-cyan-200">Rank: Deckhand</p>
+          </div>
+
+          <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
+            <p className="text-5xl">🚐</p>
+            <h3 className="mt-4 text-2xl font-black text-amber-200">Road Dog Salvage</h3>
+            <p className="mt-3 text-slate-300">Useful junk, RV parts, and road-life treasure from the long haul.</p>
+            <p className="mt-4 font-bold text-cyan-200">Rank: Able Seaman</p>
+          </div>
+        </div>
+
+        <div className="mt-10 rounded-[2rem] border border-cyan-300/20 bg-cyan-300/10 p-6">
+          <h3 className="font-black text-cyan-200">How Captains Are Featured</h3>
+          <p className="mt-3 text-slate-200">
+            Featured Captains may be chosen by reputation, completed voyages, helpful communication, unusual treasures, and service to the Harbor.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
     <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">{eyebrow}</p>
