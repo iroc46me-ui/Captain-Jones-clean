@@ -611,6 +611,7 @@ export default function Home() {
       <ListingDetails/>
       <SellerProfiles/>
       <SellerHarbors/>
+      <MessageBottles/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
