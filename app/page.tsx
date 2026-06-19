@@ -546,6 +546,43 @@ function MessageBottles() {
   );
 }
 
+function HarborRules() {
+  return (
+    <section id="harbor-rules" className="scroll-mt-24 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl">
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
+          Harbor Code
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+          The rules that keep the Harbor safe.
+        </h2>
+
+        <div className="mt-8 space-y-5 text-slate-300">
+          <p>⚓ All buyer and seller communication must remain inside Harbor until purchase is completed.</p>
+          <p>⚓ No phone numbers, emails, payment links, social handles, or outside contact information before purchase.</p>
+          <p>⚓ Buyer and seller information remains private until a transaction is completed.</p>
+          <p>⚓ Davey Jones Junk N Treasure provides marketplace, listing, and communication tools only.</p>
+          <p>⚓ Sellers are responsible for item condition, accuracy, shipping, pickup, fulfillment, and seller policies.</p>
+          <p>⚓ Buyers are responsible for reading listings, asking questions, and understanding what they purchase.</p>
+          <p>⚓ Harbor does not guarantee item authenticity, condition, delivery, refunds, payment outcomes, or seller claims.</p>
+          <p>⚓ Harbor may remove listings, sellers, buyers, or messages that violate the Harbor Code.</p>
+        </div>
+
+        <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
+          <h3 className="font-black text-amber-200">
+            Captain’s Note
+          </h3>
+          <p className="mt-3 text-slate-200">
+            This is an early Harbor Alpha rules draft. Formal legal terms, privacy policy,
+            payment rules, refund language, and prohibited item policies will be developed before public launch.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
     <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">{eyebrow}</p>
