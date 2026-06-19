@@ -583,6 +583,59 @@ function HarborRules() {
   );
 }
 
+function SafeHarbor() {
+  return (
+    <section
+      id="safe-harbor"
+      className="scroll-mt-24 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"
+    >
+      <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl">
+
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-cyan-200">
+          Safe Harbor
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black tracking-tight text-amber-200 sm:text-5xl">
+          The Harbor rejects certain cargo.
+        </h2>
+
+        <div className="mt-8 space-y-5 text-slate-300">
+
+          <p>⚓ Stolen property and fraudulent listings.</p>
+
+          <p>⚓ Counterfeit goods and copyright violations.</p>
+
+          <p>⚓ Illegal items and prohibited materials.</p>
+
+          <p>⚓ Dangerous chemicals and hazardous substances.</p>
+
+          <p>⚓ Adult material and exploitative content.</p>
+
+          <p>⚓ Scam listings, deceptive practices, and misrepresentation.</p>
+
+          <p>⚓ Harassment, threats, and abusive behavior.</p>
+
+          <p>⚓ Attempts to bypass Harbor communication and payment systems.</p>
+
+        </div>
+
+        <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
+          <h3 className="font-black text-amber-200">
+            Harbor Master's Authority
+          </h3>
+
+          <p className="mt-3 text-slate-200">
+            Davey Jones Junk N Treasure reserves the right to remove
+            listings, messages, buyers, sellers, or entire harbors that
+            threaten the safety and integrity of the Harbor.
+          </p>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
 function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
     <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">{eyebrow}</p>
@@ -650,6 +703,7 @@ export default function Home() {
       <SellerHarbors/>
       <MessageBottles/>
       <HarborRules/>
+      <Safe Harbor/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
