@@ -743,7 +743,7 @@ export default function Home() {
       <MessageBottles/>
       <HarborRules/>
       <SafeHarbor/>
-      <CaptiansPromise/>
+      <CaptainsPromise/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
