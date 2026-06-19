@@ -495,6 +495,57 @@ function SellerHarbors() {
   );
 }
 
+function MessageBottles() {
+  return (
+    <section id="message-bottle" className="scroll-mt-24 bg-gradient-to-b from-slate-950 via-cyan-950 to-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl">
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-cyan-200">
+          Message Bottles
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black tracking-tight text-amber-200 sm:text-5xl">
+          Send a Bottle across the Harbor.
+        </h2>
+
+        <p className="mt-5 text-lg leading-8 text-slate-300">
+          Ask a seller about a treasure without leaving the Harbor. Buyer and seller information stays private until purchase.
+        </p>
+
+        <div className="mt-8 grid gap-4">
+          <input
+            placeholder="To: Seller name"
+            className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-4 text-white placeholder:text-slate-500 outline-none focus:border-amber-200"
+          />
+
+          <input
+            placeholder="Regarding: Treasure listing"
+            className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-4 text-white placeholder:text-slate-500 outline-none focus:border-amber-200"
+          />
+
+          <textarea
+            placeholder="Write your message bottle..."
+            className="min-h-40 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-4 text-white placeholder:text-slate-500 outline-none focus:border-amber-200"
+          />
+        </div>
+
+        <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6 text-slate-200">
+          <h3 className="font-black text-amber-200">Harbor Communication Rules</h3>
+          <ul className="mt-4 space-y-2">
+            <li>⚓ All buyer-seller communication stays inside Harbor before purchase.</li>
+            <li>⚓ No phone numbers, emails, outside payment links, or social handles before purchase.</li>
+            <li>⚓ Buyer and seller information remains private until the transaction is completed.</li>
+            <li>⚓ Harbor provides the message channel, but does not guarantee items, payments, delivery, or outcomes.</li>
+          </ul>
+        </div>
+
+        <button className="mt-6 rounded-full bg-amber-300 px-8 py-4 font-black text-slate-950 hover:bg-amber-200">
+          Send Bottle
+        </button>
+      </div>
+    </section>
+  );
+}
+
 function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
     <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">{eyebrow}</p>
