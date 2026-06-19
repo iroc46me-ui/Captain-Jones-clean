@@ -773,6 +773,64 @@ function ShippingReturns() {
   );
 }
 
+function HarborReputation() {
+  return (
+    <section
+      id="harbor-reputation"
+      className="scroll-mt-24 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"
+    >
+      <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl">
+
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-cyan-200">
+          Harbor Reputation
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black tracking-tight text-amber-200 sm:text-5xl">
+          Trust is treasure.
+        </h2>
+
+        <div className="mt-8 space-y-5 text-slate-300">
+
+          <p>
+            ⭐ Harbor Reputation is earned through honesty, communication, and successful voyages.
+          </p>
+
+          <p>
+            ⭐ Buyers may someday leave ratings, reviews, and notes about their experience.
+          </p>
+
+          <p>
+            ⭐ Response times, completed sales, and repeat customers help build a seller's standing.
+          </p>
+
+          <p>
+            ⭐ Harbor recognizes Trusted Harbor Sellers, Captain's Picks, and Featured Captains.
+          </p>
+
+          <p>
+            ⭐ Reputation takes time to earn and can be lost through dishonesty or Harbor Code violations.
+          </p>
+
+        </div>
+
+        <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
+
+          <h3 className="font-black text-amber-200">
+            Harbor Master's Wisdom
+          </h3>
+
+          <p className="mt-3 text-slate-200">
+            A good reputation is worth more than gold.
+            The Harbor remembers honest sailors.
+          </p>
+
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
 function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl">
     <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">{eyebrow}</p>
@@ -844,6 +902,7 @@ export default function Home() {
       <CaptainsPromise/>
       <HarborFees/>
       <ShippingReturns/>
+      <HaborReputation/>
       <IdentityAndBuild/>
       <SellerInviteForm/>
       <About/>
