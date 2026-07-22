@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import HarborWatchButton from "./components/HarborWatchButton";
 import {
-  
+
   Anchor,
   BadgeCheck,
   Camera,
@@ -21,16 +21,16 @@ import {
   ShipWheel,
   Sparkles,
   Store,
-  
+
   UploadCloud,
   Users,
-  
+
   X,
 } from "lucide-react";
 
 const sampleItems = [
- 
-   {
+
+  {
     title: "Vintage Brass Ship Lantern",
     slug: "vintage-brass-ship-lantern",
     price: "$68",
@@ -137,7 +137,7 @@ function LogoBust() {
     </div>
   );
 }
-  function Header() {
+function Header() {
   const navLink =
     "rounded-md px-3 py-2 text-sm font-bold text-white transition hover:bg-amber-300/20 hover:text-amber-200";
 
@@ -168,8 +168,8 @@ function Hero() {
   return (
     <section
       id="home"
-      
-      className="relative min-h-screen overflow-hidden text-white"
+
+      className="relative min-h-screen overflow-hidden pt-28 text-white"
       style={{
         backgroundImage: "url('/harbor-hero.png')",
         backgroundSize: "cover",
@@ -179,7 +179,7 @@ function Hero() {
     >
       <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
-      
+
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-between px-4 pb-8 pt-24 sm:px-6 lg:px-8">
         <motion.div
           className="flex flex-1 items-center justify-center"
@@ -187,7 +187,7 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          <div className="mt-[27.75rem] flex justify-center gap-2">
+          <div className="mt-[rem] flex justify-center gap-2">
             <a
               href="#join"
               className="-ml-1 rounded-md border border-transparent px-10 py-2 text-transparent hover:bg-amber-300/10"
@@ -204,10 +204,10 @@ function Hero() {
           </div>
         </motion.div>
 
-        <div className="absolute bottom-0 left-0 right-0 z-10 flex justify-center pb-6">
-          </div>
+        <div className="absolute left-0 right-0 top-[57%] z-10 flex justify-center">
         </div>
-      
+      </div>
+
     </section>
   );
 }
@@ -229,23 +229,23 @@ function Marketplace() {
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Treasure");
   const visibleItems = useMemo(() => {
-  return sampleItems.filter((item) => {
-    const matchesSearch = `${item.title} ${item.category} ${item.seller}`
-      .toLowerCase()
-      .includes(query.toLowerCase());
+    return sampleItems.filter((item) => {
+      const matchesSearch = `${item.title} ${item.category} ${item.seller}`
+        .toLowerCase()
+        .includes(query.toLowerCase());
 
-    const matchesCategory =
-      selectedCategory === "All Treasure" ||
-      (selectedCategory === "Captain's Picks"
-        ? item.tag?.toLowerCase().includes("captain")
-        : item.category === selectedCategory);
+      const matchesCategory =
+        selectedCategory === "All Treasure" ||
+        (selectedCategory === "Captain's Picks"
+          ? item.tag?.toLowerCase().includes("captain")
+          : item.category === selectedCategory);
 
-    return matchesSearch && matchesCategory;
-  });
-}, 
-    
-[query, selectedCategory]);
-    return (
+      return matchesSearch && matchesCategory;
+    });
+  },
+
+    [query, selectedCategory]);
+  return (
     <section id="marketplace" className="bg-gradient-to-b from-cyan-950 to-slate-950 px-4 py-6 text-white sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl"></div><div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
         <div><p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">Marketplace Preview</p>
@@ -253,74 +253,73 @@ function Marketplace() {
           <p className="mt-4 max-w-2xl text-slate-300"></p></div>
         <div className="relative mt-6 w-full md:max-w-sm">
           <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
-          <input value={query} onChange={(e) => setQuery(e.target.value)} 
-            placeholder="Search the Treasure deck..." className="relative -top-4 w-full rounded-2xl border border-white/10 bg-white/10 py-4 pl-12 pr-4 text-white placeholder:text-slate-400 outline-none focus:border-amber-200"/></div>
+          <input value={query} onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search the Treasure deck..." className="relative -top-4 w-full rounded-2xl border border-white/10 bg-white/10 py-4 pl-12 pr-4 text-white placeholder:text-slate-400 outline-none focus:border-amber-200" /></div>
       </div>
-<div className="mt-2 flex flex-wrap gap-3">
-  {["All Treasure", ...categories].map((category) => {
-    const isActive = selectedCategory === category;
+      <div className="mt-2 flex flex-wrap gap-3">
+        {["All Treasure", ...categories].map((category) => {
+          const isActive = selectedCategory === category;
 
-    return (
-      <button
-        key={category}
-        type="button"
-        onClick={() => setSelectedCategory(category)}
-        className={`rounded-full border px-4 py-2 text-sm font-bold transition-all duration-300 ${
-  isActive
-    ? "border-amber-300 bg-amber-300 text-slate-950 shadow-lg shadow-amber-300/40 scale-105"
-    : "border-cyan-300/30 bg-cyan-400/10 text-white hover:-translate-y-1 hover:border-amber-300/70 hover:bg-cyan-300/20 hover:shadow-lg hover:shadow-cyan-300/20"
-}`}     
+          return (
+            <button
+              key={category}
+              type="button"
+              onClick={() => setSelectedCategory(category)}
+              className={`rounded-full border px-4 py-2 text-sm font-bold transition-all duration-300 ${isActive
+                  ? "border-amber-300 bg-amber-300 text-slate-950 shadow-lg shadow-amber-300/40 scale-105"
+                  : "border-cyan-300/30 bg-cyan-400/10 text-white hover:-translate-y-1 hover:border-amber-300/70 hover:bg-cyan-300/20 hover:shadow-lg hover:shadow-cyan-300/20"
+                }`}
+            >
+              {category}
+            </button>
+          );
+        })}
+      </div>
+      <div
+        key={`${selectedCategory}-${query}`}
+        className="mt-6 grid gap-4 animate-[fadeInUp_400ms_ease-out] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       >
-        {category}
-      </button>
-    );
-  })}
-</div>
-<div
-  key={`${selectedCategory}-${query}`}
-  className="mt-6 grid gap-4 animate-[fadeInUp_400ms_ease-out] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
->
-  {visibleItems.map((item) => (
-<a
-  key={item.title}
-  href={`#item-${item.slug}`}
-  className="group relativeblock rounded-[2rem] border border-white/10 bg-white/[0.06] p-5 shadow-xl 
+        {visibleItems.map((item) => (
+          <a
+            key={item.title}
+            href={`#item-${item.slug}`}
+            className="group relativeblock rounded-[2rem] border border-white/10 bg-white/[0.06] p-5 shadow-xl 
   transition-all duration-300 hover:-translate-y-3 hover:scale-[1.02] hover:border-amber-200/60 hover:bg-white/[0.10] 
   hover:shadow-2xl hover:shadow-cyan-400/30"
-  >
-    <HarborWatchButton
-  item={{
-    title: item.title,
-    slug: item.slug,
-    price: item.price,
-    category: item.category,
-    seller: item.seller,
-  }}
-/>
-       
+          >
+            <HarborWatchButton
+              item={{
+                title: item.title,
+                slug: item.slug,
+                price: item.price,
+                category: item.category,
+                seller: item.seller,
+              }}
+            />
 
- <div className="flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-800 to-cyan-900">
-          <span className="text-5xl">
-  {categoryImages[item.category as keyof typeof categoryImages] === "gold" && "⛏️"}
-  {categoryImages[item.category as keyof typeof categoryImages] === "wheel" && "⚙️"}
-  {categoryImages[item.category as keyof typeof categoryImages] === "compass" && "🧭"}
-  {categoryImages[item.category as keyof typeof categoryImages] === "chest" && "🧰"}
-  {categoryImages[item.category as keyof typeof categoryImages] === "hammer" && "🔨"}
-  {categoryImages[item.category as keyof typeof categoryImages] === "scroll" && "📜"}
-  {categoryImages[item.category as keyof typeof categoryImages] === "kraken" && "🐙"}
-  {categoryImages[item.category as keyof typeof categoryImages] === "anchor" && "⚓"}
-  {categoryImages[item.category as keyof typeof categoryImages] === "flag" && "🏴‍☠️"}
-</span>
-</div>
-        <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-cyan-200">{item.tag}</p>
-        <h3 className="mt-2 text-xl font-black">{item.title}</h3><div className="mt-4 flex items-center justify-between">
-          <span className="text-2xl font-black text-amber-200">{item.price}</span>
-          <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-bold text-slate-300">{item.category}</span></div>
-        <p className="mt-3 text-sm font-semibold text-slate-400">Seller: {item.seller}</p>
-        </a>
-      ))}
-        </div>
-        </section>
+
+            <div className="flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-800 to-cyan-900">
+              <span className="text-5xl">
+                {categoryImages[item.category as keyof typeof categoryImages] === "gold" && "⛏️"}
+                {categoryImages[item.category as keyof typeof categoryImages] === "wheel" && "⚙️"}
+                {categoryImages[item.category as keyof typeof categoryImages] === "compass" && "🧭"}
+                {categoryImages[item.category as keyof typeof categoryImages] === "chest" && "🧰"}
+                {categoryImages[item.category as keyof typeof categoryImages] === "hammer" && "🔨"}
+                {categoryImages[item.category as keyof typeof categoryImages] === "scroll" && "📜"}
+                {categoryImages[item.category as keyof typeof categoryImages] === "kraken" && "🐙"}
+                {categoryImages[item.category as keyof typeof categoryImages] === "anchor" && "⚓"}
+                {categoryImages[item.category as keyof typeof categoryImages] === "flag" && "🏴‍☠️"}
+              </span>
+            </div>
+            <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-cyan-200">{item.tag}</p>
+            <h3 className="mt-2 text-xl font-black">{item.title}</h3><div className="mt-4 flex items-center justify-between">
+              <span className="text-2xl font-black text-amber-200">{item.price}</span>
+              <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-bold text-slate-300">{item.category}</span></div>
+            <p className="mt-3 text-sm font-semibold text-slate-400">Seller: {item.seller}</p>
+          </a>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -339,27 +338,27 @@ function ListingDetails() {
               id={`item-${item.slug}`}
               className="scroll-mt-28 rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl"
             >
-             
-     
-     <div className="mb-4 flex h-28 items-center justify-center rounded-[2rem]
+
+
+              <div className="mb-4 flex h-28 items-center justify-center rounded-[2rem]
       border border-white/10 bg-gradient-to-br from-amber-900/30 to-slate-900 sm:h-36">
 
-  <span className="text-8xl">
-    {categoryImages[item.category as keyof typeof categoryImages] === "gold" && "⛏️"}
-    {categoryImages[item.category as keyof typeof categoryImages] === "wheel" && "⚙️"}
-    {categoryImages[item.category as keyof typeof categoryImages] === "compass" && "🧭"}
-    {categoryImages[item.category as keyof typeof categoryImages] === "chest" && "🧰"}
-    {categoryImages[item.category as keyof typeof categoryImages] === "hammer" && "🔨"}
-    {categoryImages[item.category as keyof typeof categoryImages] === "scroll" && "📜"}
-    {categoryImages[item.category as keyof typeof categoryImages] === "kraken" && "🐙"}
-    {categoryImages[item.category as keyof typeof categoryImages] === "anchor" && "⚓"}
-    {categoryImages[item.category as keyof typeof categoryImages] === "flag" && "🏴‍☠️"}
-  </span>
-</div>
+                <span className="text-8xl">
+                  {categoryImages[item.category as keyof typeof categoryImages] === "gold" && "⛏️"}
+                  {categoryImages[item.category as keyof typeof categoryImages] === "wheel" && "⚙️"}
+                  {categoryImages[item.category as keyof typeof categoryImages] === "compass" && "🧭"}
+                  {categoryImages[item.category as keyof typeof categoryImages] === "chest" && "🧰"}
+                  {categoryImages[item.category as keyof typeof categoryImages] === "hammer" && "🔨"}
+                  {categoryImages[item.category as keyof typeof categoryImages] === "scroll" && "📜"}
+                  {categoryImages[item.category as keyof typeof categoryImages] === "kraken" && "🐙"}
+                  {categoryImages[item.category as keyof typeof categoryImages] === "anchor" && "⚓"}
+                  {categoryImages[item.category as keyof typeof categoryImages] === "flag" && "🏴‍☠️"}
+                </span>
+              </div>
 
-<p className="text-xs font-black uppercase tracking-[0.3em] text-cyan-200">
-  {item.tag}
-</p>
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-cyan-200">
+                {item.tag}
+              </p>
 
               <h3 className="mt-3 text-3xl font-black text-amber-200">
                 {item.title}
@@ -368,50 +367,50 @@ function ListingDetails() {
               <p className="mt-3 text-2xl font-black">{item.price}</p>
 
               <p className="mt-4 text-slate-300">
-  Seller:{" "}
-  <a href={`#seller-${item.seller.replaceAll(" ", "-").toLowerCase()}`} className="font-bold text-amber-200 hover:underline">
-    {item.seller}
-  </a>
-</p>
+                Seller:{" "}
+                <a href={`#seller-${item.seller.replaceAll(" ", "-").toLowerCase()}`} className="font-bold text-amber-200 hover:underline">
+                  {item.seller}
+                </a>
+              </p>
 
               <p className="mt-5 max-w-3xl leading-7 text-slate-300">
                 This is an early Harbor Alpha listing preview. Full photos,
                 condition notes, shipping options, seller profile, and contact
                 tools will be added as the marketplace grows.
               </p>
-      
-    <p className="mt-6 text-slate-300">
-  {item.description}
-</p>
 
-<div className="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
-  <h3 className="text-lg font-black text-amber-200">
-    Harbor Notes
-  </h3>
+              <p className="mt-6 text-slate-300">
+                {item.description}
+              </p>
 
-  <ul className="mt-4 space-y-2 text-slate-300">
-    <li>• Handmade Tool</li>
-    <li>• Arizona Built</li>
-    <li>• Small Batch Production</li>
-    <li>• Ships from Seller Location</li>
-  </ul>
-</div>
-            
-  <a
-     href="#join"
+              <div className="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
+                <h3 className="text-lg font-black text-amber-200">
+                  Harbor Notes
+                </h3>
+
+                <ul className="mt-4 space-y-2 text-slate-300">
+                  <li>• Handmade Tool</li>
+                  <li>• Arizona Built</li>
+                  <li>• Small Batch Production</li>
+                  <li>• Ships from Seller Location</li>
+                </ul>
+              </div>
+
+              <a
+                href="#join"
                 className="mt-6 inline-block rounded-full bg-amber-300 px-6 py-3 font-black text-slate-950 hover:bg-amber-200"
               >
                 Ask About This Treasure
               </a>
-<a
-  href="#marketplace"
- className="ml-3 mt-6 inline-block rounded-full border border-white/20 px-6 py-3 font-black text-white hover:bg-white/10"
->
- Back to Treasure Deck
-</a>
- </div>             
-  ))}
-  </div>
+              <a
+                href="#marketplace"
+                className="ml-3 mt-6 inline-block rounded-full border border-white/20 px-6 py-3 font-black text-white hover:bg-white/10"
+              >
+                Back to Treasure Deck
+              </a>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -434,59 +433,59 @@ function SellerProfiles() {
               id={`seller-${seller.replaceAll(" ", "-").toLowerCase()}`}
               className="scroll-mt-28 rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl"
             >
-       
-<div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-5xl">
-  {seller === "Davey's Workshop" && "⚒️"}
-  {seller === "Road Dog Salvage" && "🚐"}
-  {seller === "Relic Rider" && "🏺"}
-  {seller === "Old Harbor Finds" && "🏮"}
-  {seller === "Quartzsite Cache" && "⛏️"}
-  {seller === "Second Drawer Co." && "🗃️"}
-  {!["Davey's Workshop", "Road Dog Salvage", "Relic Rider", "Old Harbor Finds", "Quartzsite Cache", "Second Drawer Co."].includes(seller) && "⚓"}
-</div>
+
+              <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-5xl">
+                {seller === "Davey's Workshop" && "⚒️"}
+                {seller === "Road Dog Salvage" && "🚐"}
+                {seller === "Relic Rider" && "🏺"}
+                {seller === "Old Harbor Finds" && "🏮"}
+                {seller === "Quartzsite Cache" && "⛏️"}
+                {seller === "Second Drawer Co." && "🗃️"}
+                {!["Davey's Workshop", "Road Dog Salvage", "Relic Rider", "Old Harbor Finds", "Quartzsite Cache", "Second Drawer Co."].includes(seller) && "⚓"}
+              </div>
 
               <h3 className="text-3xl font-black text-amber-200">{seller}</h3>
-      <a
-  href={`#harbor-${seller.replaceAll(" ", "-").toLowerCase()}`}
-  className="mt-3 inline-block rounded-full border border-amber-300/30 px-4 py-2 text-sm font-black text-amber-200 hover:bg-amber-300/10"
->
-  Visit Seller Harbor
-</a>        
-     <div className="mt-4 space-y-2 text-slate-300">
-  <p>📍 Arizona</p>
-  <p>⚒️ Gold Prospecting Tools & Field Equipment</p>
-  <p>⭐ Trusted Harbor Seller</p>
-  <p>📦 Ships Throughout the United States</p>
-  <p>🏴‍☠️ Harbor Member Since 2026</p>
-</div>
-     <p>⭐⭐⭐⭐⭐ 5.0 Harbor Rating</p>
-<p>⚡ Replies Within 24 Hours</p>
-<p>🎯 Specialty: Curated Treasure Finds</p>         
+              <a
+                href={`#harbor-${seller.replaceAll(" ", "-").toLowerCase()}`}
+                className="mt-3 inline-block rounded-full border border-amber-300/30 px-4 py-2 text-sm font-black text-amber-200 hover:bg-amber-300/10"
+              >
+                Visit Seller Harbor
+              </a>
+              <div className="mt-4 space-y-2 text-slate-300">
+                <p>📍 Arizona</p>
+                <p>⚒️ Gold Prospecting Tools & Field Equipment</p>
+                <p>⭐ Trusted Harbor Seller</p>
+                <p>📦 Ships Throughout the United States</p>
+                <p>🏴‍☠️ Harbor Member Since 2026</p>
+              </div>
+              <p>⭐⭐⭐⭐⭐ 5.0 Harbor Rating</p>
+              <p>⚡ Replies Within 24 Hours</p>
+              <p>🎯 Specialty: Curated Treasure Finds</p>
 
-<p className="mt-2 text-slate-300">
+              <p className="mt-2 text-slate-300">
                 Listings: {sampleItems.filter((item) => item.seller === seller).length}
               </p>
-             
-<div className="mt-6">
-  <h4 className="font-black text-amber-200">
-    Seller Inventory
-  </h4>
 
-  <div className="mt-3 space-y-2">
-    {sampleItems
-      .filter((item) => item.seller === seller)
-      .map((item) => (
-        <a
-          key={item.title}
-          href={`#item-${item.slug}`}
-          className="block rounded-xl border border-white/10 bg-white/[0.04] p-3 font-bold text-white hover:bg-white/[0.08]"
-        >
-          {item.title} — {item.price}
-        </a>
-      ))}
-  </div>
-</div>
-      
+              <div className="mt-6">
+                <h4 className="font-black text-amber-200">
+                  Seller Inventory
+                </h4>
+
+                <div className="mt-3 space-y-2">
+                  {sampleItems
+                    .filter((item) => item.seller === seller)
+                    .map((item) => (
+                      <a
+                        key={item.title}
+                        href={`#item-${item.slug}`}
+                        className="block rounded-xl border border-white/10 bg-white/[0.04] p-3 font-bold text-white hover:bg-white/[0.08]"
+                      >
+                        {item.title} — {item.price}
+                      </a>
+                    ))}
+                </div>
+              </div>
+
               <a
                 href="#marketplace"
                 className="mt-6 inline-block rounded-full border border-white/20 px-6 py-3 font-black text-white hover:bg-white/10"
@@ -1095,19 +1094,121 @@ function Section({ id, eyebrow, title, children }: { id?: string; eyebrow: strin
 }
 
 function Cards({ items }: { items: [string, string, React.ReactNode?][] }) {
-  return <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{items.map(([title, text, icon]) => 
+  return <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{items.map(([title, text, icon]) =>
     <div key={title} className="rounded-[2rem] border border-white/10 bg-white/[0.06] p-4 shadow-xl">{icon}
       <h3 className="mt-2 text-lg font-black text-amber-200">{title}</h3><p className="mt-2 leading-5 text-slate-300">{text}</p></div>)}</div>;
 }
 
 function IdentityAndBuild() {
-  const tech = [["Frontend", "React/Next.js for the public site, marketplace pages, seller dashboard, admin panel, and mobile layout.", <MonitorSmartphone className="h-9 w-9 text-amber-200" key="a" />], ["Database", "PostgreSQL through Supabase or Neon for users, sellers, listings, images, orders, messages, and moderation.", <Database className="h-9 w-9 text-amber-200" key="b" />], ["Login System", "Supabase Auth, Clerk, or Auth.js for buyers, sellers, admins, dashboards, and permissions.", <LockKeyhole className="h-9 w-9 text-amber-200" key="c" />], ["Image Uploads", "Cloudinary, Supabase Storage, or S3-compatible storage for product photos and homepage artwork.", <UploadCloud className="h-9 w-9 text-amber-200" key="d" />], ["Payments", "Stripe Connect first for marketplace payment splitting and seller payouts; PayPal Commerce later.", <Gem className="h-9 w-9 text-amber-200" key="e" />], ["Admin Control", "Moderation queue, listing approval, seller flags, disputes, refunds, and prohibited item controls.", <ShieldCheck className="h-9 w-9 text-amber-200" key="f" />]] as [string,string,React.ReactNode][];
+  const tech = [["Frontend", "React/Next.js for the public site, marketplace pages, seller dashboard, admin panel, and mobile layout.", <MonitorSmartphone className="h-9 w-9 text-amber-200" key="a" />], ["Database", "PostgreSQL through Supabase or Neon for users, sellers, listings, images, orders, messages, and moderation.", <Database className="h-9 w-9 text-amber-200" key="b" />], ["Login System", "Supabase Auth, Clerk, or Auth.js for buyers, sellers, admins, dashboards, and permissions.", <LockKeyhole className="h-9 w-9 text-amber-200" key="c" />], ["Image Uploads", "Cloudinary, Supabase Storage, or S3-compatible storage for product photos and homepage artwork.", <UploadCloud className="h-9 w-9 text-amber-200" key="d" />], ["Payments", "Stripe Connect first for marketplace payment splitting and seller payouts; PayPal Commerce later.", <Gem className="h-9 w-9 text-amber-200" key="e" />], ["Admin Control", "Moderation queue, listing approval, seller flags, disputes, refunds, and prohibited item controls.", <ShieldCheck className="h-9 w-9 text-amber-200" key="f" />]] as [string, string, React.ReactNode][];
   return <><Section id="identity" eyebrow="Official Identity System" title="The permanent h-40face of the harbor."><p className="mt-6 max-w-4xl text-lg leading-8 text-slate-300">A cinematic maritime marketplace identity built around discovery, mystery, forgotten valuables, and trustworthy seller culture.</p><div className="mt-8 flex flex-wrap gap-4">{brandButtons.map((button) => <button key={button} className="rounded-full border border-amber-200/20 bg-gradient-to-br from-slate-950 to-cyan-950 px-6 py-4 font-black text-amber-100 shadow-xl transition hover:scale-[1.03] hover:border-amber-200/40">{button}</button>)}</div></Section><Section id="build" eyebrow="Marketplace V2 Build Plan" title="The real engine underneath the Treasure deck."><Cards items={tech} /></Section></>;
 }
 
 function SellerInviteForm() {
-  return <section id="join" className="scroll-mt-24 bg-gradient-to-b from-cyan-950 to-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8">
-    <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-2xl lg:p-12"><p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">Seller Harbor Intake</p><h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">Apply to become an early harbor seller.</h2><p className="mt-5 text-lg leading-8 text-slate-300">During Harbor Alpha, sellers are curated carefully to help establish trust, atmosphere, quality listings, and discovery culture.</p><div className="mt-10 grid gap-5 md:grid-cols-2"><input placeholder="Full name or seller name" className="rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none focus:border-amber-200" /><input placeholder="Email address" className="rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none focus:border-amber-200" /><input placeholder="What do you primarily sell?" className="rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none focus:border-amber-200" /><input placeholder="Website or social media (optional)" className="rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none focus:border-amber-200" /><textarea placeholder="Tell the harbor about your Treasure, story, or specialties..." className="min-h-40 rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none focus:border-amber-200 md:col-span-2" /></div><div className="mt-8 flex flex-col gap-4 sm:flex-row"><button className="rounded-full bg-amber-300 px-8 py-4 font-black text-slate-950 shadow-xl transition hover:bg-amber-200">Submit Harbor Application</button><button className="rounded-full border border-white/15 bg-white/5 px-8 py-4 font-black text-white transition hover:bg-white/10">Learn About Seller Benefits</button></div></div></section>;
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+
+    const application = {
+      sellerName: String(formData.get("sellerName") || ""),
+      email: String(formData.get("email") || ""),
+      primaryItems: String(formData.get("primaryItems") || ""),
+      website: String(formData.get("website") || ""),
+      story: String(formData.get("story") || ""),
+      submittedAt: new Date().toISOString(),
+    };
+
+    localStorage.setItem(
+      "davey-jones-seller-application",
+      JSON.stringify(application)
+    );
+
+    window.location.href = "/seller-chest";
+  }
+
+  return (
+    <section
+      id="join"
+      className="scroll-mt-24 bg-gradient-to-b from-cyan-950 to-slate-950 px-4 py-12 text-white sm:px-6 lg:px-8"
+    >
+      <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-6 shadow-2xl sm:p-8 lg:p-10">
+        <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
+          Seller Harbor Intake
+        </p>
+
+        <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+          Apply to become an early harbor seller.
+        </h2>
+
+        <p className="mt-4 max-w-4xl text-lg leading-7 text-slate-300">
+          During Harbor Alpha, sellers are curated carefully to help establish
+          trust, atmosphere, quality listings, and discovery culture.
+        </p>
+
+        <form onSubmit={handleSubmit} className="mt-8">
+          <div className="grid gap-4 md:grid-cols-2">
+            <input
+              name="sellerName"
+              required
+              placeholder="Full name or seller name"
+              className="rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none transition focus:border-amber-300"
+            />
+
+            <input
+              name="email"
+              type="email"
+              required
+              placeholder="Email address"
+              className="rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none transition focus:border-amber-300"
+            />
+
+            <input
+              name="primaryItems"
+              required
+              placeholder="What do you primarily sell?"
+              className="rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none transition focus:border-amber-300"
+            />
+
+            <input
+              name="website"
+              placeholder="Website or social media (optional)"
+              className="rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none transition focus:border-amber-300"
+            />
+          </div>
+
+          <textarea
+            name="story"
+            required
+            rows={5}
+            placeholder="Tell the harbor about your treasure, story, or specialties..."
+            className="mt-4 w-full resize-y rounded-2xl border border-white/10 bg-slate-950 px-5 py-4 text-white outline-none transition focus:border-amber-300"
+          />
+
+          <div className="mt-6 flex flex-wrap gap-4">
+            <button
+              type="submit"
+              className="rounded-full bg-amber-300 px-8 py-4 font-black text-slate-950 shadow-lg shadow-amber-300/20 transition hover:-translate-y-1 hover:bg-amber-200"
+            >
+              Submit Harbor Application
+            </button>
+
+            <a
+              href="#about"
+              className="rounded-full border border-white/20 bg-white/5 px-8 py-4 font-bold text-white transition hover:-translate-y-1 hover:border-amber-300/60 hover:bg-amber-300/10"
+            >
+              Learn About Seller Benefits
+            </a>
+          </div>
+
+          <p className="mt-4 text-sm text-slate-400">
+            Harbor Alpha test mode: submitting this application opens the
+            working Seller Chest.
+          </p>
+        </form>
+      </div>
+    </section>
+  );
 }
 function About() {
   return (
@@ -1150,23 +1251,23 @@ export default function Home() {
       <Hero />
       <LiveBanner />
       <Marketplace />
-      <ListingDetails/>
-      <SellerProfiles/>
-      <SellerHarbors/>
-      <MessageBottles/>
-      <HarborRules/>
-      <SafeHarbor/>
-      <CaptainsPromise/>
-      <HarborFees/>
-      <ShippingReturns/>
-      <HarborReputation/>
-      <TreasureChest/>
-      <HarborRanks/>
-      <FeaturedCaptains/>
-      <IdentityAndBuild/>
-      <SellerInviteForm/>
-      <About/>
-      <Footer/>
+      <ListingDetails />
+      <SellerProfiles />
+      <SellerHarbors />
+      <MessageBottles />
+      <HarborRules />
+      <SafeHarbor />
+      <CaptainsPromise />
+      <HarborFees />
+      <ShippingReturns />
+      <HarborReputation />
+      <TreasureChest />
+      <HarborRanks />
+      <FeaturedCaptains />
+      <IdentityAndBuild />
+      <SellerInviteForm />
+      <About />
+      <Footer />
     </div>
   );
 }
