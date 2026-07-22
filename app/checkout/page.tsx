@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 type CheckoutListing = {
   title: string;
@@ -74,7 +74,7 @@ const sampleListings: CheckoutListing[] = [
   },
 ];
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const itemSlug = searchParams.get("item");
@@ -284,5 +284,18 @@ export default function CheckoutPage() {
         </div>
       </section>
     </main>
+  );
+}
+export default function CheckoutPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-[#071116] text-stone-300">
+          Preparing Captain&apos;s Checkout...
+        </main>
+      }
+    >
+      <CheckoutContent />
+    </Suspense>
   );
 }
