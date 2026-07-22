@@ -169,17 +169,20 @@ function Hero() {
     <section
       id="home"
       className="relative min-h-screen screen text-white flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen overflow-hidden text-white"
       style={{
         backgroundImage: "url('/harbor-hero.png')",
         backgroundSize: "cover",
-        backgroundPosition: "center center",
+        backgroundPosition: "center bottom",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="absolute inset-0 bg-black/25 pointer-events-none" />
+      <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
       <div className="relative z-10 mx-auto max-w-5xl px-4 py-16 text-center sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-between px-4 pb-8 pt-24 sm:px-6 lg:px-8">
         <motion.div
+          className="flex flex-1 items-center justify-center"
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
@@ -200,6 +203,45 @@ function Hero() {
             </a>
           </div>
         </motion.div>
+
+        <div
+          id="live-events"
+          className="scroll-mt-24 rounded-[2rem] border border-amber-200/20 bg-black/55 p-4 shadow-2xl backdrop-blur-md sm:p-6"
+        >
+          <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.3em] text-red-400">
+                Live Treasure Event
+              </p>
+
+              <h2 className="mt-1 text-2xl font-bold tracking-tight text-white md:text-3xl lg:text-4xl">
+                The Captain&apos;s Midnight Treasure Drop
+              </h2>
+
+              <p className="mt-3 max-w-2xl text-base leading-6 text-slate-200">
+                A rotating live event featuring rare listings, strange finds,
+                collectible lots, estate discoveries, and featured sellers from
+                around the harbor.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <a
+                href="#join"
+                className="rounded-full bg-amber-300 px-8 py-4 text-center font-black text-slate-950 shadow-xl transition hover:bg-amber-200"
+              >
+                Enter the Drop
+              </a>
+
+              <a
+                href="#join"
+                className="rounded-full border border-white/20 bg-black/30 px-8 py-4 text-center font-black text-white transition hover:bg-white/10"
+              >
+                Become Featured Seller
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -215,6 +257,7 @@ function LiveBanner() {
         <p className="mt-3 max-w-2xl text-base leading-6 text-slate-300">
           A rotating live event featuring rare listings, strange finds, collectible lots, estate discoveries, and featured sellers from around the harbor.</p></div>
         <div className="flex flex-col gap-4"><a href="#join" className="rounded-full bg-amber-300 px-8 py-4 text-center font-black text-slate-950 shadow-xl transition hover:bg-amber-200">Enter the Drop</a><a href="#join" className="rounded-full border border-white/15 bg-white/5 px-8 py-4 text-center font-black text-white transition hover:bg-white/10">Become Featured Seller</a></div></div></div></section>;
+  return null;
 }
 
 function Marketplace() {
