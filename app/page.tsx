@@ -168,7 +168,7 @@ function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen screen text-white flex items-center justify-center overflow-hidden"
+      
       className="relative min-h-screen overflow-hidden text-white"
       style={{
         backgroundImage: "url('/harbor-hero.png')",
@@ -179,7 +179,7 @@ function Hero() {
     >
       <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
-      <div className="relative z-10 mx-auto max-w-5xl px-4 py-16 text-center sm:px-6 lg:px-8">
+      
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-between px-4 pb-8 pt-24 sm:px-6 lg:px-8">
         <motion.div
           className="flex flex-1 items-center justify-center"
