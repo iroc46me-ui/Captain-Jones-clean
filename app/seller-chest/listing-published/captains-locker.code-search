@@ -1,0 +1,14 @@
+# Query: captains-locker
+# ContextLines: 1
+
+2 results - 2 files
+
+app\captain's-locker\page.tsx:
+  209                <Link
+  210:                 href="/captain's-locker/orders"
+  211                  className="mt-6 inline-flex rounded-full border border-white/20 px-5 py-2.5 text-sm font-bold transition hover:bg-white/10"
+
+app\captain's-locker\orders\page.tsx:
+  54            <Link
+  55:             href="/captain's-locker"
+  56              className="w-fit rounded-full border border-white/20 px-5 py-2.5 font-bold"

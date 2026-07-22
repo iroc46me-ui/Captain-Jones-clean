@@ -2,9 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import HarborWatchButton from "./components/HarborWatchButton";
 import {
-  
   Anchor,
   BadgeCheck,
   Camera,
@@ -206,7 +204,7 @@ function Hero() {
 }
 
 function LiveBanner() {
-  return <section id="live-events" className="scroll-mt-24 mt-8 t16 bg-slate-950 px-4 py-4 text-white sm:px-6 lg:px-8">
+  return <section id="live-events" className="scroll-mt-24 mt-16 t16 bg-slate-950 px-4 py-4 text-white sm:px-6 lg:px-8">
     <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-amber-200/20 
     from bg-slate-950 shadow-2xl">
       <div className="grid gap-2 p-2 lg:grid-cols-[1fr_auto] lg:items-center lg:p-2"><div>
@@ -219,27 +217,10 @@ function LiveBanner() {
 
 function Marketplace() {
   const [query, setQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All Treasure");
-  const visibleItems = useMemo(() => {
-  return sampleItems.filter((item) => {
-    const matchesSearch = `${item.title} ${item.category} ${item.seller}`
-      .toLowerCase()
-      .includes(query.toLowerCase());
-
-    const matchesCategory =
-      selectedCategory === "All Treasure" ||
-      (selectedCategory === "Captain's Picks"
-        ? item.tag?.toLowerCase().includes("captain")
-        : item.category === selectedCategory);
-
-    return matchesSearch && matchesCategory;
-  });
-}, 
-    
-[query, selectedCategory]);
-    return (
+  const visibleItems = useMemo(() => sampleItems.filter((item) => `${item.title} ${item.category} ${item.seller}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  return (
     <section id="marketplace" className="bg-gradient-to-b from-cyan-950 to-slate-950 px-4 py-6 text-white sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl"></div><div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
+      <div className="mx-auto max-w-7xl"><div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
         <div><p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">Marketplace Preview</p>
           <h2 className="mt-0 text-xl font-black tracking-tight text-red-500"> Treasure by category</h2>
           <p className="mt-4 max-w-2xl text-slate-300"></p></div>
@@ -248,47 +229,16 @@ function Marketplace() {
           <input value={query} onChange={(e) => setQuery(e.target.value)} 
             placeholder="Search the Treasure deck..." className="relative -top-4 w-full rounded-2xl border border-white/10 bg-white/10 py-4 pl-12 pr-4 text-white placeholder:text-slate-400 outline-none focus:border-amber-200"/></div>
       </div>
-<div className="mt-2 flex flex-wrap gap-3">
-  {["All Treasure", ...categories].map((category) => {
-    const isActive = selectedCategory === category;
+<div className="mt-2 flex flex-wrap gap-3">{categories.map((category) => <span key={category} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-slate-200">{category}</span>)}</div><div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{visibleItems.map((item) => 
 
-    return (
-      <button
-        key={category}
-        type="button"
-        onClick={() => setSelectedCategory(category)}
-        className={`rounded-full border px-4 py-2 text-sm font-bold transition-all duration-300 ${
-  isActive
-    ? "border-amber-300 bg-amber-300 text-slate-950 shadow-lg shadow-amber-300/40 scale-105"
-    : "border-cyan-300/30 bg-cyan-400/10 text-white hover:-translate-y-1 hover:border-amber-300/70 hover:bg-cyan-300/20 hover:shadow-lg hover:shadow-cyan-300/20"
-}`}     
-      >
-        {category}
-      </button>
-    );
-  })}
-</div>
-<div
-  key={`${selectedCategory}-${query}`}
-  className="mt-6 grid gap-4 animate-[fadeInUp_400ms_ease-out] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
->
-  {visibleItems.map((item) => (
 <a
   key={item.title}
   href={`#item-${item.slug}`}
-  className="group relativeblock rounded-[2rem] border border-white/10 bg-white/[0.06] p-5 shadow-xl 
+  className="group block rounded-[2rem] border border-white/10 bg-white/[0.06] p-5 shadow-xl 
   transition-all duration-300 hover:-translate-y-3 hover:scale-[1.02] hover:border-amber-200/60 hover:bg-white/[0.10] 
   hover:shadow-2xl hover:shadow-cyan-400/30"
-  >
-    <HarborWatchButton
-  item={{
-    title: item.title,
-    slug: item.slug,
-    price: item.price,
-    category: item.category,
-    seller: item.seller,
-  }}
-/>
+
+>
        
 
  <div className="flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-800 to-cyan-900">
@@ -308,11 +258,7 @@ function Marketplace() {
         <h3 className="mt-2 text-xl font-black">{item.title}</h3><div className="mt-4 flex items-center justify-between">
           <span className="text-2xl font-black text-amber-200">{item.price}</span>
           <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-bold text-slate-300">{item.category}</span></div>
-        <p className="mt-3 text-sm font-semibold text-slate-400">Seller: {item.seller}</p>
-        </a>
-      ))}
-        </div>
-        </section>
+        <p className="mt-3 text-sm font-semibold text-slate-400">Seller: {item.seller}</p></a>)}</div></div></section>
   );
 }
 
@@ -620,7 +566,7 @@ function HarborRules() {
           <p>⚓ All buyer and seller communication must remain inside Harbor until purchase is completed.</p>
           <p>⚓ No phone numbers, emails, payment links, social handles, or outside contact information before purchase.</p>
           <p>⚓ Buyer and seller information remains private until a transaction is completed.</p>
-          <p>⚓ Davey Jones Junk-N-Treasure provides marketplace, listing, and communication tools only.</p>
+          <p>⚓ Davey Jones Junk N Treasure provides marketplace, listing, and communication tools only.</p>
           <p>⚓ Sellers are responsible for item condition, accuracy, shipping, pickup, fulfillment, and seller policies.</p>
           <p>⚓ Buyers are responsible for reading listings, asking questions, and understanding what they purchase.</p>
           <p>⚓ Harbor does not guarantee item authenticity, condition, delivery, refunds, payment outcomes, or seller claims.</p>
