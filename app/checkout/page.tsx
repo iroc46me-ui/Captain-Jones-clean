@@ -126,7 +126,13 @@ function CheckoutContent() {
         ORDERS_KEY,
         JSON.stringify(updatedOrders)
       );
+localStorage.setItem(
+    ORDERS_KEY,
+    JSON.stringify(updatedOrders)
+);
 
+console.log("Saved orders:", updatedOrders);
+console.log("Storage now contains:", localStorage.getItem(ORDERS_KEY));
       localStorage.setItem(
         LAST_ORDER_KEY,
         JSON.stringify(order)
