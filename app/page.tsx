@@ -236,6 +236,68 @@ function Hero() {
     </a>
   </div>
 </section>
+<section
+  className="relative overflow-hidden border-b border-amber-400/30 bg-[#05091c] px-6 py-16 text-white"
+  style={{
+    backgroundImage:
+      "linear-gradient(rgba(2, 6, 23, 0.78), rgba(2, 6, 23, 0.9)), url('/harbor-watch-underwater-bg.jpg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }}
+>
+  <img
+  src="/harbor-watch-seaweed-left.png"
+  alt=""
+  aria-hidden="true"
+  className="pointer-events-none absolute bottom-0 left-0 z-0 h-[85%] max-w-[32%] object-contain opacity-35"
+/>
+
+<img
+  src="/harbor-watch-fish-blue.png"
+  alt=""
+  aria-hidden="true"
+  className="pointer-events-none absolute right-[8%] top-[18%] z-0 w-32 opacity-35"
+/>
+
+<div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-r from-slate-950/60 via-transparent to-slate-950/40" />
+  <div className="relative z-10 mx-auto max-w-5xl">
+    <div className="rounded-3xl border border-amber-400/25 bg-white/[0.03] px-7 py-10 shadow-2xl sm:px-12 sm:py-14">
+      <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">
+        A Message from Captain Davey
+      </p>
+
+      <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
+        Welcome Aboard, Shipmate.
+      </h2>
+
+      <div className="mt-7 max-w-3xl space-y-5 text-lg leading-8 text-slate-300">
+        <p>
+          Every treasure has a story. Sometimes it&apos;s an antique,
+          sometimes it&apos;s a family heirloom, and sometimes it&apos;s
+          something that was simply waiting to be discovered again.
+        </p>
+
+        <p>
+          Davey Jones Junk-N-Treasure is more than a place to buy and
+          sell. It&apos;s a harbor where stories, collections,
+          craftsmanship, and unexpected discoveries can come together.
+        </p>
+
+        <p>
+          Whether you&apos;re here to browse, sell, collect, or simply
+          enjoy the voyage, I&apos;m glad you&apos;ve come aboard.
+        </p>
+      </div>
+
+      <div className="mt-9 border-l-2 border-amber-400 pl-5">
+        <p className="italic text-slate-400">Fair winds,</p>
+        <p className="mt-1 text-xl font-bold text-amber-400">
+          Captain Davey ⚓
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
   </>
 );
 }
