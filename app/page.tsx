@@ -165,7 +165,8 @@ function Header() {
   );
 }
 function Hero() {
-  return (
+ return (
+  <>
     <section
       id="home"
 
@@ -209,8 +210,36 @@ function Hero() {
       </div>
 
     </section>
-  );
+    <section className="border-y border-amber-400/30 bg-slate-950 px-6 py-14 text-white">
+  <div className="mx-auto max-w-4xl text-center">
+    <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">
+      Captain&apos;s Preview
+    </p>
+
+    <h2 className="text-3xl font-bold sm:text-4xl">
+      Help Us Chart Our Course
+    </h2>
+
+    <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-300">
+  Welcome to <strong>Davey Jones Junk-N-Treasure</strong>. You're
+  visiting during our Captain&apos;s Preview, where every suggestion,
+  every idea, and every new crew member helps us chart our course.
+  Explore the harbor, discover hidden treasures, together we'll build a
+  marketplace to remember.
+</p>
+
+    <a
+      href="#join"
+      className="mt-8 inline-flex rounded-md bg-amber-500 px-6 py-3 font-semibold text-slate-950 transition hover:bg-amber-400"
+    >
+      Come Aboard
+    </a>
+  </div>
+</section>
+  </>
+);
 }
+
 
 function LiveBanner() {
   return <section id="live-events" className="scroll-mt-24 mt-8 t16 bg-slate-950 px-4 py-4 text-white sm:px-6 lg:px-8">
