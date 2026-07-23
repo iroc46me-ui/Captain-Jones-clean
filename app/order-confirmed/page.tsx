@@ -70,14 +70,14 @@ export default function OrderConfirmedPage() {
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           
            <a
-  href="/captain's-locker"
+  href="/captains-locker"
   className="rounded-full bg-amber-300 px-6 py-3 font-bold text-slate-950 transition hover:bg-amber-200"
 >
   Open Captain&apos;s Locker
 </a>
 
 <a
-  href="/captain's-locker/orders"
+  href="/captains-locker/orders"
   className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-6 py-3 font-bold text-cyan-100"
 >
   View Orders

@@ -207,7 +207,7 @@ export default function CaptainsLockerPage() {
               )}
 
               <Link
-                href="/captain's-locker/orders"
+                href="/captains-locker/orders"
                 className="mt-6 inline-flex rounded-full border border-white/20 px-5 py-2.5 text-sm font-bold transition hover:bg-white/10"
               >
                 View All Orders
@@ -221,14 +221,14 @@ export default function CaptainsLockerPage() {
 
               <div className="mt-5 grid gap-3">
                 <Link
-                  href="/captain's-locker/messages"
+                  href="/captains-locker/messages"
                   className="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 font-bold transition hover:border-cyan-300/40"
                 >
                   Harbor Messages
                 </Link>
 
                 <Link
-                  href="/captain's-locker/profile"
+                  href="/captains-locker/profile"
                   className="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 font-bold transition hover:border-cyan-300/40"
                 >
                   Account & Profile

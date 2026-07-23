@@ -54,7 +54,7 @@ export default function OrdersPage() {
           </div>
 
           <a
-            href="/captain's-locker"
+            href="/captains-locker"
             className="rounded-full border border-white/20 px-6 py-3 text-center font-bold transition hover:border-amber-300/60 hover:text-amber-200"
           >
             Return to Captain&apos;s Locker
