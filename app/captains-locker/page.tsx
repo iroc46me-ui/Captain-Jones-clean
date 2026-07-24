@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import OceanFloorAmbience from "../components/OceanFloorAmbience";  
 
 type HarborWatchItem = {
   title: string;
@@ -66,7 +67,12 @@ export default function CaptainsLockerPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#071116] text-stone-100">
+    <main className="relative min-h-screen overflow-hidden bg-[#071116] text-stone-100">
+      <OceanFloorAmbience
+  showDiver={true}
+  showBubbles={true}
+  density="light"
+/>
       <section className="border-b border-amber-400/20 bg-gradient-to-r from-[#071116] via-[#10242c] to-[#071116]">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 px-6 py-7 sm:px-10 md:flex-row md:items-end lg:px-16">
           <div>

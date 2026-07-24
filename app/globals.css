@@ -23,3 +23,100 @@ body {
     transform: translateY(0);
   }
 }
+@keyframes underwater-ray-drift {
+  0%,
+  100% {
+    transform: translateX(-2%) skewX(-5deg);
+    opacity: 0.25;
+  }
+
+  50% {
+    transform: translateX(2%) skewX(4deg);
+    opacity: 0.45;
+  }
+}
+
+@keyframes underwater-seaweed-sway {
+  0%,
+  100% {
+    transform: rotate(-1.5deg);
+  }
+
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+@keyframes underwater-seaweed-sway-right {
+  0%,
+  100% {
+    transform: scaleX(-1) rotate(-1deg);
+  }
+
+  50% {
+    transform: scaleX(-1) rotate(2deg);
+  }
+}
+
+.underwater-rays {
+  background:
+    linear-gradient(
+      105deg,
+      transparent 10%,
+      rgba(186, 230, 253, 0.12) 28%,
+      transparent 39%
+    ),
+    linear-gradient(
+      78deg,
+      transparent 42%,
+      rgba(165, 243, 252, 0.09) 55%,
+      transparent 69%
+    ),
+    linear-gradient(
+      115deg,
+      transparent 63%,
+      rgba(224, 242, 254, 0.08) 75%,
+      transparent 87%
+    );
+
+  transform-origin: top center;
+  animation: underwater-ray-drift 14s ease-in-out infinite;
+}
+
+.underwater-seaweed {
+  transform-origin: bottom left;
+  animation: underwater-seaweed-sway 8s ease-in-out infinite;
+}
+
+.underwater-seaweed-right {
+  transform-origin: bottom right;
+  animation: underwater-seaweed-sway-right 10s ease-in-out infinite;
+}
+@keyframes sea-turtle-swim {
+  0% {
+    transform: translateX(0) translateY(0);
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: translateX(-55vw) translateY(18px);
+    opacity: 0.4;
+  }
+
+  92% {
+    opacity: 0.35;
+  }
+
+  100% {
+    transform: translateX(-125vw) translateY(-8px);
+    opacity: 0;
+  }
+}
+
+.sea-turtle {
+  animation: sea-turtle-swim 42s linear infinite;
+}

@@ -1,8 +1,14 @@
 "use client";
-
+import CaptainsLog from "./components/Captainslog";
 import React, { useMemo, useState } from "react";
+import MarketplacePreview from "./components/MarketplacePreview";
 import { motion } from "framer-motion";
+import HarborDivider from "./components/HarborDivider";
+import FeaturedMarketplace from "./components/FeaturedMarketplace";
+import DockmastersNotice from "./components/DockmastersNotice";
+import HarborAlpha from "./components/HarborAlpha";
 import HarborWatchButton from "./components/HarborWatchButton";
+import HarborSecrets from "./components/HarborSecrets";
 import {
 
   Anchor,
@@ -263,7 +269,7 @@ function Hero() {
   <div className="relative z-10 mx-auto max-w-5xl">
     <div className="rounded-3xl border border-amber-400/25 bg-white/[0.03] px-7 py-10 shadow-2xl sm:px-12 sm:py-14">
       <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">
-        A Message from Captain Davey
+        A Message from Captain Jones
       </p>
 
       <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
@@ -292,12 +298,18 @@ function Hero() {
       <div className="mt-9 border-l-2 border-amber-400 pl-5">
         <p className="italic text-slate-400">Fair winds,</p>
         <p className="mt-1 text-xl font-bold text-amber-400">
-          Captain Davey ⚓
+          Captain Jones ⚓
         </p>
       </div>
     </div>
   </div>
 </section>
+<HarborDivider />
+<CaptainsLog />
+<FeaturedMarketplace items={sampleItems.slice(0, 5)} /> 
+
+<DockmastersNotice />
+<HarborAlpha />
   </>
 );
 }
@@ -777,11 +789,11 @@ function SafeHarbor() {
 
         <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
           <h3 className="font-black text-amber-200">
-            Harbor Master's Authority
+            Harbor Master's Authority-
           </h3>
 
           <p className="mt-3 text-slate-200">
-            Davey Jones Junk N Treasure reserves the right to remove
+            Davey Jones-Junk-N-Treasure reserves the right to remove
             listings, messages, buyers, sellers, or entire harbors that
             threaten the safety and integrity of the Harbor.
           </p>
@@ -1314,7 +1326,7 @@ function About() {
         </h2>
 
         <p className="mt-5 text-lg leading-8 text-slate-300">
-          Davey Jones Junk N Treasure is a harbor-style marketplace for sellers, collectors,
+          Davey Jones Junk-N-Treasure is a harbor-style marketplace for sellers, collectors,
           prospectors, estate finds, handmade tools, RV parts, oddities, and stories worth keeping.
         </p>
 
@@ -1329,7 +1341,7 @@ function About() {
 function Footer() {
   return (
     <footer className="border-t border-white/10 bg-slate-950 px-4 py-10 text-center text-sm text-slate-400">
-      © {new Date().getFullYear()} Davey Jones Junk N Treasure
+      © {new Date().getFullYear()} Davey Jones Junk-N-Treasure
     </footer>
   );
 }
@@ -1339,6 +1351,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-white">
       <Header />
+      
       <Hero />
       <LiveBanner />
       <Marketplace />

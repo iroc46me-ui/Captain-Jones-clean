@@ -1,8 +1,16 @@
 import Link from "next/link";
 import Marketplace from "../components/Marketplace";
+import OceanFloorAmbience from "../components/OceanFloorAmbience";
 export default function TreasureDeckPage() {
   return (
-    <main className="min-h-screen bg-[#071116] text-stone-100">
+   
+    <main className="relative min-h-screen overflow-hidden bg-[#071116] text-stone-100">
+<OceanFloorAmbience
+  showDiver={true}
+  showBubbles={true}
+  density="light"
+/>
+
       <section className="border-b border-cyan-400/20 bg-gradient-to-r from-[#071116] via-[#0a2230] to-[#071116]">
   <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 px-6 py-5 sm:px-10 md:flex-row md:items-end lg:px-16">
     <div>
