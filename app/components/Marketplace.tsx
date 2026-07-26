@@ -3,10 +3,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import HarborWatchButton from "./HarborWatchButton";
+import TreasureCard from "./TreasureCard";
 
 type MarketplaceItem = {
   title: string;
   slug: string;
+  image?: string;
   price: string;
   category: string;
   tag: string;
@@ -35,6 +37,7 @@ const sampleItems: MarketplaceItem[] = [
   {
     title: "Desert Nugget Digger",
     slug: "desert-nugget-digger",
+    image: "/marketplace-pick.png",
     price: "$75",
     category: "Gold & Prospecting",
     tag: "Handmade Tool",
@@ -190,9 +193,13 @@ export default function Marketplace() {
 
   return (
     <section
-      id="marketplace"
-      className="bg-gradient-to-b from-cyan-950 to-slate-950 px-4 py-5 text-white sm:px-6 lg:px-8"
-    >
+  id="marketplace"
+  className="relative min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat px-4 py-5 text-white"
+  style={{
+  backgroundImage: "url('/public-marketplace-background-clean.png')"
+}}
+>
+    
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
@@ -258,54 +265,12 @@ export default function Marketplace() {
           className="mt-4 grid gap-4 animate-[fadeInUp_400ms_ease-out] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
           {visibleItems.map((item, index) => (
-            <a
-              
-              key={`${item.slug}-${index}`}
-              href={`/listing/${item.slug}`}
-              className="group relative block rounded-[2rem] border border-white/10 bg-white/[0.06] p-5 shadow-xl transition-all duration-300 hover:-translate-y-3 hover:scale-[1.02] hover:border-amber-200/60 hover:shadow-2xl hover:shadow-cyan-400/30"
-            >
-              <HarborWatchButton
-                item={{
-                  title: item.title,
-                  slug: item.slug,
-                  price: item.price,
-                  category: item.category,
-                  seller: item.seller,
-                }}
-              />
-
-              <div className="flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-600/50 to-cyan-950/60">
-                <span
-                  className="text-5xl"
-                  aria-hidden="true"
-                >
-                  {categoryIcons[item.category] ?? "⚓"}
-                </span>
-              </div>
-
-              <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-cyan-200">
-                {item.tag || "New Listing"}
-              </p>
-
-              <h3 className="mt-2 pr-12 text-xl font-black text-white">
-                {item.title}
-              </h3>
-
-              <div className="mt-4 flex items-center justify-between gap-3">
-                <span className="text-2xl font-black text-amber-200">
-                  {item.price}
-                </span>
-
-                <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-bold text-slate-200">
-                  {item.category}
-                </span>
-              </div>
-
-              <p className="mt-3 text-sm font-semibold text-slate-400">
-                Seller: {item.seller}
-              </p>
-            </a>
-          ))}
+  <TreasureCard
+    key={`${item.slug}-${index}`}
+    item={item}
+    featured={item.title === "Desert Nugget Digger"}
+  />
+))}
         </div>
 
         {visibleItems.length === 0 && (

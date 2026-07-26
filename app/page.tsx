@@ -1,5 +1,5 @@
 "use client";
-import CaptainsLog from "./components/Captainslog";
+import CaptainsLog from "./components/CaptainsJournal";
 import React, { useMemo, useState } from "react";
 import MarketplacePreview from "./components/MarketplacePreview";
 import { motion } from "framer-motion";
@@ -9,6 +9,7 @@ import DockmastersNotice from "./components/DockmastersNotice";
 import HarborAlpha from "./components/HarborAlpha";
 import HarborWatchButton from "./components/HarborWatchButton";
 import HarborSecrets from "./components/HarborSecrets";
+import ChartOurCourse from "./components/ChartOurCourse";
 import {
 
   Anchor,
@@ -33,6 +34,7 @@ import {
 
   X,
 } from "lucide-react";
+import CaptainsJournal from "./components/CaptainsJournal";
 
 const sampleItems = [
 
@@ -216,100 +218,16 @@ function Hero() {
       </div>
 
     </section>
-    <section className="border-y border-amber-400/30 bg-slate-950 px-6 py-14 text-white">
-  <div className="mx-auto max-w-4xl text-center">
-    <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">
-      Captain&apos;s Preview
-    </p>
+    <ChartOurCourse />
 
-    <h2 className="text-3xl font-bold sm:text-4xl">
-      Help Us Chart Our Course
-    </h2>
-
-    <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-300">
-  Welcome to <strong>Davey Jones Junk-N-Treasure</strong>. You're
-  visiting during our Captain&apos;s Preview, where every suggestion,
-  every idea, and every new crew member helps us chart our course.
-  Explore the harbor, discover hidden treasures, together we'll build a
-  marketplace to remember.
-</p>
-
-    <a
-      href="#join"
-      className="mt-8 inline-flex rounded-md bg-amber-500 px-6 py-3 font-semibold text-slate-950 transition hover:bg-amber-400"
-    >
-      Come Aboard
-    </a>
-  </div>
-</section>
-<section
-  className="relative overflow-hidden border-b border-amber-400/30 bg-[#05091c] px-6 py-16 text-white"
-  style={{
-    backgroundImage:
-      "linear-gradient(rgba(2, 6, 23, 0.78), rgba(2, 6, 23, 0.9)), url('/harbor-watch-underwater-bg.jpg')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  }}
->
-  <img
-  src="/harbor-watch-seaweed-left.png"
-  alt=""
-  aria-hidden="true"
-  className="pointer-events-none absolute bottom-0 left-0 z-0 h-[85%] max-w-[32%] object-contain opacity-35"
-/>
-
-<img
-  src="/harbor-watch-fish-blue.png"
-  alt=""
-  aria-hidden="true"
-  className="pointer-events-none absolute right-[8%] top-[18%] z-0 w-32 opacity-35"
-/>
-
-<div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-r from-slate-950/60 via-transparent to-slate-950/40" />
-  <div className="relative z-10 mx-auto max-w-5xl">
-    <div className="rounded-3xl border border-amber-400/25 bg-white/[0.03] px-7 py-10 shadow-2xl sm:px-12 sm:py-14">
-      <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">
-        A Message from Captain Jones
-      </p>
-
-      <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
-        Welcome Aboard, Shipmate.
-      </h2>
-
-      <div className="mt-7 max-w-3xl space-y-5 text-lg leading-8 text-slate-300">
-        <p>
-          Every treasure has a story. Sometimes it&apos;s an antique,
-          sometimes it&apos;s a family heirloom, and sometimes it&apos;s
-          something that was simply waiting to be discovered again.
-        </p>
-
-        <p>
-          Davey Jones Junk-N-Treasure is more than a place to buy and
-          sell. It&apos;s a harbor where stories, collections,
-          craftsmanship, and unexpected discoveries can come together.
-        </p>
-
-        <p>
-          Whether you&apos;re here to browse, sell, collect, or simply
-          enjoy the voyage, I&apos;m glad you&apos;ve come aboard.
-        </p>
-      </div>
-
-      <div className="mt-9 border-l-2 border-amber-400 pl-5">
-        <p className="italic text-slate-400">Fair winds,</p>
-        <p className="mt-1 text-xl font-bold text-amber-400">
-          Captain Jones ⚓
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
 <HarborDivider />
-<CaptainsLog />
+<CaptainsJournal />
+
 <FeaturedMarketplace items={sampleItems.slice(0, 5)} /> 
 
 <DockmastersNotice />
 <HarborAlpha />
+ 
   </>
 );
 }
@@ -349,7 +267,13 @@ function Marketplace() {
 
     [query, selectedCategory]);
   return (
-    <section id="marketplace" className="bg-gradient-to-b from-cyan-950 to-slate-950 px-4 py-6 text-white sm:px-6 lg:px-8">
+    <section
+  id="marketplace"
+  className="relative overflow-hidden bg-cover bg-center px-4 py-6 text-white sm:px-6 lg:px-8"
+  style={{
+    backgroundImage: "url('/public-marketplace-background-clean.png')"  
+  }}
+>
       <div className="mx-auto max-w-7xl"></div><div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
         <div><p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">Marketplace Preview</p>
           <h2 className="mt-0 text-xl font-black tracking-tight text-red-500"> Treasure by category</h2>
@@ -386,9 +310,8 @@ function Marketplace() {
           <a
             key={item.title}
             href={`#item-${item.slug}`}
-            className="group relativeblock rounded-[2rem] border border-white/10 bg-white/[0.06] p-5 shadow-xl 
-  transition-all duration-300 hover:-translate-y-3 hover:scale-[1.02] hover:border-amber-200/60 hover:bg-white/[0.10] 
-  hover:shadow-2xl hover:shadow-cyan-400/30"
+            className="group relative block overflow-hidden rounded-[2rem] border border-white/15 bg-slate-950/70 p-5 shadow-xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-3 
+            hover:scale-[1.02] hover:border-amber-200/60 hover:bg-slate-950/85 hover:shadow-2xl hover:shadow-cyan-400/30"
           >
             <HarborWatchButton
               item={{
@@ -401,19 +324,50 @@ function Marketplace() {
             />
 
 
-            <div className="flex h-24 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-800 to-cyan-900">
-              <span className="text-5xl">
-                {categoryImages[item.category as keyof typeof categoryImages] === "gold" && "⛏️"}
-                {categoryImages[item.category as keyof typeof categoryImages] === "wheel" && "⚙️"}
-                {categoryImages[item.category as keyof typeof categoryImages] === "compass" && "🧭"}
-                {categoryImages[item.category as keyof typeof categoryImages] === "chest" && "🧰"}
-                {categoryImages[item.category as keyof typeof categoryImages] === "hammer" && "🔨"}
-                {categoryImages[item.category as keyof typeof categoryImages] === "scroll" && "📜"}
-                {categoryImages[item.category as keyof typeof categoryImages] === "kraken" && "🐙"}
-                {categoryImages[item.category as keyof typeof categoryImages] === "anchor" && "⚓"}
-                {categoryImages[item.category as keyof typeof categoryImages] === "flag" && "🏴‍☠️"}
-              </span>
-            </div>
+           <div className="flex h-24 items-center justify-center overflow-hidden rounded-2xl bg-slate-800/90">
+  
+  {item.title === "Vintage Brass Ship Lantern" ? (
+  <img
+  src="/marketplace-art/lantern-card.png"
+  alt={item.title}
+  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+/>
+  ) : item.title === "Old Coin & Relic Lot" ? (
+  <img
+    src="/marketplace-art/coin-card.png"
+    alt={item.title}
+    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+  />
+  ) : item.title === "Prospector's Brass Scale" ? (
+  <img
+    src="/marketplace-art/scale-card.png"
+    alt={item.title}
+    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+  />
+  
+  ) : item.title === "Estate Drawer Oddities" ? (
+  <img
+    src="/marketplace-art/drawer-card.png"
+    alt={item.title}
+    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+  />
+
+) : item.title === "Desert Nugget Digger" ? (
+  <img
+    src="/marketplace-pick.png"
+    alt={item.title}
+    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+  />
+) : item.title === "RV Parts Mystery Box" ? (
+  <img
+    src="/marketplace-art/toolbox-card.png"
+    alt={item.title}
+    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+  />
+) : (
+  <span className="text-5xl">📦</span>
+)}
+</div>
             <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-cyan-200">{item.tag}</p>
             <h3 className="mt-2 text-xl font-black">{item.title}</h3><div className="mt-4 flex items-center justify-between">
               <span className="text-2xl font-black text-amber-200">{item.price}</span>

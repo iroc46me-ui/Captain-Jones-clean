@@ -7,7 +7,7 @@ export default function MarketplacePreview() {
 
       <div className="relative z-10 mx-auto max-w-6xl text-center">
         <p className="text-sm font-semibold uppercase tracking-[0.32em] text-amber-400">
-          Marketplace Preview
+          Marketplace Preview — ACTIVE COMPONENT
         </p>
 
         <h2 className="mx-auto mt-5 max-w-4xl text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
