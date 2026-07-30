@@ -382,10 +382,15 @@ function Marketplace() {
 
 function ListingDetails() {
   return (
-    <section className="bg-slate-950 px-4 py-8 text-white sm:px-6 lg:px-8">
+    <section
+  className="bg-slate-950 bg-cover bg-center bg-fixed bg-no-repeat px-4 py-8 text-white sm:px-6 lg:px-8"
+  style={{
+    backgroundImage: "url('/treasure-details-background.png')",
+  }}
+>
       <div className="mx-auto max-w-7xl">
         <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
-          Treasure Details
+          Treasure Details 
         </p>
 
         <div className="mt-8 grid gap-6">
@@ -397,8 +402,7 @@ function ListingDetails() {
             >
 
 
-              <div className="mb-4 flex h-28 items-center justify-center rounded-[2rem]
-      border border-white/10 bg-gradient-to-br from-amber-900/30 to-slate-900 sm:h-36">
+              <div className="mb-4 flex h-28 items-center justify-center rounded-[2rem] border border-white/15 bg-black/35 sm:h-36">
 
                 <span className="text-8xl">
                   {categoryImages[item.category as keyof typeof categoryImages] === "gold" && "⛏️"}

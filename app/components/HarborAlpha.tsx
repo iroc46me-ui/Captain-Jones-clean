@@ -3,11 +3,15 @@ import UnderwaterLayers from "./UnderwaterLayers";
 
 export default function HarborAlpha() {
   return (
-    <section className="relative overflow-hidden border-y border-amber-400/20 bg-slate-950 px-6 py-16 text-white">
-        <UnderwaterLayers />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.10),transparent_62%)]" />
-
-      <div className="relative z-10 mx-auto max-w-6xl rounded-3xl border border-amber-400/25 bg-slate-900/80 px-7 py-10 shadow-2xl sm:px-10 lg:px-14">
+    <section className="relative overflow-hidden border-y border-amber-400/20 bg-slate-950">
+  <div
+    className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-100 brightness-125 saturate-125 contrast-110"  
+    style={{
+      backgroundImage: "url('/harbor-alpha-master-background.png')",
+    }}
+  />
+    
+      <div className="relative z-10 mx-auto max-w-6xl rounded-3xl border border-amber-400/25 bg-slate-900/55 px-7 py-10 shadow-2xl sm:px-10 lg:px-14">
         <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <p className="text-sm font-bold uppercase tracking-[0.32em] text-amber-400">

@@ -169,8 +169,18 @@ export default function ListingPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#071116] text-stone-100">
-      <section className="border-b border-cyan-400/20 bg-gradient-to-r from-[#071116] via-[#0a2230] to-[#071116]">
+    <main
+  className="min-h-screen text-stone-100"
+  style={{
+    backgroundColor: "red",
+    backgroundImage: "url('/treasure-details-background.png')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundAttachment: "fixed",
+  }}
+>
+      <section className="border-b border-cyan-400/20 bg-transparent">
         <div className="mx-auto max-w-7xl px-6 py-7 sm:px-10 lg:px-16">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300">
             Davey Jones Junk-N-Treasure
