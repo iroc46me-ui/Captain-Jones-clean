@@ -14,7 +14,15 @@ export default function FeaturedMarketplace({
   items,
 }: FeaturedMarketplaceProps) {
   return (
-    <section className="bg-slate-950 px-6 py-16 text-white">
+    <section
+  className="fresh-arrivals-reveal relative overflow-hidden px-6 py-16 text-white"
+  style={{
+    backgroundImage: "url('/marketplace-art/fresh-arrivals-harbor-bg.png')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  }}
+>
       <div className="mx-auto max-w-7xl">
         <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">
           Captain Jones' Featured Discoveries
@@ -24,11 +32,11 @@ export default function FeaturedMarketplace({
           Fresh Arrivals at the Harbor
         </h2>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-5">
+        <div className="fresh-arrivals-grid mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-5">
           {items.map((item) => (
             <div
               key={item.title}
-              className="rounded-2xl border border-amber-400/20 bg-slate-900 p-5 transition hover:-translate-y-1 hover:border-amber-400/50"
+              className="rounded-2xl border border-amber-400/20 bg-slate-900/85 backdrop-blur-sm p-5 transition hover:-translate-y-1 hover:border-amber-400/50"
             >
               <div className="mb-4 flex h-40 items-center justify-center rounded-xl bg-slate-800 text-5xl">
                 ⚓
@@ -47,18 +55,28 @@ export default function FeaturedMarketplace({
               </p>
 
               <div className="mt-5 flex items-center justify-between">
-                <span className="font-bold text-amber-300">
-                  {item.price}
-                </span>
+  <span className="font-bold text-amber-300">
+    {item.price}
+  </span>
 
-                <button className="rounded-full border border-amber-400/50 px-4 py-2 text-sm hover:bg-amber-400 hover:text-slate-900">
-                  View Treasure
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  <button
+    type="button"
+    className="rounded-full border border-amber-400/50
+px-2.5 py-1
+text-[11px] font-semibold
+tracking-wide
+transition-all duration-300
+hover:bg-amber-400
+hover:text-slate-900
+hover:shadow-[0_0_16px_rgba(251,191,36,0.45)]" 
+  >
+    Open Chest
+  </button>
+</div>
+</div>
+))}
+</div>
+</div>
+</section>
+);
 }

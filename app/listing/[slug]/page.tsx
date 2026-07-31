@@ -196,8 +196,8 @@ export default function ListingPage() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-7 px-6 py-8 sm:px-10 lg:grid-cols-[1fr_0.9fr] lg:px-16">
-        <div className="flex min-h-[330px] items-center justify-center rounded-3xl border border-cyan-300/20 bg-gradient-to-br from-cyan-700/30 to-slate-950">
+      <section className="mx-auto grid max-w-6xl gap-7 px-6 py-8 sm:px-10 lg:grid-cols-[0.88fr_0.9fr] lg:px-16">
+  <div className="mx-auto flex min-h-[285px] w-[88%] items-center justify-center rounded-3xl border border-cyan-300/20 bg-gradient-to-br from-cyan-700/30 to-slate-950">
           <span className="text-8xl" aria-hidden="true">
             {categoryIcons[listing.category] || "⚓"}
           </span>

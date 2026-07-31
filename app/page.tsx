@@ -106,6 +106,7 @@ const categories = [
   "Captain's Picks",
 ];
 const categoryImages = {
+  
   "Gold & Prospecting": "gold",
   "Antiques": "wheel",
   "RV & Auto": "compass",
@@ -116,6 +117,14 @@ const categoryImages = {
   "Local Pickup": "anchor",
   "Captain's Picks": "flag",
 }
+const listingImages: Record<string, string> = {
+  "Vintage Brass Ship Lantern": "/marketplace-art/lantern-card.png",
+  "Desert Nugget Digger": "/marketplace-art/pick-card.png",
+  "Old Coin & Relic Lot": "/marketplace-art/coin-card.png",
+  "Prospector's Brass Scale": "/marketplace-art/scale-card.png",
+  "Estate Drawer Oddities": "/marketplace-art/drawer-card.png",
+  "RV Parts Mystery Box": "/marketplace-art/toolbox-card.png",
+};
 
 const brandButtons = [
   "Browse Treasure",
@@ -155,7 +164,7 @@ function Header() {
         <div className="text-3xl text-amber-300">⚓</div>
 
         <nav className="flex overflow-x-auto items-center gap-2 text-xs">
-          <a href="#join" className={navLink}>Open a Chest</a>
+          <a href="#marketplace" className={navLink}>Open a Chest</a>
           <a href="#marketplace" className={navLink}>Treasure Deck</a>
           <a href="#identity" className={navLink}>The Captain&apos;s Cut</a>
           <a href="#live-events" className={navLink}>Live Events</a>
@@ -402,20 +411,21 @@ function ListingDetails() {
             >
 
 
-              <div className="mb-4 flex h-28 items-center justify-center rounded-[2rem] border border-white/15 bg-black/35 sm:h-36">
+              <div className="group relative mx-auto mb-8 h-48 w-[54%] overflow-hidden rounded-[2rem] border border-white/15 bg-black/20 shadow-2xl sm:h-64">
+  {listingImages[item.title] ? (
+    <img
+      src={listingImages[item.title]}
+      alt={item.title}
+      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+    />
+  ) : (
+    <div className="flex h-full w-full items-center justify-center bg-black/30">
+      <span className="text-7xl">⚓</span>
+    </div>
+  )}
 
-                <span className="text-8xl">
-                  {categoryImages[item.category as keyof typeof categoryImages] === "gold" && "⛏️"}
-                  {categoryImages[item.category as keyof typeof categoryImages] === "wheel" && "⚙️"}
-                  {categoryImages[item.category as keyof typeof categoryImages] === "compass" && "🧭"}
-                  {categoryImages[item.category as keyof typeof categoryImages] === "chest" && "🧰"}
-                  {categoryImages[item.category as keyof typeof categoryImages] === "hammer" && "🔨"}
-                  {categoryImages[item.category as keyof typeof categoryImages] === "scroll" && "📜"}
-                  {categoryImages[item.category as keyof typeof categoryImages] === "kraken" && "🐙"}
-                  {categoryImages[item.category as keyof typeof categoryImages] === "anchor" && "⚓"}
-                  {categoryImages[item.category as keyof typeof categoryImages] === "flag" && "🏴‍☠️"}
-                </span>
-              </div>
+  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
+</div>
 
               <p className="text-xs font-black uppercase tracking-[0.3em] text-cyan-200">
                 {item.tag}
@@ -427,9 +437,9 @@ function ListingDetails() {
 
               <p className="mt-3 text-2xl font-black">{item.price}</p>
 
-              <p className="mt-4 text-slate-300">
+              <p className="mt-3 text-lg text-white [text-shadow:0_2px_5px_rgba(0,0,0,0.95)]">
                 Seller:{" "}
-                <a href={`#seller-${item.seller.replaceAll(" ", "-").toLowerCase()}`} className="font-bold text-amber-200 hover:underline">
+                <a href={`#seller-${item.seller.replaceAll(" ", "-").toLowerCase()}`} className="font-bold text-amber-200 hover:text-amber-100" >
                   {item.seller}
                 </a>
               </p>
@@ -495,7 +505,7 @@ function SellerProfiles() {
               className="scroll-mt-28 rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl"
             >
 
-              <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-5xl">
+              <div className="mb-3 flex h-24 w-24 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-5xl">
                 {seller === "Davey's Workshop" && "⚒️"}
                 {seller === "Road Dog Salvage" && "🚐"}
                 {seller === "Relic Rider" && "🏺"}

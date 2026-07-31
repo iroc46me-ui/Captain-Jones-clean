@@ -120,3 +120,64 @@ body {
 .sea-turtle {
   animation: sea-turtle-swim 42s linear infinite;
 }
+/* Fresh Arrivals: show the harbor scene before revealing buttons */
+.fresh-arrivals-reveal button,
+.fresh-arrivals-reveal a[role="button"] {
+  opacity: 0;
+  visibility: hidden;
+  animation: revealHarborButtons 1.8s ease-in-out 3s forwards;
+}
+
+@keyframes revealHarborButtons {
+  from {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+.harbor-button-reveal {
+  opacity: 0;
+  animation: harborButtonReveal 2s ease-in-out 3s both;
+}
+
+@keyframes harborButtonReveal {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+} 
+.fresh-arrivals-grid {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: freshArrivalsGridReveal 2s ease-out 3s both;
+}
+
+@keyframes freshArrivalsGridReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fresh-arrivals-grid {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
