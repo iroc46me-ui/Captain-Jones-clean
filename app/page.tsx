@@ -164,26 +164,22 @@ function Header() {
         <div className="text-3xl text-amber-300">⚓</div>
 
         <nav className="flex overflow-x-auto items-center gap-2 text-xs">
-          <a href="#marketplace" className={navLink}>Open a Chest</a>
+          <a href="#home" className={navLink}>Home</a>
+          <a href="#join" className={navLink}>Sell Your Treasure</a>
           <a href="#marketplace" className={navLink}>Treasure Deck</a>
-          <a href="#identity" className={navLink}>The Captain&apos;s Cut</a>
-          <a href="#live-events" className={navLink}>Live Events</a>
+          <a href="#identity" className={navLink}>The Captain's picks'</a>
+          <a href="#live-events" className={navLink}>Live Events coming soon</a>
           <a href="#about" className={navLink}>About</a>
         </nav>
 
-        <a
-          href="#join"
-          className="rounded-md border border-amber-400/30 bg-amber-500/10 px-5 py-2 text-sm font-bold text-amber-100 transition hover:bg-amber-500/20"
-        >
-          Join Harbor
-        </a>
+        
       </div>
     </header>
   );
 }
 function Hero() {
   return (
-    <>
+    <>  
       <section
         id="home"
         className="relative flex min-h-[calc(100svh-64px)] w-full items-center overflow-hidden bg-cover bg-center text-white"
@@ -200,30 +196,29 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <p className="text-xs font-black uppercase tracking-[0.32em] text-cyan-200 sm:text-sm md:text-base">
-            Harbor Marketplace
-          </p>
+          <p className="text-[10px] font-black uppercase tracking-[0.28em] text-cyan-200 sm:text-xs md:text-sm">
+  Harbor Marketplace
+</p>
 
-          <h1 className="mt-4 font-serif text-5xl font-black uppercase leading-[0.9] tracking-tight text-stone-100 drop-shadow-[0_4px_5px_rgba(0,0,0,0.95)] sm:text-6xl md:text-7xl lg:text-8xl">
-            Davey Jones
-          </h1>
+<h1 className="mt-3 font-serif text-4xl font-black uppercase leading-[0.9] tracking-tight text-stone-100 drop-shadow-[0_4px_5px_rgba(0,0,0,0.95)] sm:text-5xl md:text-6xl lg:text-7xl">
+  Davey Jones
+</h1>
 
-          <h2 className="mt-3 font-serif text-2xl font-bold uppercase tracking-[0.12em] text-amber-300 drop-shadow-[0_3px_4px_rgba(0,0,0,0.95)] sm:text-3xl md:text-4xl lg:text-5xl">
-            Junk N Treasure
-          </h2>
+<h2 className="mt-2 font-serif text-xl font-bold uppercase tracking-[0.12em] text-amber-300 drop-shadow-[0_3px_4px_rgba(0,0,0,0.95)] sm:text-2xl md:text-3xl lg:text-4xl">
+  Junk-N-Treasure
+</h2>
 
-          <div className="my-6 h-px w-52 bg-gradient-to-r from-transparent via-amber-300/80 to-transparent sm:w-72" />
+<div className="my-4 h-px w-44 bg-gradient-to-r from-transparent via-amber-300/80 to-transparent sm:w-60" />
 
-          <h3 className="max-w-3xl font-serif text-3xl font-bold leading-tight text-stone-100 drop-shadow-[0_3px_4px_rgba(0,0,0,0.95)] sm:text-4xl md:text-5xl">
-            Where junk goes overboard
-            <br />
-            and <span className="text-amber-300">Treasure</span> rises.
-          </h3>
+<h3 className="max-w-3xl font-serif text-2xl font-bold leading-tight text-stone-100 drop-shadow-[0_3px_4px_rgba(0,0,0,0.95)] sm:text-3xl md:text-4xl">
+  Where junk goes overboard
+  <br />
+  and <span className="text-amber-300">Treasure</span> rises.
+</h3>
 
-          <p className="mt-5 max-w-2xl text-base font-medium leading-7 text-stone-200 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] sm:text-lg md:text-xl">
-            A lower-fee marketplace for useful junk, rare finds, and honest
-            Treasure.
-          </p>
+<p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-stone-200 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] sm:text-base md:text-lg">
+  An adventurous marketplace for useful junk, rare finds, and honest Treasure.
+</p>
 
           <div className="mt-8 flex w-full max-w-xl flex-col gap-4 sm:flex-row sm:justify-center">
             <a
