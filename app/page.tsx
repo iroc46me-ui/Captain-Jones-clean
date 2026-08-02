@@ -187,25 +187,22 @@ function Hero() {
     <section
       id="home"
 
-      className="relative min-h-screen overflow-hidden pt-28 text-white"
-      style={{
-        backgroundImage: "url('/harbor-hero.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center bottom",
-        backgroundRepeat: "no-repeat",
-      }}
+      className="relative w-full overflow-hidden bg-contain bg-top bg-no-repeat pt-16 text-white md:min-h-screen md:bg-cover md:bg-center md:pt-28"
+style={{
+  backgroundImage: "url('/harbor-hero.png')",
+}}
     >
       <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
 
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-between px-4 pb-8 pt-24 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto flex min-h-[56vw] w-full max-w-7xl flex-col justify-between px-3 pb-4 pt-4 sm:px-6 md:min-h-screen md:pb-8 md:pt-24 lg:px-8">
         <motion.div
           className="flex flex-1 items-center justify-center"
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          <div className="mt-[rem] flex justify-center gap-2">
+          <div className="mt-auto hidden justify-center gap-2 md:flex">
             <a
               href="#join"
               className="-ml-1 rounded-md border border-transparent px-10 py-2 text-transparent hover:bg-amber-300/10"
