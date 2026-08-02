@@ -182,62 +182,76 @@ function Header() {
   );
 }
 function Hero() {
- return (
-  <>
-    <section
-      id="home"
+  return (
+    <>
+      <section
+        id="home"
+        className="relative flex min-h-[calc(100svh-64px)] w-full items-center overflow-hidden bg-cover bg-center text-white"
+        style={{
+          backgroundImage: "url('/harbor-hero.png')",
+        }}
+      >
+        {/* Darkens the center slightly so the real text stays readable */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-slate-950/25 via-slate-950/45 to-slate-950/75" />
 
-      className="relative w-full overflow-hidden bg-contain bg-top bg-no-repeat pt-16 text-white md:min-h-screen md:bg-cover md:bg-center md:pt-28"
-style={{
-  backgroundImage: "url('/harbor-hero.png')",
-}}
-    >
-      <div className="absolute inset-0 bg-black/20 pointer-events-none" />
-
-
-      <div className="relative z-10 mx-auto flex min-h-[56vw] w-full max-w-7xl flex-col justify-between px-3 pb-4 pt-4 sm:px-6 md:min-h-screen md:pb-8 md:pt-24 lg:px-8">
         <motion.div
-          className="flex flex-1 items-center justify-center"
+          className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-5 py-16 text-center sm:px-8 md:py-20"
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.8 }}
         >
-          <div className="mt-auto hidden justify-center gap-2 md:flex">
+          <p className="text-xs font-black uppercase tracking-[0.32em] text-cyan-200 sm:text-sm md:text-base">
+            Harbor Marketplace
+          </p>
+
+          <h1 className="mt-4 font-serif text-5xl font-black uppercase leading-[0.9] tracking-tight text-stone-100 drop-shadow-[0_4px_5px_rgba(0,0,0,0.95)] sm:text-6xl md:text-7xl lg:text-8xl">
+            Davey Jones
+          </h1>
+
+          <h2 className="mt-3 font-serif text-2xl font-bold uppercase tracking-[0.12em] text-amber-300 drop-shadow-[0_3px_4px_rgba(0,0,0,0.95)] sm:text-3xl md:text-4xl lg:text-5xl">
+            Junk N Treasure
+          </h2>
+
+          <div className="my-6 h-px w-52 bg-gradient-to-r from-transparent via-amber-300/80 to-transparent sm:w-72" />
+
+          <h3 className="max-w-3xl font-serif text-3xl font-bold leading-tight text-stone-100 drop-shadow-[0_3px_4px_rgba(0,0,0,0.95)] sm:text-4xl md:text-5xl">
+            Where junk goes overboard
+            <br />
+            and <span className="text-amber-300">Treasure</span> rises.
+          </h3>
+
+          <p className="mt-5 max-w-2xl text-base font-medium leading-7 text-stone-200 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] sm:text-lg md:text-xl">
+            A lower-fee marketplace for useful junk, rare finds, and honest
+            Treasure.
+          </p>
+
+          <div className="mt-8 flex w-full max-w-xl flex-col gap-4 sm:flex-row sm:justify-center">
             <a
               href="#join"
-              className="-ml-1 rounded-md border border-transparent px-10 py-2 text-transparent hover:bg-amber-300/10"
+              className="w-full rounded-xl border border-amber-300/70 bg-slate-950/75 px-6 py-4 text-center font-black text-amber-100 shadow-xl backdrop-blur-sm transition hover:-translate-y-1 hover:bg-amber-300 hover:text-slate-950 hover:shadow-amber-300/30 sm:w-auto"
             >
-              Open a Seller Chest
+              ⚓ Open a Seller Chest
             </a>
 
             <a
               href="#marketplace"
-              className="rounded-md border border-transparent px-8 py-2 text-transparent hover:bg-amber-300/10"
+              className="w-full rounded-xl border border-cyan-200/50 bg-slate-950/75 px-6 py-4 text-center font-black text-white shadow-xl backdrop-blur-sm transition hover:-translate-y-1 hover:border-amber-300 hover:bg-amber-300 hover:text-slate-950 hover:shadow-amber-300/30 sm:w-auto"
             >
-              Explore the Treasure Deck
+              🧭 Explore the Treasure Deck
             </a>
           </div>
         </motion.div>
+      </section>
 
-        <div className="absolute left-0 right-0 top-[57%] z-10 flex justify-center">
-        </div>
-      </div>
-
-    </section>
-    <ChartOurCourse />
-
-<HarborDivider />
-<CaptainsJournal />
-
-<FeaturedMarketplace items={sampleItems.slice(0, 5)} /> 
-
-<DockmastersNotice />
-<HarborAlpha />
- 
-  </>
-);
+      <ChartOurCourse />
+      <HarborDivider />
+      <CaptainsJournal />
+      <FeaturedMarketplace items={sampleItems.slice(0, 5)} />
+      <DockmastersNotice />
+      <HarborAlpha />
+    </>
+  );
 }
-
 
 function LiveBanner() {
   return <section id="live-events" className="scroll-mt-24 mt-8 t16 bg-slate-950 px-4 py-4 text-white sm:px-6 lg:px-8">
