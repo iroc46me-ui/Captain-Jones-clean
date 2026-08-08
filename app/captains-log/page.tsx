@@ -23,45 +23,87 @@ export default function CaptainsLogPage() {
               actually want than guess. This is where the Harbor Crew helps
               chart our course.
             </p>
+            
+            <p className="mt-5 text-xl font-semibold italic text-amber-300 drop-shadow-xl sm:text-2xl">
+                  Come aboard. Be part of the crew.
+             </p>
+
 
             <section id="vote" className="mt-16 max-w-xl">
-              <h2 className="text-3xl font-bold text-amber-300 drop-shadow-xl">
-                Vote on Features
-              </h2>
+  <h2 className="text-3xl font-bold text-amber-300 drop-shadow-xl">
+    Vote on Features
+  </h2>
 
-              <p className="mt-4 text-lg leading-8 text-white drop-shadow-xl">
-                Future visitors will vote on new Harbor features. The most
-                requested ideas move to the top of the Captain&apos;s build
-                list.
-              </p>
-            </section>
+  <p className="mt-4 text-lg leading-8 text-white drop-shadow-xl">
+    Help decide what gets built next. Vote on new Harbor features and
+    help move the most useful ideas toward the top of the Captain&apos;s
+    build list.
+  </p>
 
-            <section id="ideas" className="mt-14 max-w-xl">
-              <h2 className="text-3xl font-bold text-cyan-300 drop-shadow-xl">
-                Suggest an Idea
-              </h2>
+  <a
+    href="/captains-log/vote"
+    className="mt-5 inline-block rounded-full border border-amber-300/60 bg-slate-950/70 px-6 py-3 font-bold text-amber-200 shadow-lg transition hover:-translate-y-1 hover:bg-amber-300 hover:text-slate-950"
+  >
+    Cast Your Vote
+  </a>
+</section>
 
-              <p className="mt-4 text-lg leading-8 text-white drop-shadow-xl">
-                Have an idea for buying, selling, searching, shipping, ratings,
-                auctions, or anything else? Drop your message in the
-                Captain&apos;s Log.
-              </p>
-            </section>
 
-            <section id="problems" className="mt-14 max-w-xl pb-24">
-              <h2 className="text-3xl font-bold text-red-300 drop-shadow-xl">
-                Report Rough Seas
-              </h2>
+<section id="ideas" className="mt-14 max-w-xl">
+  <h2 className="text-3xl font-bold text-cyan-300 drop-shadow-xl">
+    Suggest an Idea
+  </h2>
 
-              <p className="mt-4 text-lg leading-8 text-white drop-shadow-xl">
-                Found a broken button, confusing wording, or something that
-                doesn&apos;t work? Tell us here so we can fix it before the
-                Harbor officially opens.
-              </p>
-            </section>
-          </div>
-        </div>
+  <p className="mt-4 text-lg leading-8 text-white drop-shadow-xl">
+    Have an idea for buying, selling, searching, shipping, ratings,
+    categories, auctions, or something we haven&apos;t thought of yet?
+    Put it in the Captain&apos;s Log.
+  </p>
+
+  <a
+    href="/captains-log/ideas"
+    className="mt-5 inline-block rounded-full border border-cyan-300/60 bg-slate-950/70 px-6 py-3 font-bold text-cyan-200 shadow-lg transition hover:-translate-y-1 hover:bg-cyan-300 hover:text-slate-950"
+  >
+    Log an Idea
+  </a>
+</section>
+
+
+<section id="problems" className="mt-14 max-w-xl">
+  <h2 className="text-3xl font-bold text-red-300 drop-shadow-xl">
+    Report Rough Seas
+  </h2>
+
+  <p className="mt-4 text-lg leading-8 text-white drop-shadow-xl">
+    Found a broken button, confusing wording, a mobile problem, or
+    something that simply doesn&apos;t work? Tell the Captain so we can
+    repair it before the Harbor officially opens.
+  </p>
+
+  <a
+    href="/captains-log/rough-seas"
+    className="mt-5 inline-block rounded-full border border-red-300/60 bg-slate-950/70 px-6 py-3 font-bold text-red-200 shadow-lg transition hover:-translate-y-1 hover:bg-red-300 hover:text-slate-950"
+  >
+    Report a Problem
+  </a>
+</section>
+
+
+<div className="mt-16 pb-24">
+  <a
+    href="/"
+    className="inline-block rounded-full border border-white/30 bg-slate-950/70 px-7 py-3 font-bold text-white shadow-lg transition hover:-translate-y-1 hover:border-amber-300 hover:text-amber-200"
+  >
+    ⚓ Return to Harbor
+  </a>
+</div>
       </div>
+      </div>
+              
+            
+          
+        </div>
+      
     </main>
   );
 } 
