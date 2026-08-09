@@ -6,28 +6,41 @@ import { FormEvent, useState } from "react";
 export default function RoughSeasPage() {
   const [submitted, setSubmitted] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+  setSubmitted(false);
 
-    const form = new FormData(event.currentTarget);
+  const formElement = event.currentTarget;
+  const form = new FormData(formElement);
 
-    const report = {
-      name: form.get("name"),
-      email: form.get("email"),
-      page: form.get("page"),
-      device: form.get("device"),
-      details: form.get("details"),
-      submittedAt: new Date().toISOString(),
-    };
+  const report = {
+    name: form.get("name"),
+    email: form.get("email"),
+    page: form.get("page"),
+    device: form.get("device"),
+    details: form.get("details"),
+  };
 
-    localStorage.setItem(
-      "davey-jones-latest-rough-seas-report",
-      JSON.stringify(report)
-    );
+  try {
+    const response = await fetch("/api/rough-seas", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(report),
+    });
 
-    event.currentTarget.reset();
+    if (!response.ok) {
+      throw new Error("Report could not be sent.");
+    }
+
+    formElement.reset();
     setSubmitted(true);
+  } catch (error) {
+    console.error(error);
+    alert("Your report could not be sent. Please try again.");
   }
+}
 
   return (
     <main
