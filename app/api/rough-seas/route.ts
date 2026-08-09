@@ -2,13 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const {
-      name,
-      email,
-      page,
-      device,
-      details,
-    } = await request.json();
+    const { name, email, page, device, details } = await request.json();
 
     if (!name || !email || !page || !device || !details) {
       return NextResponse.json(
@@ -30,12 +24,10 @@ export async function POST(request: Request) {
         subject: `Rough Seas Report: ${page}`,
         html: `
           <h2>New Rough Seas Report</h2>
-
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Where:</strong> ${page}</p>
           <p><strong>Device:</strong> ${device}</p>
-
           <h3>What Happened</h3>
           <p>${details}</p>
         `,
@@ -47,7 +39,7 @@ export async function POST(request: Request) {
       console.error("Resend error:", error);
 
       return NextResponse.json(
-        { error: "The report could not be sent." },
+        { error: "The report could not be sent.", details: error },
         { status: 500 }
       );
     }
