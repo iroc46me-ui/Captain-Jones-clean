@@ -6,7 +6,7 @@ import { FormEvent, useState } from "react";
 export default function RoughSeasPage() {
   const [submitted, setSubmitted] = useState(false);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
   event.preventDefault();
   setSubmitted(false);
 
@@ -30,17 +30,27 @@ export default function RoughSeasPage() {
       body: JSON.stringify(report),
     });
 
+    const result = await response.json();
+
     if (!response.ok) {
-      throw new Error("Report could not be sent.");
+      throw new Error(result.error || "Report could not be sent.");
     }
 
     formElement.reset();
     setSubmitted(true);
   } catch (error) {
     console.error(error);
-    alert("Your report could not be sent. Please try again.");
+
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Your report could not be sent.";
+
+    alert(message);
   }
-}
+
+  }
+
 
   return (
     <main
