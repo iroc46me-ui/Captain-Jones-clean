@@ -10,7 +10,8 @@ export default function SuggestIdeaPage() {
   event.preventDefault();
   setSubmitted(false);
 
-  const form = new FormData(event.currentTarget);
+  const formElement = event.currentTarget;
+  const form = new FormData(formElement);
 
   const idea = {
     name: form.get("name"),
@@ -32,7 +33,7 @@ export default function SuggestIdeaPage() {
       throw new Error("Message could not be sent.");
     }
 
-    event.currentTarget.reset();
+    formElement.reset();
     setSubmitted(true);
   } catch (error) {
     console.error(error);
