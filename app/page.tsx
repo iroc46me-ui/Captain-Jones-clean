@@ -500,7 +500,13 @@ function SellerProfiles() {
   const sellers = Array.from(new Set(sampleItems.map((item) => item.seller)));
 
   return (
-    <section id="sellers" className="bg-slate-950 px-4 py-20 text-white sm:px-6 lg:px-8">
+    <section
+  id="sellers"
+  className="relative bg-slate-950 bg-cover bg-center bg-no-repeat px-4 py-20 text-white sm:px-6 lg:px-8"
+  style={{
+    backgroundImage: "url('/harbor-sellers.png')",
+  }}
+>
       <div className="mx-auto max-w-7xl">
         <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
           Harbor Sellers
