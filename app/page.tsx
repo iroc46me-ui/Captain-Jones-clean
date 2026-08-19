@@ -163,12 +163,16 @@ function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
         <div className="text-3xl text-amber-300">⚓</div>
 
-        <nav className="flex overflow-x-auto items-center gap-2 text-xs">
+        <nav className="flex overflow-x-auto items-center gap-3 text-xs">
           <a href="#home" className={navLink}>Home</a>
           <a href="#join" className={navLink}>Sell Your Treasure</a>
           <a href="#marketplace" className={navLink}>Treasure Deck</a>
           <a href="/captains-picks" className={navLink}>The Captain's Picks</a>
-          <a href="/captains-log" className={navLink}>
+          <a href="/harbor-sellers" className={navLink}>
+  Harbor Sellers
+</a>
+
+<a href="/captains-log" className={navLink}>
   Captain's Log
 </a>
           <a href="#live-events" className={navLink}>Live Events coming soon</a>
