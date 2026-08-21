@@ -1,51 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
+import { sellers } from "../../lib/sellers";
 type SellerPaymentStatus = {
   readyForPayouts: boolean;
   transferStatus: string | null;
   hasCurrentRequirements: boolean;
 };
-const sellers = [
-  {
-    name: "Old Harbor Finds",
-    stripeAccountId: null,
-    icon: "🏮",
-    location: "Arizona",
-    specialty: "Curated Treasure Finds",
-    category: "Gold Prospecting Tools & Field Equipment",
-    rating: "5.0 Harbor Rating",
-    response: "Replies Within 24 Hours",
-    memberSince: "Harbor Member Since 2026",
-    listings: 1,
-    inventory: [
-      {
-        title: "Vintage Brass Ship Lantern",
-        price: "$68",
-        href: "/listing/vintage-brass-ship-lantern",
-      },
-    ],
-  },
 
-   {
-  name: "Davey's Workshop",
-  stripeAccountId: "acct_1U6f1KAP0ztOQFEL",
-  icon: "⚒️",
-    location: "Arizona",
-    specialty: "Curated Treasure Finds",
-    category: "Gold Prospecting Tools & Field Equipment",
-    rating: "5.0 Harbor Rating",
-    response: "Replies Within 24 Hours",
-    memberSince: "Harbor Member Since 2026",
-    listings: 1,
-    inventory: [
-      {
-        title: "Desert Nugget Digger",
-        price: "$75",
-        href: "/listing/desert-nugget-digger",
-      },
-    ],
-  },
-];
 
 export default function HarborSellersPage() {
   const [paymentStatuses, setPaymentStatuses] = useState<
@@ -58,9 +19,9 @@ useEffect(() => {
 
       try {
         const response = await fetch(
-          `/api/seller-payment-status?accountId=${seller.stripeAccountId}`,
-          { cache: "no-store" }
-        );
+  `/api/seller-payment-status?sellerId=${seller.id}`,
+  { cache: "no-store" }
+);
 
         const data = await response.json();
 

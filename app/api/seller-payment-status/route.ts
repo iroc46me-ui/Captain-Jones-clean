@@ -1,26 +1,58 @@
 import { NextResponse } from "next/server";
+import { getSellerById } from "../../../lib/sellers";
 
 export async function GET(request: Request) {
   try {
     const secretKey = process.env.STRIPE_SECRET_KEY;
+
     const { searchParams } = new URL(request.url);
-const accountId = searchParams.get("accountId");
-if (!accountId) {
-  return NextResponse.json(
-    {
-      ok: false,
-      error: "accountId is required",
-    },
-    { status: 400 }
-  );
-}
+    const sellerId = searchParams.get("sellerId");
+
+    if (!sellerId) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "sellerId is required",
+        },
+        { status: 400 }
+      );
+    }
+
+    const seller = getSellerById(sellerId);
+
+    if (!seller) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "Seller not found",
+        },
+        { status: 404 }
+      );
+    }
+
+    if (!seller.stripeAccountId) {
+      return NextResponse.json({
+        ok: true,
+        sellerId: seller.id,
+        sellerName: seller.name,
+        connected: false,
+        readyForPayouts: false,
+        transferStatus: null,
+        hasCurrentRequirements: false,
+      });
+    }
 
     if (!secretKey) {
       return NextResponse.json(
-        { ok: false, error: "STRIPE_SECRET_KEY is missing" },
+        {
+          ok: false,
+          error: "STRIPE_SECRET_KEY is missing",
+        },
         { status: 500 }
       );
     }
+
+    const accountId = seller.stripeAccountId;
 
     const url = new URL(
       `https://api.stripe.com/v2/core/accounts/${accountId}`
@@ -66,6 +98,9 @@ if (!accountId) {
 
     return NextResponse.json({
       ok: true,
+      sellerId: seller.id,
+      sellerName: seller.name,
+      connected: true,
       accountId: data.id,
       readyForPayouts,
       transferStatus,
@@ -81,4 +116,4 @@ if (!accountId) {
       { status: 500 }
     );
   }
-}
+}   
