@@ -1,6 +1,14 @@
+"use client";
+import { useEffect, useState } from "react";
+type SellerPaymentStatus = {
+  readyForPayouts: boolean;
+  transferStatus: string | null;
+  hasCurrentRequirements: boolean;
+};
 const sellers = [
   {
     name: "Old Harbor Finds",
+    stripeAccountId: null,
     icon: "🏮",
     location: "Arizona",
     specialty: "Curated Treasure Finds",
@@ -17,9 +25,11 @@ const sellers = [
       },
     ],
   },
-  {
-    name: "Davey's Workshop",
-    icon: "⚒️",
+
+   {
+  name: "Davey's Workshop",
+  stripeAccountId: "acct_1U6f1KAP0ztOQFEL",
+  icon: "⚒️",
     location: "Arizona",
     specialty: "Curated Treasure Finds",
     category: "Gold Prospecting Tools & Field Equipment",
@@ -38,6 +48,43 @@ const sellers = [
 ];
 
 export default function HarborSellersPage() {
+  const [paymentStatuses, setPaymentStatuses] = useState<
+  Record<string, SellerPaymentStatus>
+>({});
+useEffect(() => {
+  async function loadPaymentStatuses() {
+    for (const seller of sellers) {
+      if (!seller.stripeAccountId) continue;
+
+      try {
+        const response = await fetch(
+          `/api/seller-payment-status?accountId=${seller.stripeAccountId}`,
+          { cache: "no-store" }
+        );
+
+        const data = await response.json();
+
+        if (response.ok && data.ok) {
+          setPaymentStatuses((current) => ({
+            ...current,
+            [seller.name]: {
+              readyForPayouts: data.readyForPayouts,
+              transferStatus: data.transferStatus,
+              hasCurrentRequirements: data.hasCurrentRequirements,
+            },
+          }));
+        }
+      } catch (error) {
+        console.error(
+          `Could not check Stripe status for ${seller.name}:`,
+          error
+        );
+      }
+    }
+  }
+
+  loadPaymentStatuses();
+}, []);
   return (
     <main
       className="min-h-screen bg-slate-950 bg-cover bg-center bg-fixed bg-no-repeat text-white"
@@ -85,6 +132,25 @@ export default function HarborSellersPage() {
                     >
                       Visit Seller Harbor
                     </a>
+                    {seller.stripeAccountId ? (
+  paymentStatuses[seller.name]?.readyForPayouts ? (
+    <p className="mt-4 inline-block rounded-full border border-emerald-300/40 bg-emerald-300/10 px-4 py-2 text-sm font-black text-emerald-200">
+      ✓ Stripe Verified — Ready for Payouts
+    </p>
+  ) : paymentStatuses[seller.name] ? (
+    <p className="mt-4 inline-block rounded-full border border-amber-300/40 bg-amber-300/10 px-4 py-2 text-sm font-black text-amber-200">
+      Stripe Setup Needs Attention
+    </p>
+  ) : (
+    <p className="mt-4 text-sm font-bold text-slate-400">
+      Checking Stripe status...
+    </p>
+  )
+) : (
+  <p className="mt-4 inline-block rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm font-black text-slate-300">
+    Stripe Not Connected
+  </p>
+)}
                   </div>
                 </div>
 
