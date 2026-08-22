@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^7.9.1",
     "@tailwindcss/postcss": "latest",
     "@types/node": "latest",
     "@types/react": "latest",
@@ -16,6 +17,7 @@
     "framer-motion": "latest",
     "lucide-react": "latest",
     "next": "latest",
+    "prisma": "^7.9.1",
     "react": "latest",
     "react-dom": "latest",
     "stripe": "^22.5.0",

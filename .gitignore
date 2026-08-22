@@ -27,3 +27,15 @@ Thumbs.db
 
 # TypeScript
 *.tsbuildinfo
+
+/lib/generated/prisma
+
+# Local Prisma database
+dev.db
+dev.db-journal
+
+# Local AI/tool workspace files
+.agents/
+.claude/
+.windsurf/
+skills-lock.json

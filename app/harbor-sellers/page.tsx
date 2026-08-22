@@ -12,6 +12,13 @@ export default function HarborSellersPage() {
   const [paymentStatuses, setPaymentStatuses] = useState<
   Record<string, SellerPaymentStatus>
 >({});
+async function startStripeOnboarding(sellerId: string) {
+  try {
+    console.log("Starting Stripe onboarding for:", sellerId);
+  } catch (error) {
+    console.error("Unable to start Stripe onboarding:", error);
+  }
+}
 useEffect(() => {
   async function loadPaymentStatuses() {
     for (const seller of sellers) {
@@ -108,9 +115,13 @@ useEffect(() => {
     </p>
   )
 ) : (
-  <p className="mt-4 inline-block rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm font-black text-slate-300">
-    Stripe Not Connected
-  </p>
+  <button
+  type="button"
+  onClick={() => startStripeOnboarding(seller.id)}
+  className="mt-4 inline-block rounded-full border border-amber-300/40 bg-amber-300/10 px-4 py-2 text-sm font-black text-amber-200 transition hover:bg-amber-300 hover:text-slate-950"
+>
+  Connect Stripe
+</button>
 )}
                   </div>
                 </div>
