@@ -2,27 +2,70 @@
 import { useEffect, useState } from "react";
 import { sellers } from "../../lib/sellers";
 type SellerPaymentStatus = {
+  connected: boolean;
   readyForPayouts: boolean;
   transferStatus: string | null;
   hasCurrentRequirements: boolean;
 };
-
-
 export default function HarborSellersPage() {
   const [paymentStatuses, setPaymentStatuses] = useState<
   Record<string, SellerPaymentStatus>
 >({});
-async function startStripeOnboarding(sellerId: string) {
+
+
+    async function startStripeOnboarding(sellerId: string) {
   try {
-    console.log("Starting Stripe onboarding for:", sellerId);
+    const accountResponse = await fetch(
+      "/api/create-connected-account",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ sellerId }),
+      }
+    );
+
+    const accountData = await accountResponse.json();
+
+    if (!accountResponse.ok || !accountData.accountId) {
+      throw new Error(
+        accountData.error
+          ? JSON.stringify(accountData.error)
+          : "Unable to create or find Stripe account"
+      );
+    }
+
+    const linkResponse = await fetch("/api/create-account-link", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        accountId: accountData.accountId,
+      }),
+    });
+
+    const linkData = await linkResponse.json();
+
+    if (!linkResponse.ok || !linkData.url) {
+      throw new Error(
+        linkData.error
+          ? JSON.stringify(linkData.error)
+          : "Unable to create Stripe onboarding link"
+      );
+    }
+
+    window.location.href = linkData.url;
   } catch (error) {
     console.error("Unable to start Stripe onboarding:", error);
+    alert("Unable to start Stripe onboarding. Check the console for details.");
   }
 }
 useEffect(() => {
   async function loadPaymentStatuses() {
     for (const seller of sellers) {
-      if (!seller.stripeAccountId) continue;
+      
 
       try {
         const response = await fetch(
@@ -36,6 +79,7 @@ useEffect(() => {
           setPaymentStatuses((current) => ({
             ...current,
             [seller.name]: {
+              connected: data.connected,
               readyForPayouts: data.readyForPayouts,
               transferStatus: data.transferStatus,
               hasCurrentRequirements: data.hasCurrentRequirements,
@@ -100,28 +144,30 @@ useEffect(() => {
                     >
                       Visit Seller Harbor
                     </a>
-                    {seller.stripeAccountId ? (
-  paymentStatuses[seller.name]?.readyForPayouts ? (
-    <p className="mt-4 inline-block rounded-full border border-emerald-300/40 bg-emerald-300/10 px-4 py-2 text-sm font-black text-emerald-200">
-      ✓ Stripe Verified — Ready for Payouts
-    </p>
-  ) : paymentStatuses[seller.name] ? (
-    <p className="mt-4 inline-block rounded-full border border-amber-300/40 bg-amber-300/10 px-4 py-2 text-sm font-black text-amber-200">
-      Stripe Setup Needs Attention
-    </p>
-  ) : (
-    <p className="mt-4 text-sm font-bold text-slate-400">
-      Checking Stripe status...
-    </p>
-  )
+                    {!paymentStatuses[seller.name] ? (
+  <p className="mt-4 text-sm font-bold text-slate-400">
+    Checking Stripe status...
+  </p>
+) : paymentStatuses[seller.name].readyForPayouts ? (
+  <p className="mt-4 inline-block rounded-full border border-emerald-300/40 bg-emerald-300/10 px-4 py-2 text-sm font-black text-emerald-200">
+    ✓ Stripe Verified — Ready for Payouts
+  </p>
+) : paymentStatuses[seller.name].connected ? (
+  <button
+    type="button"
+    onClick={() => startStripeOnboarding(seller.id)}
+    className="mt-4 inline-block rounded-full border border-amber-300/40 bg-amber-300/10 px-4 py-2 text-sm font-black text-amber-200 transition hover:bg-amber-300 hover:text-slate-950"
+  >
+    Continue Stripe Setup
+  </button>
 ) : (
   <button
-  type="button"
-  onClick={() => startStripeOnboarding(seller.id)}
-  className="mt-4 inline-block rounded-full border border-amber-300/40 bg-amber-300/10 px-4 py-2 text-sm font-black text-amber-200 transition hover:bg-amber-300 hover:text-slate-950"
->
-  Connect Stripe
-</button>
+    type="button"
+    onClick={() => startStripeOnboarding(seller.id)}
+    className="mt-4 inline-block rounded-full border border-amber-300/40 bg-amber-300/10 px-4 py-2 text-sm font-black text-amber-200 transition hover:bg-amber-300 hover:text-slate-950"
+  >
+    Connect Stripe
+  </button>
 )}
                   </div>
                 </div>

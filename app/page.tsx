@@ -481,17 +481,25 @@ function ListingDetails() {
               </div>
 
               <a
-                href="#join"
-                className="mt-6 inline-block rounded-full bg-amber-300 px-6 py-3 font-black text-slate-950 hover:bg-amber-200"
-              >
-                Ask About This Treasure
-              </a>
-              <a
-                href="#marketplace"
-                className="ml-3 mt-6 inline-block rounded-full border border-white/20 px-6 py-3 font-black text-white hover:bg-white/10"
-              >
-                Back to Treasure Deck
-              </a>
+  href="#join"
+  className="mt-6 inline-block rounded-full bg-amber-300 px-6 py-3 font-black text-slate-950 hover:bg-amber-200"
+>
+  Ask About This Treasure
+</a>
+
+<a
+  href={`/checkout?item=${item.slug}`}
+  className="ml-3 mt-6 inline-block rounded-full bg-cyan-300 px-6 py-3 font-black text-slate-950 hover:bg-cyan-200"
+>
+  Claim This Treasure
+</a>
+
+<a
+  href="#marketplace"
+  className="ml-3 mt-6 inline-block rounded-full border border-white/20 px-6 py-3 font-black text-white hover:bg-white/10"
+>
+  Back to Treasure Deck
+</a>
             </div>
           ))}
         </div>

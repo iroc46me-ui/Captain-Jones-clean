@@ -1,40 +1,55 @@
 import { NextResponse } from "next/server";
+import { neon } from "@neondatabase/serverless";
 import { getSellerById } from "../../../lib/sellers";
 
 export async function GET(request: Request) {
   try {
     const secretKey = process.env.STRIPE_SECRET_KEY;
+    const databaseUrl = process.env.DATABASE_URL;
 
     const { searchParams } = new URL(request.url);
     const sellerId = searchParams.get("sellerId");
 
     if (!sellerId) {
       return NextResponse.json(
-        {
-          ok: false,
-          error: "sellerId is required",
-        },
+        { ok: false, error: "sellerId is required" },
         { status: 400 }
       );
     }
 
-    const seller = getSellerById(sellerId);
+    const sellerInfo = getSellerById(sellerId);
 
-    if (!seller) {
+    if (!sellerInfo) {
       return NextResponse.json(
-        {
-          ok: false,
-          error: "Seller not found",
-        },
+        { ok: false, error: "Seller not found" },
         { status: 404 }
       );
     }
 
-    if (!seller.stripeAccountId) {
+    if (!databaseUrl) {
+      return NextResponse.json(
+        { ok: false, error: "DATABASE_URL is missing" },
+        { status: 500 }
+      );
+    }
+
+    const sql = neon(databaseUrl);
+
+    const rows = await sql`
+      SELECT "stripeAccountId"
+      FROM "Seller"
+      WHERE "id" = ${sellerId}
+      LIMIT 1
+    `;
+
+    const stripeAccountId =
+      rows.length > 0 ? rows[0].stripeAccountId : null;
+
+    if (!stripeAccountId) {
       return NextResponse.json({
         ok: true,
-        sellerId: seller.id,
-        sellerName: seller.name,
+        sellerId,
+        sellerName: sellerInfo.name,
         connected: false,
         readyForPayouts: false,
         transferStatus: null,
@@ -44,18 +59,13 @@ export async function GET(request: Request) {
 
     if (!secretKey) {
       return NextResponse.json(
-        {
-          ok: false,
-          error: "STRIPE_SECRET_KEY is missing",
-        },
+        { ok: false, error: "STRIPE_SECRET_KEY is missing" },
         { status: 500 }
       );
     }
 
-    const accountId = seller.stripeAccountId;
-
     const url = new URL(
-      `https://api.stripe.com/v2/core/accounts/${accountId}`
+      `https://api.stripe.com/v2/core/accounts/${stripeAccountId}`
     );
 
     url.searchParams.append("include[0]", "requirements");
@@ -98,8 +108,8 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       ok: true,
-      sellerId: seller.id,
-      sellerName: seller.name,
+      sellerId,
+      sellerName: sellerInfo.name,
       connected: true,
       accountId: data.id,
       readyForPayouts,
@@ -116,4 +126,4 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
-}   
+}

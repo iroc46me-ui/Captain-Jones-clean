@@ -82,71 +82,62 @@ function CheckoutContent() {
   const [listing, setListing] = useState<CheckoutListing | null>(null);
   const [paymentMethod, setPaymentMethod] = useState("Test Card");
   const [isReady, setIsReady] = useState(false);
-
   useEffect(() => {
-    try {
-      const publishedListings = JSON.parse(
-        localStorage.getItem(PUBLISHED_LISTINGS_KEY) || "[]"
-      ) as CheckoutListing[];
+  try {
+    const publishedListings = JSON.parse(
+      localStorage.getItem(PUBLISHED_LISTINGS_KEY) || "[]"
+    ) as CheckoutListing[];
 
-      const foundListing = [...publishedListings, ...sampleListings].find(
-        (item) => item.slug === itemSlug
-      );
+    const foundListing = [...publishedListings, ...sampleListings].find(
+      (item) => item.slug === itemSlug
+    );
 
-      setListing(foundListing || null);
-    } catch {
-      const sampleListing = sampleListings.find(
-        (item) => item.slug === itemSlug
-      );
+    setListing(foundListing || null);
+  } catch {
+    const sampleListing = sampleListings.find(
+      (item) => item.slug === itemSlug
+    );
 
-      setListing(sampleListing || null);
-    }
-
-    setIsReady(true);
-  }, [itemSlug]);
-
-  function completeTestPurchase() {
-    if (!listing) return;
-
-    const order: Order = {
-      ...listing,
-      orderId: `DJ-${Date.now()}`,
-      status: "Order Confirmed",
-      orderedAt: new Date().toISOString(),
-    };
-
-    try {
-      const existingOrders = JSON.parse(
-        localStorage.getItem(ORDERS_KEY) || "[]"
-      ) as Order[];
-
-      const updatedOrders = [order, ...existingOrders];
-
-      localStorage.setItem(
-        ORDERS_KEY,
-        JSON.stringify(updatedOrders)
-      );
-localStorage.setItem(
-    ORDERS_KEY,
-    JSON.stringify(updatedOrders)
-);
-
-console.log("Saved orders:", updatedOrders);
-console.log("Storage now contains:", localStorage.getItem(ORDERS_KEY));
-      localStorage.setItem(
-        LAST_ORDER_KEY,
-        JSON.stringify(order)
-      );
-
-      window.dispatchEvent(
-        new CustomEvent("orders-updated")
-      );
-
-      router.push("/order-confirmed");
-    } catch {
-      alert("The test order could not be saved.");
-    }
+    setListing(sampleListing || null);
   }
+
+  setIsReady(true);
+}, [itemSlug]);
+
+async function completeTestPurchase() {
+  if (!listing) return;
+
+  try {
+    const response = await fetch("/api/create-checkout-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        slug: listing.slug,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.url) {
+      console.error("Checkout error:", data);
+
+      alert(
+        data.error ||
+          "Unable to start Stripe checkout."
+      );
+
+      return;
+    }
+
+    window.location.href = data.url;
+  } catch (error) {
+    console.error("Unable to start checkout:", error);
+
+    alert("Unable to start Stripe checkout.");
+  }
+}
 
   if (!isReady) {
     return (
