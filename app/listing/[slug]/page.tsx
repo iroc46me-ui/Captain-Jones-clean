@@ -114,16 +114,42 @@ export default function ListingPage() {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+  async function loadListing() {
     try {
-      const publishedListings = JSON.parse(
-        localStorage.getItem(PUBLISHED_LISTINGS_KEY) || "[]"
-      ) as Listing[];
+      const response = await fetch("/api/listings", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ slug }),
+      });
 
-      const foundListing = [...publishedListings, ...sampleListings].find(
+      const data = await response.json();
+
+      if (response.ok && data.success && data.listing) {
+        const databaseListing = data.listing;
+
+        setListing({
+          title: databaseListing.title,
+          slug: databaseListing.slug,
+          price: `$${(databaseListing.priceCents / 100).toFixed(2)}`,
+          category: databaseListing.category,
+          tag: "New Listing",
+          seller: databaseListing.seller,
+          description: databaseListing.description,
+          condition: databaseListing.condition || undefined,
+          shipping: databaseListing.shipping || undefined,
+        });
+
+        setIsReady(true);
+        return;
+      }
+
+      const sampleListing = sampleListings.find(
         (item) => item.slug === slug
       );
 
-      setListing(foundListing || null);
+      setListing(sampleListing || null);
     } catch {
       const sampleListing = sampleListings.find(
         (item) => item.slug === slug
@@ -133,7 +159,10 @@ export default function ListingPage() {
     }
 
     setIsReady(true);
-  }, [slug]);
+  }
+
+  loadListing();
+}, [slug]);
 
   if (!isReady) {
     return (

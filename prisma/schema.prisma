@@ -15,6 +15,25 @@ model Seller {
   id                String   @id
   name              String
   stripeAccountId   String?  @unique
+  listings          Listing[]
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+}
+
+model Listing {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  priceCents  Int
+  category    String
+  condition   String?
+  shipping    String?
+  status      String   @default("ACTIVE")
+
+  sellerId    String
+  seller      Seller   @relation(fields: [sellerId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

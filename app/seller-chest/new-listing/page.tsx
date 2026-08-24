@@ -63,66 +63,74 @@ export default function NewListingPage() {
     }
   }
 
-  function publishListing(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function publishListing(event: FormEvent<HTMLFormElement>) {
+  event.preventDefault();
 
-    const cleanTitle = listing.title.trim();
-    const cleanSeller = listing.seller.trim();
-    const cleanDescription = listing.description.trim();
-    const cleanPrice = listing.price.trim();
+  const cleanTitle = listing.title.trim();
+  const cleanSeller = listing.seller.trim();
+  const cleanDescription = listing.description.trim();
+  const cleanPrice = listing.price.trim();
 
-    if (
-      !cleanTitle ||
-      !cleanSeller ||
-      !cleanDescription ||
-      !cleanPrice
-    ) {
+  if (
+    !cleanTitle ||
+    !cleanSeller ||
+    !cleanDescription ||
+    !cleanPrice
+  ) {
+    setMessage(
+      "Please complete the title, price, seller and description."
+    );
+    return;
+  }
+
+  const slug = cleanTitle
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+  const publishedListing = {
+    ...listing,
+    title: cleanTitle,
+    seller: cleanSeller,
+    description: cleanDescription,
+    price: cleanPrice.startsWith("$")
+      ? cleanPrice
+      : `$${cleanPrice}`,
+    slug,
+    status: "Active",
+    createdAt: new Date().toISOString(),
+  };
+
+  try {
+    const response = await fetch("/api/listings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(publishedListing),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
       setMessage(
-        "Please complete the title, price, seller and description."
+        data.error || "The listing could not be published."
       );
       return;
     }
 
-    const slug = cleanTitle
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "");
+    localStorage.setItem(
+      "davey-jones-last-published-listing",
+      JSON.stringify(publishedListing)
+    );
 
-    const publishedListing = {
-      ...listing,
-      title: cleanTitle,
-      seller: cleanSeller,
-      description: cleanDescription,
-      price: cleanPrice.startsWith("$")
-        ? cleanPrice
-        : `$${cleanPrice}`,
-      slug,
-      status: "Active",
-      createdAt: new Date().toISOString(),
-    };
+    localStorage.removeItem(DRAFT_KEY);
 
-    try {
-      const existingListings = JSON.parse(
-        localStorage.getItem(STORAGE_KEY) || "[]"
-      );
-
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify([...existingListings, publishedListing])
-      );
-
-      localStorage.setItem(
-        "davey-jones-last-published-listing",
-        JSON.stringify(publishedListing)
-      );
-
-      localStorage.removeItem(DRAFT_KEY);
-
-      router.push("/seller-chest/listing-published");
-    } catch {
-      setMessage("The listing could not be published.");
-    }
+    router.push("/seller-chest/listing-published");
+  } catch {
+    setMessage("The listing could not be published.");
   }
+}
 
   return (
     <main className="min-h-screen bg-[#071116] text-stone-100">

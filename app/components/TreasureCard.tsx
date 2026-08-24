@@ -35,22 +35,7 @@ export default function TreasureCard({
         }
       `}
     >
-      {/* Little diver appears when the card rises */}
-      <img
-        src="/harbor-watch-diver.png"
-        alt=""
-        aria-hidden="true"
-        className="
-          pointer-events-none absolute -right-1 -top-5 z-30
-          h-20 w-auto
-          translate-y-3 scale-75 opacity-0
-          transition-all duration-300 ease-out
-          group-hover:-translate-y-1
-          group-hover:scale-100
-          group-hover:opacity-100
-        "
-      />
-
+      
       <Link
         href={`/listing/${item.slug}`}
         className="block rounded-[1.5rem] focus:outline-none focus:ring-2 focus:ring-amber-300"
@@ -116,18 +101,16 @@ export default function TreasureCard({
         </p>
       </Link>
 
-      {/* Remains a separate real button—not nested inside the listing link */}
-      <div className="relative z-40 mt-4">
-        <HarborWatchButton
-          item={{
-            title: item.title,
-            slug: item.slug,
-            price: item.price,
-            category: item.category,
-            seller: item.seller,
-          }}
-        />
-      </div>
+      {/* Harbor Watch diver */}
+<HarborWatchButton
+  item={{
+    title: item.title,
+    slug: item.slug,
+    price: item.price,
+    category: item.category,
+    seller: item.seller,
+  }}
+/>
     </article>
   );
 }

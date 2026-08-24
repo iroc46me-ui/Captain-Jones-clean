@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import HarborWatchButton from "./HarborWatchButton";
 import TreasureCard from "./TreasureCard";
 
 type MarketplaceItem = {
@@ -20,8 +19,19 @@ type MarketplaceItem = {
   createdAt?: string;
 };
 
-const PUBLISHED_LISTINGS_KEY =
-  "davey-jones-published-listings";
+type ApiListing = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  priceCents: number;
+  category: string;
+  condition?: string | null;
+  shipping?: string | null;
+  status?: string;
+  createdAt?: string;
+  seller: string;
+};
 
 const sampleItems: MarketplaceItem[] = [
   {
@@ -100,74 +110,63 @@ const categories = [
   "Captain's Picks",
 ];
 
-const categoryIcons: Record<string, string> = {
-  "Gold & Prospecting": "⛏️",
-  Antiques: "🏺",
-  Tools: "🧰",
-  "RV & Auto": "🧭",
-  Collectibles: "🪙",
-  Handmade: "🔨",
-  "Estate Finds": "📜",
-  Oddities: "🗝️",
-  "Local Pickup": "⚓",
-  "Captain's Picks": "🏴‍☠️",
-};
-
 export default function Marketplace() {
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] =
     useState("All Treasure");
-  const [publishedItems, setPublishedItems] = useState<
+
+  const [databaseItems, setDatabaseItems] = useState<
     MarketplaceItem[]
   >([]);
 
-  useEffect(() => {
-    function loadPublishedListings() {
-      try {
-        const saved = JSON.parse(
-          localStorage.getItem(PUBLISHED_LISTINGS_KEY) || "[]"
-        ) as MarketplaceItem[];
+  const [loadingListings, setLoadingListings] = useState(true);
 
-        setPublishedItems(
-          saved.map((item) => ({
-            ...item,
-            tag: item.tag || "New Listing",
-          }))
-        );
-      } catch {
-        localStorage.removeItem(PUBLISHED_LISTINGS_KEY);
-        setPublishedItems([]);
+  useEffect(() => {
+    async function loadDatabaseListings() {
+      try {
+        const response = await fetch("/api/listings", {
+          cache: "no-store",
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          console.error("Unable to load database listings:", data);
+          setDatabaseItems([]);
+          return;
+        }
+
+        const convertedItems: MarketplaceItem[] = (
+          data.listings as ApiListing[]
+        ).map((item) => ({
+          title: item.title,
+          slug: item.slug,
+          price: `$${(item.priceCents / 100).toFixed(2)}`,
+          category: item.category,
+          tag: "New Listing",
+          seller: item.seller,
+          description: item.description,
+          condition: item.condition || undefined,
+          shipping: item.shipping || undefined,
+          status: item.status,
+          createdAt: item.createdAt,
+        }));
+
+        setDatabaseItems(convertedItems);
+      } catch (error) {
+        console.error("Unable to load database listings:", error);
+        setDatabaseItems([]);
+      } finally {
+        setLoadingListings(false);
       }
     }
 
-    loadPublishedListings();
-
-    window.addEventListener(
-      "storage",
-      loadPublishedListings
-    );
-
-    window.addEventListener(
-      "published-listings-updated",
-      loadPublishedListings
-    );
-
-    return () => {
-      window.removeEventListener(
-        "storage",
-        loadPublishedListings
-      );
-
-      window.removeEventListener(
-        "published-listings-updated",
-        loadPublishedListings
-      );
-    };
+    loadDatabaseListings();
   }, []);
 
   const allItems = useMemo(
-    () => [...publishedItems, ...sampleItems],
-    [publishedItems]
+    () => [...databaseItems, ...sampleItems],
+    [databaseItems]
   );
 
   const visibleItems = useMemo(() => {
@@ -193,13 +192,13 @@ export default function Marketplace() {
 
   return (
     <section
-  id="marketplace"
-  className="relative min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat px-4 py-5 text-white"
-  style={{
-  backgroundImage: "url('/public-marketplace-background-clean.png')"
-}}
->
-    
+      id="marketplace"
+      className="relative min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat px-4 py-5 text-white"
+      style={{
+        backgroundImage:
+          "url('/public-marketplace-background-clean.png')",
+      }}
+    >
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
@@ -212,9 +211,15 @@ export default function Marketplace() {
             </h2>
 
             <p className="mt-3 max-w-2xl text-slate-300">
-              Search the deck, explore the categories and place memorable
-              finds under Harbor Watch.
+              Search the deck, explore the categories and place
+              memorable finds under Harbor Watch.
             </p>
+
+            {loadingListings && (
+              <p className="mt-2 text-sm text-cyan-200">
+                Loading fresh treasure...
+              </p>
+            )}
           </div>
 
           <div className="relative w-full md:max-w-sm">
@@ -261,29 +266,33 @@ export default function Marketplace() {
         </div>
 
         <div
-          key={`${selectedCategory}-${query}-${publishedItems.length}`}
+          key={`${selectedCategory}-${query}-${databaseItems.length}`}
           className="mt-4 grid gap-4 animate-[fadeInUp_400ms_ease-out] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
           {visibleItems.map((item, index) => (
-  <TreasureCard
-    key={`${item.slug}-${index}`}
-    item={item}
-    featured={item.title === "Desert Nugget Digger"}
-  />
-))}
+            <TreasureCard
+              key={`${item.slug}-${index}`}
+              item={item}
+              featured={
+                item.title === "Desert Nugget Digger"
+              }
+            />
+          ))}
         </div>
 
-        {visibleItems.length === 0 && (
-          <div className="mt-8 rounded-3xl border border-cyan-300/20 bg-white/[0.04] px-6 py-14 text-center">
-            <p className="font-serif text-2xl text-amber-200">
-              No treasure found
-            </p>
+        {visibleItems.length === 0 &&
+          !loadingListings && (
+            <div className="mt-8 rounded-3xl border border-cyan-300/20 bg-white/[0.04] px-6 py-14 text-center">
+              <p className="font-serif text-2xl text-amber-200">
+                No treasure found
+              </p>
 
-            <p className="mt-2 text-slate-400">
-              Try another search or choose a different category.
-            </p>
-          </div>
-        )}
+              <p className="mt-2 text-slate-400">
+                Try another search or choose a different
+                category.
+              </p>
+            </div>
+          )}
       </div>
     </section>
   );
