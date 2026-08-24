@@ -176,9 +176,9 @@ function Header() {
   Captain's Log
 </a>
           <a href="#live-events" className={navLink}>Live Events coming soon</a>
-          <a href="#about" className={navLink}>About</a>
+          <a href="about" className={navLink}>About</a>
         </nav>
-
+    
         
       </div>
     </header>
@@ -1292,7 +1292,7 @@ function SellerInviteForm() {
             </button>
 
             <a
-              href="#about"
+              href="/about"
               className="rounded-full border border-white/20 bg-white/5 px-8 py-4 font-bold text-white transition hover:-translate-y-1 hover:border-amber-300/60 hover:bg-amber-300/10"
             >
               Learn About Seller Benefits
