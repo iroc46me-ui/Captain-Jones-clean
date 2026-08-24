@@ -166,7 +166,7 @@ function Header() {
         <nav className="flex overflow-x-auto items-center gap-3 text-xs">
           <a href="#home" className={navLink}>Home</a>
           <a href="#join" className={navLink}>Sell Your Treasure</a>
-          <a href="#marketplace" className={navLink}>Treasure Deck</a>
+          <a href="/treasure-deck" className={navLink}>Treasure Deck</a>
           <a href="/captains-picks" className={navLink}>The Captain's Picks</a>
           <a href="/harbor-sellers" className={navLink}>
   Harbor Sellers
@@ -178,7 +178,7 @@ function Header() {
           <a href="#live-events" className={navLink}>Live Events coming soon</a>
           <a href="about" className={navLink}>About</a>
         </nav>
-    
+
         
       </div>
     </header>

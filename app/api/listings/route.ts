@@ -13,6 +13,48 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
+    if (body.action === "reactivate") {
+  const databaseUrl = process.env.DATABASE_URL;
+
+  if (!databaseUrl) {
+    return NextResponse.json(
+      { error: "DATABASE_URL is missing." },
+      { status: 500 }
+    );
+  }
+
+  const { slug } = body;
+
+  if (!slug) {
+    return NextResponse.json(
+      { error: "Listing slug is required." },
+      { status: 400 }
+    );
+  }
+
+  const sql = neon(databaseUrl);
+
+  const listings = await sql`
+    UPDATE "Listing"
+    SET
+      "status" = 'ACTIVE',
+      "updatedAt" = NOW()
+    WHERE "slug" = ${slug}
+    RETURNING *
+  `;
+
+  if (listings.length === 0) {
+    return NextResponse.json(
+      { error: "Listing not found." },
+      { status: 404 }
+    );
+  }
+
+  return NextResponse.json({
+    success: true,
+    listing: listings[0],
+  });
+}
 
     const {
       title,
@@ -129,7 +171,7 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const databaseUrl = process.env.DATABASE_URL;
 
@@ -141,6 +183,9 @@ export async function GET() {
     }
 
     const sql = neon(databaseUrl);
+    const url = new URL(request.url);
+const includeInactive =
+  url.searchParams.get("includeInactive") === "true";
 
     const listings = await sql`
       SELECT
@@ -158,8 +203,11 @@ export async function GET() {
       FROM "Listing" l
       JOIN "Seller" s
         ON s."id" = l."sellerId"
-      WHERE l."status" = 'ACTIVE'
-      ORDER BY l."createdAt" DESC
+      WHERE (
+  ${includeInactive} = true
+  OR l."status" = 'ACTIVE'
+)
+ORDER BY l."createdAt" DESC
     `;
 
     return NextResponse.json({
@@ -244,6 +292,156 @@ export async function PUT(request: Request) {
           error instanceof Error
             ? error.message
             : "Listing could not be loaded.",
+      },
+      { status: 500 }
+    );
+  }
+}
+export async function PATCH(request: Request) {
+  try {
+    const databaseUrl = process.env.DATABASE_URL;
+
+    if (!databaseUrl) {
+      return NextResponse.json(
+        { error: "DATABASE_URL is missing." },
+        { status: 500 }
+      );
+    }
+
+    const body = await request.json();
+
+    const {
+      slug,
+      title,
+      price,
+      category,
+      condition,
+      description,
+      shipping,
+    } = body;
+
+    if (
+      !slug ||
+      !title ||
+      !price ||
+      !category ||
+      !description
+    ) {
+      return NextResponse.json(
+        { error: "Required listing information is missing." },
+        { status: 400 }
+      );
+    }
+
+    const numericPrice = Number(
+      String(price)
+        .replace("$", "")
+        .replace(",", "")
+        .trim()
+    );
+
+    if (!Number.isFinite(numericPrice) || numericPrice <= 0) {
+      return NextResponse.json(
+        { error: "A valid price is required." },
+        { status: 400 }
+      );
+    }
+
+    const priceCents = Math.round(numericPrice * 100);
+
+    const sql = neon(databaseUrl);
+
+    const listings = await sql`
+      UPDATE "Listing"
+      SET
+        "title" = ${title.trim()},
+        "description" = ${description.trim()},
+        "priceCents" = ${priceCents},
+        "category" = ${category},
+        "condition" = ${condition || null},
+        "shipping" = ${shipping || null},
+        "updatedAt" = NOW()
+      WHERE "slug" = ${slug}
+      RETURNING *
+    `;
+
+    if (listings.length === 0) {
+      return NextResponse.json(
+        { error: "Listing not found." },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      listing: listings[0],
+    });
+  } catch (error) {
+    console.error("Unable to update listing:", error);
+
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "The listing could not be updated.",
+      },
+      { status: 500 }
+    );
+  }
+}
+export async function DELETE(request: Request) {
+  try {
+    const databaseUrl = process.env.DATABASE_URL;
+
+    if (!databaseUrl) {
+      return NextResponse.json(
+        { error: "DATABASE_URL is missing." },
+        { status: 500 }
+      );
+    }
+
+    const body = await request.json();
+    const { slug } = body;
+
+    if (!slug) {
+      return NextResponse.json(
+        { error: "Listing slug is required." },
+        { status: 400 }
+      );
+    }
+
+    const sql = neon(databaseUrl);
+
+    const listings = await sql`
+      UPDATE "Listing"
+      SET
+        "status" = 'INACTIVE',
+        "updatedAt" = NOW()
+      WHERE "slug" = ${slug}
+      RETURNING *
+    `;
+
+    if (listings.length === 0) {
+      return NextResponse.json(
+        { error: "Listing not found." },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      listing: listings[0],
+    });
+  } catch (error) {
+    console.error("Unable to deactivate listing:", error);
+
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "The listing could not be deactivated.",
       },
       { status: 500 }
     );

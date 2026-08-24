@@ -20,35 +20,40 @@ type DatabaseListing = {
 const SELLER_NAME = "Davey's Workshop";
 
 export default function SellerChestPage() {
-  const [listings, setListings] = useState<DatabaseListing[]>([]);
+    const [listings, setListings] = useState<DatabaseListing[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
 
   useEffect(() => {
     async function loadSellerListings() {
       try {
-        const response = await fetch("/api/listings", {
+        setLoading(true);
+        setLoadError("");
+
+        const response = await fetch("/api/listings?includeInactive=true", {
           cache: "no-store",
         });
 
         const data = await response.json();
 
         if (!response.ok || !data.success) {
-          setLoadError(
-            data.error || "Seller listings could not be loaded."
+          throw new Error(
+            data.error || "Seller inventory could not be loaded."
           );
-          return;
         }
 
-        const sellerListings = (
-          data.listings as DatabaseListing[]
-        ).filter(
-          (listing) => listing.seller === SELLER_NAME
+        const sellerListings = (data.listings || []).filter(
+          (listing: DatabaseListing) =>
+            listing.seller === SELLER_NAME
         );
 
         setListings(sellerListings);
-      } catch {
-        setLoadError("Seller listings could not be loaded.");
+      } catch (error) {
+        setLoadError(
+          error instanceof Error
+            ? error.message
+            : "Seller inventory could not be loaded."
+        );
       } finally {
         setLoading(false);
       }
@@ -56,6 +61,76 @@ export default function SellerChestPage() {
 
     loadSellerListings();
   }, []);
+async function deactivateListing(slug: string) {
+  const confirmed = window.confirm(
+    "Deactivate this listing? It will be removed from the Treasure Deck but kept in the database."
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/listings", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ slug }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      alert(data.error || "The listing could not be deactivated.");
+      return;
+    }
+
+    setListings((current) =>
+      current.map((listing) =>
+        listing.slug === slug
+          ? { ...listing, status: "INACTIVE" }
+          : listing
+      )
+    );
+  } catch {
+    alert("The listing could not be deactivated.");
+  }
+}
+
+  async function reactivateListing(slug: string) {
+  try {
+    const response = await fetch("/api/listings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        action: "reactivate",
+        slug,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      alert(
+        data.error || "The listing could not be reactivated."
+      );
+      return;
+    }
+
+    setListings((current) =>
+      current.map((listing) =>
+        listing.slug === slug
+          ? { ...listing, status: "ACTIVE" }
+          : listing
+      )
+    );
+  } catch {
+    alert("The listing could not be reactivated.");
+  }
+}
 
   const activeListings = useMemo(
     () =>
@@ -64,6 +139,13 @@ export default function SellerChestPage() {
       ),
     [listings]
   );
+  const inactiveListings = useMemo(
+  () =>
+    listings.filter(
+      (listing) => listing.status === "INACTIVE"
+    ),
+  [listings]
+);
 
   const sellerStats = [
     {
@@ -183,29 +265,94 @@ export default function SellerChestPage() {
 
             <div className="mt-6 space-y-3">
               {activeListings.map((listing) => (
-                <Link
-                  key={listing.id}
-                  href={`/listing/${listing.slug}`}
-                  className="flex flex-col justify-between gap-3 rounded-2xl border border-white/10 bg-slate-950/50 px-5 py-4 transition hover:border-cyan-300/40 hover:bg-slate-950/70 sm:flex-row sm:items-center"
-                >
-                  <div>
-                    <p className="font-bold">
-                      {listing.title}
-                    </p>
+  <div
+    key={listing.id}
+    className="flex flex-col justify-between gap-4 rounded-2xl border border-white/10 bg-slate-950/50 px-5 py-4 sm:flex-row sm:items-center"
+  >
+    <div>
+      <Link
+        href={`/listing/${listing.slug}`}
+        className="font-bold transition hover:text-amber-200"
+      >
+        {listing.title}
+      </Link>
 
-                    <p className="mt-1 text-sm text-stone-400">
-                      Active · {listing.category}
-                    </p>
-                  </div>
+      <p className="mt-1 text-sm text-stone-400">
+        Active · {listing.category}
+      </p>
+    </div>
 
-                  <p className="text-xl font-black text-amber-200">
-                    $
-                    {(listing.priceCents / 100).toFixed(2)}
-                  </p>
-                </Link>
-              ))}
+    <div className="flex flex-wrap items-center gap-3">
+      <p className="text-xl font-black text-amber-200">
+        ${(listing.priceCents / 100).toFixed(2)}
+      </p>
+
+      <Link
+        href={`/seller-chest/edit-listing/${listing.slug}`}
+        className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 text-sm font-bold text-cyan-100 transition hover:bg-cyan-300/20"
+      >
+        Edit Listing
+      </Link>
+      <button
+  type="button"
+  onClick={() => deactivateListing(listing.slug)}
+  className="rounded-full border border-amber-300/30 bg-amber-300/10 px-4 py-2 text-sm font-bold text-amber-100 transition hover:bg-amber-300/20"
+>
+  Deactivate
+</button>
+    </div>
+  </div>
+))}
             </div>
           </section>
+{inactiveListings.length > 0 && (
+  <section className="rounded-3xl border border-amber-300/20 bg-white/[0.04] p-6">
+    <div>
+      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-300">
+        Stored Treasure
+      </p>
+
+      <h2 className="mt-2 font-serif text-2xl">
+        Inactive Listings
+      </h2>
+
+      <p className="mt-2 text-sm text-stone-400">
+        These listings are hidden from the Treasure Deck but remain saved.
+      </p>
+    </div>
+
+    <div className="mt-6 space-y-3">
+      {inactiveListings.map((listing) => (
+        <div
+          key={listing.id}
+          className="flex flex-col justify-between gap-4 rounded-2xl border border-white/10 bg-slate-950/50 px-5 py-4 sm:flex-row sm:items-center"
+        >
+          <div>
+            <p className="font-bold">{listing.title}</p>
+
+            <p className="mt-1 text-sm text-stone-400">
+              Inactive · {listing.category}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <p className="text-xl font-black text-amber-200">
+              ${(listing.priceCents / 100).toFixed(2)}
+            </p>
+
+            <button
+              type="button"
+              onClick={() => reactivateListing(listing.slug)}
+              className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 text-sm font-bold text-cyan-100 transition hover:bg-cyan-300/20"
+            >
+              Reactivate
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+)}
 
           <aside className="rounded-3xl border border-amber-300/20 bg-gradient-to-b from-amber-300/10 to-transparent p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-300">
