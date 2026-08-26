@@ -167,13 +167,13 @@ function Header() {
           <a href="#home" className={navLink}>Home</a>
           <a href="#join" className={navLink}>Sell Your Treasure</a>
           <a href="/treasure-deck" className={navLink}>Treasure Deck</a>
-          <a href="/captains-picks" className={navLink}>The Captain's Picks</a>
+          <a href="/captains-picks" className={navLink}>From Land & Sea</a>
           <a href="/harbor-sellers" className={navLink}>
   Harbor Sellers
 </a>
 
 <a href="/captains-log" className={navLink}>
-  Captain's Log
+  Captain's Log 
 </a>
           <a href="/fresh-arrivals" className={navLink}>Fresh Arrivals</a>
           <a href="about" className={navLink}>About</a>
