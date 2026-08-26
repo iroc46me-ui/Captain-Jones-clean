@@ -203,7 +203,7 @@ export default function Marketplace() {
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
             <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
-              Marketplace
+              Treasure Deck
             </p>
 
             <h2 className="mt-1 text-3xl font-black tracking-tight text-white sm:text-4xl">

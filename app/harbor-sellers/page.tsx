@@ -102,9 +102,9 @@ useEffect(() => {
       className="min-h-screen bg-slate-950 bg-cover bg-center bg-fixed bg-no-repeat text-white"
       style={{
         backgroundImage: "url('/harbor-sellers-background.png')",
-      }}
+      }}  
     >
-      <div className="min-h-screen bg-slate-950/55">
+      <div className="min-h-screen bg-slate-950/15">
         <section className="mx-auto max-w-7xl px-6 py-16">
           <p className="text-sm font-black uppercase tracking-[0.35em] text-amber-300">
             Harbor Sellers
