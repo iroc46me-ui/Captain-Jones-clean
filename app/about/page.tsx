@@ -63,9 +63,12 @@ export default function AboutPage() {
               Captain&apos;s Log
             </Link>
 
-            <span className="text-stone-100">
-              Live Events coming soon
-            </span>
+            <Link
+  href="/fresh-arrivals"
+  className="transition hover:text-amber-300"
+>
+  Fresh Arrivals
+</Link>
 
             <Link
               href="/about"

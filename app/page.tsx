@@ -236,7 +236,7 @@ function Hero() {
             </a>
 
             <a
-              href="#marketplace"
+              href="/treasure-deck"
               className="w-full rounded-xl border border-cyan-200/50 bg-slate-950/75 px-6 py-4 text-center font-black text-white shadow-xl backdrop-blur-sm transition hover:-translate-y-1 hover:border-amber-300 hover:bg-amber-300 hover:text-slate-950 hover:shadow-amber-300/30 sm:w-auto"
             >
               🧭 Explore the Treasure Deck
