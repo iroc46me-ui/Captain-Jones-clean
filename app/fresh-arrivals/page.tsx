@@ -1,52 +1,97 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import FeaturedMarketplace from "../components/FeaturedMarketplace";
 
-const freshItems = [
-  {
-    title: "Vintage Brass Ship Lantern",
-    price: "$68",
-    tag: "Captain's Pick",
-    seller: "Old Harbor Finds",
-    description:
-      "A weathered brass-style ship lantern with old harbor character, perfect for collectors, nautical décor, cabins, RVs, or treasure-room display.",
-  },
-  {
-    title: "Desert Nugget Digger",
-    price: "$75",
-    tag: "Handmade Tool",
-    seller: "Davey's Workshop",
-    description:
-      "A rugged handmade prospecting tool built for scraping bedrock cracks, caliche seams, and hard-packed desert washes where gold likes to hide.",
-  },
-  {
-    title: "Old Coin & Relic Lot",
-    price: "$42",
-    tag: "Treasure Bin",
-    seller: "Relic Rider",
-    description:
-      "A small mystery-style relic lot with old coins, metal finds, and forgotten drawer treasures for collectors who enjoy the hunt.",
-  },
-  {
-    title: "RV Parts Mystery Box",
-    price: "$35",
-    tag: "Useful Junk",
-    seller: "Road Dog Salvage",
-    description:
-      "A useful mixed box of RV and road-life parts, hardware, fittings, and odd spares for tinkerers, travelers, and repair-minded treasure hunters.",
-  },
-  {
-    title: "Prospector's Brass Scale",
-    price: "$58",
-    tag: "Field Gear",
-    seller: "Quartzsite Cache",
-    description:
-      "A compact brass-style field scale made for weighing small finds, gold flakes, relics, and other tiny treasures from the trail.",
-  },
-];
+type DatabaseListing = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  priceCents: number;
+  category: string;
+  seller: string;
+  createdAt?: string;
+};
+
+type FreshItem = {
+  title: string;
+  slug: string;
+  price: string;
+  tag: string;
+  seller: string;
+  description: string;
+};
 
 export default function FreshArrivalsPage() {
+  const [items, setItems] = useState<FreshItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+
+  useEffect(() => {
+    async function loadFreshArrivals() {
+      try {
+        const response = await fetch("/api/listings", {
+          cache: "no-store",
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(
+            data.error || "Fresh Arrivals could not be loaded."
+          );
+        }
+
+        const freshItems = (data.listings as DatabaseListing[])
+          .slice(0, 5)
+          .map((listing) => ({
+            title: listing.title,
+            slug: listing.slug,
+            price: `$${(listing.priceCents / 100).toFixed(2)}`,
+            tag: listing.category,
+            seller: listing.seller,
+            description: listing.description,
+          }));
+
+        setItems(freshItems);
+      } catch (error) {
+        console.error("Unable to load Fresh Arrivals:", error);
+
+        setLoadError(
+          error instanceof Error
+            ? error.message
+            : "Fresh Arrivals could not be loaded."
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadFreshArrivals();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-950 text-amber-200">
+        Loading fresh treasure...
+      </main>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-950 px-6 text-white">
+        <div className="rounded-3xl border border-red-400/30 bg-red-400/10 p-8">
+          {loadError}
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-slate-950">
-      <FeaturedMarketplace items={freshItems} />
+      <FeaturedMarketplace items={items} />
     </main>
   );
 }
