@@ -175,7 +175,7 @@ function Header() {
 <a href="/captains-log" className={navLink}>
   Captain's Log
 </a>
-          <a href="#live-events" className={navLink}>Live Events coming soon</a>
+          <a href="/fresh-arrivals" className={navLink}>Fresh Arrivals</a>
           <a href="about" className={navLink}>About</a>
         </nav>
 
