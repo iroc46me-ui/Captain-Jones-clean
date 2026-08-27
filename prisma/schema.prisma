@@ -17,6 +17,7 @@ model Seller {
   stripeAccountId   String?  @unique
   listings          Listing[]
   createdAt         DateTime @default(now())
+  inquiries Inquiry[]
   updatedAt         DateTime @updatedAt
 }
 
@@ -29,11 +30,47 @@ model Listing {
   category    String
   condition   String?
   shipping    String?
+  imageUrl String?
+  inquiries Inquiry[]
   status      String   @default("ACTIVE")
+
 
   sellerId    String
   seller      Seller   @relation(fields: [sellerId], references: [id])
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+model Inquiry {
+  id         String   @id @default(cuid())
+
+  listingId  String
+  listing    Listing  @relation(fields: [listingId], references: [id])
+
+  sellerId   String
+  seller     Seller   @relation(fields: [sellerId], references: [id])
+
+  buyerName  String
+  buyerEmail String
+
+  status     String   @default("OPEN")
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  messages   InquiryMessage[]
+}
+
+model InquiryMessage {
+  id         String   @id @default(cuid())
+
+  inquiryId  String
+  inquiry    Inquiry  @relation(fields: [inquiryId], references: [id])
+
+  senderType String
+  body       String
+
+  flagged    Boolean  @default(false)
+
+  createdAt  DateTime @default(now())
 }

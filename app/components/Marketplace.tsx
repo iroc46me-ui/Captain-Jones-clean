@@ -28,6 +28,7 @@ type ApiListing = {
   category: string;
   condition?: string | null;
   shipping?: string | null;
+  imageUrl?: string | null;
   status?: string;
   createdAt?: string;
   seller: string;
@@ -141,6 +142,7 @@ export default function Marketplace() {
         ).map((item) => ({
           title: item.title,
           slug: item.slug,
+          image: item.imageUrl || undefined,
           price: `$${(item.priceCents / 100).toFixed(2)}`,
           category: item.category,
           tag: "New Listing",

@@ -13,6 +13,7 @@ type Listing = {
   tag?: string;
   seller: string;
   description: string;
+  image?: string;
   condition?: string;
   shipping?: string;
 };
@@ -112,6 +113,12 @@ export default function ListingPage() {
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [showInquiryForm, setShowInquiryForm] = useState(false);
+  const [buyerName, setBuyerName] = useState("");
+const [buyerEmail, setBuyerEmail] = useState("");
+const [inquiryMessage, setInquiryMessage] = useState("");
+const [isSendingInquiry, setIsSendingInquiry] = useState(false);
+const [inquiryStatus, setInquiryStatus] = useState("");
 
   useEffect(() => {
   async function loadListing() {
@@ -134,6 +141,7 @@ export default function ListingPage() {
           slug: databaseListing.slug,
           price: `$${(databaseListing.priceCents / 100).toFixed(2)}`,
           category: databaseListing.category,
+          image: databaseListing.imageUrl || undefined,
           tag: "New Listing",
           seller: databaseListing.seller,
           description: databaseListing.description,
@@ -163,6 +171,51 @@ export default function ListingPage() {
 
   loadListing();
 }, [slug]);
+async function sendHarborInquiry() {
+  if (!listing) return;
+
+  if (!buyerName.trim() || !buyerEmail.trim() || !inquiryMessage.trim()) {
+    setInquiryStatus("Please complete your name, email and message.");
+    return;
+  }
+
+  try {
+    setIsSendingInquiry(true);
+    setInquiryStatus("");
+
+    const response = await fetch("/api/harbor-inquiries", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        listingSlug: listing.slug,
+        buyerName,
+        buyerEmail,
+        message: inquiryMessage,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      setInquiryStatus(data.error || "The Harbor message could not be sent.");
+      return;
+    }
+
+    setInquiryStatus(
+      "⚓ Message sent into the Harbor. The seller can reply here without exchanging private contact information."
+    );
+
+    setBuyerName("");
+    setBuyerEmail("");
+    setInquiryMessage("");
+  } catch {
+    setInquiryStatus("The Harbor message could not be sent.");
+  } finally {
+    setIsSendingInquiry(false);
+  }
+}
 
   if (!isReady) {
     return (
@@ -226,11 +279,19 @@ export default function ListingPage() {
       </section>
 
       <section className="mx-auto grid max-w-6xl gap-7 px-6 py-8 sm:px-10 lg:grid-cols-[0.88fr_0.9fr] lg:px-16">
-  <div className="mx-auto flex min-h-[285px] w-[88%] items-center justify-center rounded-3xl border border-cyan-300/20 bg-gradient-to-br from-cyan-700/30 to-slate-950">
-          <span className="text-8xl" aria-hidden="true">
-            {categoryIcons[listing.category] || "⚓"}
-          </span>
-        </div>
+ <div className="mx-auto flex aspect-[4/5] w-[88%] self-start items-center justify-center overflow-hidden rounded-3xl border border-cyan-300/20 bg-gradient-to-br from-cyan-700/30 to-slate-950">
+  {listing.image ? (
+    <img
+      src={listing.image}
+      alt={listing.title}
+      className="h-full min-h-[285px] w-full object-cover"
+    />
+  ) : (
+    <span className="text-8xl" aria-hidden="true">
+      {categoryIcons[listing.category] || "⚓"}
+    </span>
+  )}
+</div>
 
         <div className="relative rounded-3xl border border-white/10 bg-white/[0.05] p-7">
           <HarborWatchButton
@@ -284,6 +345,13 @@ export default function ListingPage() {
             >
               Claim This Treasure
             </Link>
+            <button
+  type="button"
+  onClick={() => setShowInquiryForm((current) => !current)}
+  className="rounded-full border border-amber-300/50 bg-amber-300/10 px-6 py-3 font-bold text-amber-100 transition hover:bg-amber-300/20"
+>
+  {showInquiryForm ? "Close Harbor Message" : "Ask the Seller"}
+</button>
 
             <Link
               href="/harbor-watch"
@@ -299,6 +367,61 @@ export default function ListingPage() {
               Return to Treasure Deck
             </Link>
           </div>
+          {showInquiryForm && (
+  <div className="mt-6 rounded-2xl border border-cyan-300/20 bg-slate-950/50 p-5">
+    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">
+      Harbor Inquiry
+    </p>
+
+    <h2 className="mt-2 font-serif text-2xl text-amber-200">
+      Ask {listing.seller} about this treasure
+    </h2>
+
+    <p className="mt-2 text-sm leading-6 text-stone-400">
+      Your message stays inside the Harbor.
+    </p>
+
+    <div className="mt-5 space-y-4">
+      <input
+  type="text"
+  placeholder="Your name"
+  value={buyerName}
+  onChange={(event) => setBuyerName(event.target.value)}
+  className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-stone-100 outline-none placeholder:text-stone-500 focus:border-cyan-300/50"
+/>
+
+      <input
+  type="email"
+  placeholder="Your email"
+  value={buyerEmail}
+  onChange={(event) => setBuyerEmail(event.target.value)}
+  className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-stone-100 outline-none placeholder:text-stone-500 focus:border-cyan-300/50"
+/>
+
+      <textarea
+  rows={5}
+  placeholder="Ask the seller a question about this item..."
+  value={inquiryMessage}
+  onChange={(event) => setInquiryMessage(event.target.value)}
+  className="w-full resize-none rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-stone-100 outline-none placeholder:text-stone-500 focus:border-cyan-300/50"
+/>
+
+      <button
+  type="button"
+  onClick={sendHarborInquiry}
+  disabled={isSendingInquiry}
+  className="rounded-full bg-cyan-300 px-6 py-3 font-bold text-slate-950 disabled:cursor-not-allowed disabled:opacity-60"
+>
+  {isSendingInquiry ? "Sending..." : "Send Harbor Message"}
+</button>
+{inquiryStatus && (
+  <p className="text-sm leading-6 text-amber-100">
+    {inquiryStatus}
+  </p>
+)}
+    </div>
+  </div>
+)}
         </div>
       </section>
     </main>

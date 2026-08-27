@@ -31,6 +31,8 @@ export default function NewListingPage() {
   const router = useRouter();
   const [listing, setListing] = useState<ListingDraft>(EMPTY_LISTING);
   const [message, setMessage] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+const [imagePreview, setImagePreview] = useState("");
 
   function updateField(
     field: keyof ListingDraft,
@@ -88,20 +90,48 @@ export default function NewListingPage() {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
-  const publishedListing = {
-    ...listing,
-    title: cleanTitle,
-    seller: cleanSeller,
-    description: cleanDescription,
-    price: cleanPrice.startsWith("$")
-      ? cleanPrice
-      : `$${cleanPrice}`,
-    slug,
-    status: "Active",
-    createdAt: new Date().toISOString(),
-  };
-
   try {
+    let imageUrl: string | null = null;
+
+    if (imageFile) {
+      setMessage("Uploading treasure photo...");
+
+      const formData = new FormData();
+      formData.append("file", imageFile);
+
+      const uploadResponse = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const uploadData = await uploadResponse.json();
+
+      if (!uploadResponse.ok || !uploadData.url) {
+        setMessage(
+          uploadData.error || "The treasure photo could not be uploaded."
+        );
+        return;
+      }
+
+      imageUrl = uploadData.url;
+    }
+
+    setMessage("Publishing treasure...");
+
+    const publishedListing = {
+      ...listing,
+      title: cleanTitle,
+      seller: cleanSeller,
+      description: cleanDescription,
+      price: cleanPrice.startsWith("$")
+        ? cleanPrice
+        : `$${cleanPrice}`,
+      slug,
+      imageUrl,
+      status: "Active",
+      createdAt: new Date().toISOString(),
+    };
+
     const response = await fetch("/api/listings", {
       method: "POST",
       headers: {
@@ -127,7 +157,8 @@ export default function NewListingPage() {
     localStorage.removeItem(DRAFT_KEY);
 
     router.push("/seller-chest/listing-published");
-  } catch {
+  } catch (error) {
+    console.error("Unable to publish listing:", error);
     setMessage("The listing could not be published.");
   }
 }
@@ -284,23 +315,51 @@ export default function NewListingPage() {
 
         <aside className="space-y-6">
           <section className="rounded-3xl border border-amber-300/20 bg-gradient-to-b from-amber-300/10 to-transparent p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-300">
-              Treasure Images
-            </p>
+  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-300">
+    Treasure Images
+  </p>
 
-            <div className="mt-5 flex min-h-[190px] items-center justify-center rounded-2xl border border-dashed border-white/20 bg-slate-950/50 px-6 text-center">
-              <div>
-                <p className="font-serif text-xl text-stone-200">
-                  Image Upload Coming Next
-                </p>
+  <div className="mt-5 rounded-2xl border border-dashed border-white/20 bg-slate-950/50 p-5">
+    {imagePreview ? (
+      <img
+        src={imagePreview}
+        alt="Treasure preview"
+        className="mb-4 h-56 w-full rounded-xl object-cover"
+      />
+    ) : (
+      <div className="mb-4 flex h-48 items-center justify-center rounded-xl bg-slate-900/70 text-center text-stone-500">
+        Your treasure photo will appear here.
+      </div>
+    )}
 
-                <p className="mt-2 text-sm leading-6 text-stone-500">
-                  This area will accept multiple photographs, arrange
-                  their order and select a cover image.
-                </p>
-              </div>
-            </div>
-          </section>
+    <label className="block">
+      <span className="mb-2 block text-sm font-semibold text-stone-300">
+        Choose a photo
+      </span>
+
+      <input
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+
+          if (!file) {
+            return;
+          }
+
+          setImageFile(file);
+          setImagePreview(URL.createObjectURL(file));
+        }}
+        className="block w-full text-sm text-stone-300 file:mr-4 file:rounded-full file:border-0 file:bg-amber-300 file:px-4 file:py-2 file:font-bold file:text-slate-950 hover:file:bg-amber-200"
+      />
+    </label>
+
+    <p className="mt-3 text-xs leading-5 text-stone-500">
+      JPG, PNG or WebP. We&apos;ll begin with one main listing photo and add
+      multiple-photo support later.
+    </p>
+  </div>
+</section>
 
           <section className="rounded-3xl border border-cyan-300/20 bg-white/[0.04] p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">

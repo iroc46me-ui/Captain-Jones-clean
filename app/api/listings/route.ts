@@ -65,6 +65,7 @@ export async function POST(request: Request) {
       condition,
       shipping,
       seller,
+      imageUrl
     } = body;
 
     if (
@@ -126,6 +127,7 @@ export async function POST(request: Request) {
           "category",
           "condition",
           "shipping",
+          "imageUrl",
           "status",
           "sellerId",
           "createdAt",
@@ -141,6 +143,7 @@ export async function POST(request: Request) {
           ${category},
           ${condition || null},
           ${shipping || null},
+          ${imageUrl || null},
           'ACTIVE',
           ${sellerRecord.id},
           NOW(),
@@ -197,6 +200,7 @@ const includeInactive =
         l."category",
         l."condition",
         l."shipping",
+        l."imageUrl",
         l."status",
         l."createdAt",
         s."name" AS "seller"
@@ -262,6 +266,7 @@ export async function PUT(request: Request) {
         l."category",
         l."condition",
         l."shipping",
+        l."imageUrl",
         l."status",
         l."createdAt",
         s."name" AS "seller"
