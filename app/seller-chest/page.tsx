@@ -23,6 +23,7 @@ export default function SellerChestPage() {
     const [listings, setListings] = useState<DatabaseListing[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
+  const [harborMessageCount, setHarborMessageCount] = useState(0);
 
   useEffect(() => {
     async function loadSellerListings() {
@@ -61,11 +62,34 @@ export default function SellerChestPage() {
 
     loadSellerListings();
   }, []);
+   useEffect(() => {
+  async function loadHarborMessages() {
+    try {
+      const response = await fetch(
+        `/api/harbor-inquiries?seller=${encodeURIComponent(SELLER_NAME)}`,
+        {
+          cache: "no-store",
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setHarborMessageCount(data.inquiries?.length || 0);
+      }
+    } catch {
+      setHarborMessageCount(0);
+    }
+  }
+
+  loadHarborMessages();
+}, []);
+
 async function deactivateListing(slug: string) {
   const confirmed = window.confirm(
     "Deactivate this listing? It will be removed from the Treasure Deck but kept in the database."
   );
-
+ 
   if (!confirmed) {
     return;
   }
@@ -162,7 +186,7 @@ async function deactivateListing(slug: string) {
     },
     {
       label: "Harbor Messages",
-      value: "0",
+      value: String(harborMessageCount) ,
     },
   ];
 
@@ -200,20 +224,40 @@ async function deactivateListing(slug: string) {
 
       <section className="mx-auto max-w-7xl px-6 py-8 sm:px-10 lg:px-16">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {sellerStats.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-2xl border border-white/10 bg-white/[0.05] p-5"
-            >
-              <p className="text-sm text-stone-400">
-                {stat.label}
-              </p>
+          {sellerStats.map((stat) =>
+  stat.label === "Harbor Messages" ? (
+    <Link
+      key={stat.label}
+      href="/seller-chest/harbor-messages"
+      className="rounded-2xl border border-cyan-300/20 bg-white/[0.05] p-5 transition hover:border-cyan-300/50 hover:bg-cyan-300/[0.08]"
+    >
+      <p className="text-sm text-stone-400">
+        {stat.label}
+      </p>
 
-              <p className="mt-2 text-3xl font-black text-amber-200">
-                {stat.value}
-              </p>
-            </div>
-          ))}
+      <p className="mt-2 text-3xl font-black text-amber-200">
+        {stat.value}
+      </p>
+
+      <p className="mt-2 text-xs font-semibold text-cyan-300">
+        Open Harbor Inbox →
+      </p>
+    </Link>
+  ) : (
+    <div
+      key={stat.label}
+      className="rounded-2xl border border-white/10 bg-white/[0.05] p-5"
+    >
+      <p className="text-sm text-stone-400">
+        {stat.label}
+      </p>
+
+      <p className="mt-2 text-3xl font-black text-amber-200">
+        {stat.value}
+      </p>
+    </div>
+  )
+)}
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
