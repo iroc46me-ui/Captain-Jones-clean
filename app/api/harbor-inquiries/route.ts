@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
+import { ensureUser } from "../../../lib/ensure-user";
 
 export async function POST(request: Request) {
   try {
@@ -12,23 +13,21 @@ export async function POST(request: Request) {
       );
     }
 
+    const user = await ensureUser();
     const body = await request.json();
 
-    const {
-      listingSlug,
-      buyerName,
-      buyerEmail,
-      message,
-    } = body;
+    const { listingSlug, message } = body;
 
-    if (
-      !listingSlug ||
-      !buyerName ||
-      !buyerEmail ||
-      !message
-    ) {
+    if (!listingSlug || !message?.trim()) {
       return NextResponse.json(
-        { error: "Required inquiry information is missing." },
+        { error: "Listing and message are required." },
+        { status: 400 }
+      );
+    }
+
+    if (!user.email) {
+      return NextResponse.json(
+        { error: "Your account needs an email address before sending messages." },
         { status: 400 }
       );
     }
@@ -42,7 +41,9 @@ export async function POST(request: Request) {
         l."title",
         l."slug"
       FROM "Listing" l
-      WHERE l."slug" = ${listingSlug}
+      WHERE
+        l."slug" = ${listingSlug}
+        AND l."status" = 'ACTIVE'
       LIMIT 1
     `;
 
@@ -55,12 +56,18 @@ export async function POST(request: Request) {
 
     const listing = listings[0];
 
+    const buyerName =
+      user.name?.trim() ||
+      user.email ||
+      "Harbor Buyer";
+
     const inquiries = await sql`
       INSERT INTO "Inquiry"
         (
           "id",
           "listingId",
           "sellerId",
+          "buyerUserId",
           "buyerName",
           "buyerEmail",
           "status",
@@ -72,8 +79,9 @@ export async function POST(request: Request) {
           gen_random_uuid()::text,
           ${listing.id},
           ${listing.sellerId},
-          ${buyerName.trim()},
-          ${buyerEmail.trim()},
+          ${user.id},
+          ${buyerName},
+          ${user.email},
           'OPEN',
           NOW(),
           NOW()
@@ -114,19 +122,23 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Unable to create Harbor inquiry:", error);
+    const message =
+      error instanceof Error
+        ? error.message
+        : "The Harbor inquiry could not be created.";
 
     return NextResponse.json(
       {
-        error:
-          error instanceof Error
-            ? error.message
-            : "The Harbor inquiry could not be created.",
+        success: false,
+        error: message,
       },
-      { status: 500 }
+      {
+        status: message === "Unauthorized." ? 401 : 500,
+      }
     );
   }
 }
+
 export async function GET(request: Request) {
   try {
     const databaseUrl = process.env.DATABASE_URL;
@@ -138,22 +150,27 @@ export async function GET(request: Request) {
       );
     }
 
-    const url = new URL(request.url);
-    const inquiryId = url.searchParams.get("id");
-    const sellerName = url.searchParams.get("seller");
-
+    const user = await ensureUser();
     const sql = neon(databaseUrl);
+
+    const url = new URL(request.url);
+
+    const inquiryId = url.searchParams.get("id");
+    const scope = url.searchParams.get("scope");
 
     if (inquiryId) {
       const inquiries = await sql`
         SELECT
           i."id",
+          i."buyerUserId",
           i."buyerName",
           i."status",
           i."createdAt",
+          i."sellerId",
           l."title" AS "listingTitle",
           l."slug" AS "listingSlug",
-          s."name" AS "seller"
+          s."name" AS "seller",
+          s."userId" AS "sellerUserId"
         FROM "Inquiry" i
         JOIN "Listing" l
           ON l."id" = i."listingId"
@@ -167,6 +184,19 @@ export async function GET(request: Request) {
         return NextResponse.json(
           { error: "Harbor conversation not found." },
           { status: 404 }
+        );
+      }
+
+      const inquiry = inquiries[0];
+
+      const ownsConversation =
+        inquiry.buyerUserId === user.id ||
+        inquiry.sellerUserId === user.id;
+
+      if (!ownsConversation) {
+        return NextResponse.json(
+          { error: "You do not have access to this Harbor conversation." },
+          { status: 403 }
         );
       }
 
@@ -184,61 +214,113 @@ export async function GET(request: Request) {
 
       return NextResponse.json({
         success: true,
-        inquiry: inquiries[0],
+        inquiry,
         messages,
       });
     }
 
-    if (!sellerName) {
-      return NextResponse.json(
-        { error: "Seller name is required." },
-        { status: 400 }
-      );
+    if (scope === "seller") {
+      const sellers = await sql`
+        SELECT "id", "name"
+        FROM "Seller"
+        WHERE "userId" = ${user.id}
+        LIMIT 1
+      `;
+
+      if (sellers.length === 0) {
+        return NextResponse.json({
+          success: true,
+          inquiries: [],
+        });
+      }
+
+      const seller = sellers[0];
+
+      const inquiries = await sql`
+        SELECT
+          i."id",
+          i."buyerName",
+          i."status",
+          i."createdAt",
+          l."title" AS "listingTitle",
+          l."slug" AS "listingSlug",
+          s."name" AS "seller",
+          (
+            SELECT m."body"
+            FROM "InquiryMessage" m
+            WHERE m."inquiryId" = i."id"
+            ORDER BY m."createdAt" ASC
+            LIMIT 1
+          ) AS "firstMessage"
+        FROM "Inquiry" i
+        JOIN "Listing" l
+          ON l."id" = i."listingId"
+        JOIN "Seller" s
+          ON s."id" = i."sellerId"
+        WHERE i."sellerId" = ${seller.id}
+        ORDER BY i."createdAt" DESC
+      `;
+
+      return NextResponse.json({
+        success: true,
+        inquiries,
+      });
     }
 
-    const inquiries = await sql`
-      SELECT
-        i."id",
-        i."buyerName",
-        i."status",
-        i."createdAt",
-        l."title" AS "listingTitle",
-        l."slug" AS "listingSlug",
-        s."name" AS "seller",
-        (
-          SELECT m."body"
-          FROM "InquiryMessage" m
-          WHERE m."inquiryId" = i."id"
-          ORDER BY m."createdAt" ASC
-          LIMIT 1
-        ) AS "firstMessage"
-      FROM "Inquiry" i
-      JOIN "Listing" l
-        ON l."id" = i."listingId"
-      JOIN "Seller" s
-        ON s."id" = i."sellerId"
-      WHERE s."name" = ${sellerName}
-      ORDER BY i."createdAt" DESC
-    `;
+    if (scope === "buyer") {
+      const inquiries = await sql`
+        SELECT
+          i."id",
+          i."buyerName",
+          i."status",
+          i."createdAt",
+          l."title" AS "listingTitle",
+          l."slug" AS "listingSlug",
+          s."name" AS "seller",
+          (
+            SELECT m."body"
+            FROM "InquiryMessage" m
+            WHERE m."inquiryId" = i."id"
+            ORDER BY m."createdAt" DESC
+            LIMIT 1
+          ) AS "lastMessage"
+        FROM "Inquiry" i
+        JOIN "Listing" l
+          ON l."id" = i."listingId"
+        JOIN "Seller" s
+          ON s."id" = i."sellerId"
+        WHERE i."buyerUserId" = ${user.id}
+        ORDER BY i."updatedAt" DESC
+      `;
 
-    return NextResponse.json({
-      success: true,
-      inquiries,
-    });
+      return NextResponse.json({
+        success: true,
+        inquiries,
+      });
+    }
+
+    return NextResponse.json(
+      { error: "A valid Harbor message scope is required." },
+      { status: 400 }
+    );
   } catch (error) {
-    console.error("Unable to load Harbor inquiries:", error);
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Harbor inquiries could not be loaded.";
 
     return NextResponse.json(
       {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Harbor inquiries could not be loaded.",
+        success: false,
+        error: message,
       },
-      { status: 500 }
+      {
+        status: message === "Unauthorized." ? 401 : 500,
+      }
     );
   }
 }
+
 export async function PATCH(request: Request) {
   try {
     const databaseUrl = process.env.DATABASE_URL;
@@ -250,7 +332,9 @@ export async function PATCH(request: Request) {
       );
     }
 
+    const user = await ensureUser();
     const body = await request.json();
+
     const { inquiryId, message } = body;
 
     if (!inquiryId || !message?.trim()) {
@@ -263,9 +347,14 @@ export async function PATCH(request: Request) {
     const sql = neon(databaseUrl);
 
     const inquiries = await sql`
-      SELECT "id"
-      FROM "Inquiry"
-      WHERE "id" = ${inquiryId}
+      SELECT
+        i."id",
+        i."buyerUserId",
+        s."userId" AS "sellerUserId"
+      FROM "Inquiry" i
+      JOIN "Seller" s
+        ON s."id" = i."sellerId"
+      WHERE i."id" = ${inquiryId}
       LIMIT 1
     `;
 
@@ -273,6 +362,21 @@ export async function PATCH(request: Request) {
       return NextResponse.json(
         { error: "Harbor conversation not found." },
         { status: 404 }
+      );
+    }
+
+    const inquiry = inquiries[0];
+
+    let senderType: "BUYER" | "SELLER";
+
+    if (inquiry.buyerUserId === user.id) {
+      senderType = "BUYER";
+    } else if (inquiry.sellerUserId === user.id) {
+      senderType = "SELLER";
+    } else {
+      return NextResponse.json(
+        { error: "You do not have access to this Harbor conversation." },
+        { status: 403 }
       );
     }
 
@@ -290,7 +394,7 @@ export async function PATCH(request: Request) {
         (
           gen_random_uuid()::text,
           ${inquiryId},
-          'SELLER',
+          ${senderType},
           ${message.trim()},
           false,
           NOW()
@@ -298,21 +402,30 @@ export async function PATCH(request: Request) {
       RETURNING *
     `;
 
+    await sql`
+      UPDATE "Inquiry"
+      SET "updatedAt" = NOW()
+      WHERE "id" = ${inquiryId}
+    `;
+
     return NextResponse.json({
       success: true,
       message: messages[0],
     });
   } catch (error) {
-    console.error("Unable to send Harbor reply:", error);
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Harbor reply could not be sent.";
 
     return NextResponse.json(
       {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Harbor reply could not be sent.",
+        success: false,
+        error: message,
       },
-      { status: 500 }
+      {
+        status: message === "Unauthorized." ? 401 : 500,
+      }
     );
   }
 }
