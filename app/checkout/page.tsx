@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
 type CheckoutListing = {
@@ -13,131 +13,123 @@ type CheckoutListing = {
   shipping?: string;
 };
 
-type Order = CheckoutListing & {
-  orderId: string;
-  status: string;
-  orderedAt: string;
-};
-
-const PUBLISHED_LISTINGS_KEY = "davey-jones-published-listings";
-const ORDERS_KEY = "davey-jones-orders";
-const LAST_ORDER_KEY = "davey-jones-last-order";
-
-const sampleListings: CheckoutListing[] = [
-  {
-    title: "Vintage Brass Ship Lantern",
-    slug: "vintage-brass-ship-lantern",
-    price: "$68",
-    seller: "Old Harbor Finds",
-    category: "Antiques",
-    shipping: "Buyer Pays Shipping",
-  },
-  {
-    title: "Desert Nugget Digger",
-    slug: "desert-nugget-digger",
-    price: "$75",
-    seller: "Davey's Workshop",
-    category: "Gold & Prospecting",
-    shipping: "Buyer Pays Shipping",
-  },
-  {
-    title: "Old Coin & Relic Lot",
-    slug: "old-coin-relic-lot",
-    price: "$42",
-    seller: "Relic Rider",
-    category: "Collectibles",
-    shipping: "Buyer Pays Shipping",
-  },
-  {
-    title: "RV Parts Mystery Box",
-    slug: "rv-parts-mystery-box",
-    price: "$35",
-    seller: "Road Dog Salvage",
-    category: "RV & Auto",
-    shipping: "Buyer Pays Shipping",
-  },
-  {
-    title: "Prospector's Brass Scale",
-    slug: "prospectors-brass-scale",
-    price: "$88",
-    seller: "Quartzsite Cache",
-    category: "Gold & Prospecting",
-    shipping: "Buyer Pays Shipping",
-  },
-  {
-    title: "Estate Drawer Oddities",
-    slug: "estate-drawer-oddities",
-    price: "$29",
-    seller: "Second Drawer Co.",
-    category: "Estate Finds",
-    shipping: "Buyer Pays Shipping",
-  },
-];
-
 function CheckoutContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const itemSlug = searchParams.get("item");
 
-  const [listing, setListing] = useState<CheckoutListing | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState("Test Card");
+  const [listing, setListing] =
+    useState<CheckoutListing | null>(null);
+
   const [isReady, setIsReady] = useState(false);
+  const [isStartingCheckout, setIsStartingCheckout] =
+    useState(false);
+  const [checkoutStatus, setCheckoutStatus] =
+    useState("");
+
   useEffect(() => {
-  try {
-    const publishedListings = JSON.parse(
-      localStorage.getItem(PUBLISHED_LISTINGS_KEY) || "[]"
-    ) as CheckoutListing[];
+    async function loadListing() {
+      if (!itemSlug) {
+        setListing(null);
+        setIsReady(true);
+        return;
+      }
 
-    const foundListing = [...publishedListings, ...sampleListings].find(
-      (item) => item.slug === itemSlug
-    );
+      try {
+        const response = await fetch("/api/listings", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            slug: itemSlug,
+          }),
+        });
 
-    setListing(foundListing || null);
-  } catch {
-    const sampleListing = sampleListings.find(
-      (item) => item.slug === itemSlug
-    );
+        const data = await response.json();
 
-    setListing(sampleListing || null);
-  }
+        if (
+          response.ok &&
+          data.success &&
+          data.listing
+        ) {
+          const databaseListing = data.listing;
 
-  setIsReady(true);
-}, [itemSlug]);
-
-async function completeTestPurchase() {
-  if (!listing) return;
-
-  try {
-    const response = await fetch("/api/create-checkout-session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        slug: listing.slug,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || !data.url) {
-      console.error("Checkout error:", data);
-
-      alert(
-        data.error ||
-          "Unable to start Stripe checkout."
-      );
-
-      return;
+          setListing({
+            title: databaseListing.title,
+            slug: databaseListing.slug,
+            price: `$${(
+              databaseListing.priceCents / 100
+            ).toFixed(2)}`,
+            seller: databaseListing.seller,
+            category:
+              databaseListing.category || "Treasure",
+            shipping:
+              databaseListing.shipping ||
+              "Calculated later",
+          });
+        } else {
+          setListing(null);
+        }
+      } catch {
+        setListing(null);
+      } finally {
+        setIsReady(true);
+      }
     }
 
-    window.location.href = data.url;
-  } catch (error) {
-    console.error("Unable to start checkout:", error);
+    loadListing();
+  }, [itemSlug]);
 
-    alert("Unable to start Stripe checkout.");
+  async function startStripeCheckout() {
+    if (!listing) return;
+
+    try {
+      setIsStartingCheckout(true);
+      setCheckoutStatus("");
+
+      const response = await fetch(
+        "/api/create-checkout-session",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            slug: listing.slug,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.url) {
+        console.error(
+          "Checkout error:",
+          data
+        );
+
+        setCheckoutStatus(
+          data.error ||
+            "Unable to start Stripe checkout."
+        );
+
+        return;
+      }
+
+      window.location.href = data.url;
+    } catch (error) {
+      console.error(
+        "Unable to start checkout:",
+        error
+      );
+
+      setCheckoutStatus(
+        "Unable to start Stripe checkout."
+      );
+    } finally {
+      setIsStartingCheckout(false);
+    }
   }
-}
 
   if (!isReady) {
     return (
@@ -160,7 +152,8 @@ async function completeTestPurchase() {
           </h1>
 
           <p className="mt-2 text-stone-300">
-            Review your treasure before completing this test purchase.
+            Review your treasure before continuing to
+            secure checkout.
           </p>
         </div>
       </section>
@@ -173,34 +166,47 @@ async function completeTestPurchase() {
 
           {listing ? (
             <>
-              <h2 className="mt-3 font-serif text-3xl">
+              <h2 className="mt-3 font-serif text-3xl text-amber-100">
                 {listing.title}
               </h2>
 
               <div className="mt-5 space-y-3 text-sm">
-                <div className="flex justify-between border-b border-white/10 pb-3">
-                  <span className="text-stone-400">Seller</span>
-                  <span className="font-semibold">{listing.seller}</span>
-                </div>
+                <div className="flex justify-between gap-6 border-b border-white/10 pb-3">
+                  <span className="text-stone-400">
+                    Seller
+                  </span>
 
-                <div className="flex justify-between border-b border-white/10 pb-3">
-                  <span className="text-stone-400">Category</span>
                   <span className="font-semibold">
-                    {listing.category || "Treasure"}
+                    {listing.seller}
                   </span>
                 </div>
 
-                <div className="flex justify-between border-b border-white/10 pb-3">
-                  <span className="text-stone-400">Delivery</span>
+                <div className="flex justify-between gap-6 border-b border-white/10 pb-3">
+                  <span className="text-stone-400">
+                    Category
+                  </span>
+
                   <span className="font-semibold">
-                    {listing.shipping || "Calculated later"}
+                    {listing.category ||
+                      "Treasure"}
+                  </span>
+                </div>
+
+                <div className="flex justify-between gap-6 border-b border-white/10 pb-3">
+                  <span className="text-stone-400">
+                    Delivery
+                  </span>
+
+                  <span className="font-semibold">
+                    {listing.shipping ||
+                      "Calculated later"}
                   </span>
                 </div>
               </div>
 
               <div className="mt-5 flex items-center justify-between rounded-2xl bg-slate-950/70 px-5 py-4">
                 <span className="font-semibold text-stone-300">
-                  Estimated total
+                  Item price
                 </span>
 
                 <span className="text-3xl font-black text-amber-200">
@@ -211,7 +217,12 @@ async function completeTestPurchase() {
           ) : (
             <div className="mt-5 rounded-2xl border border-amber-300/20 bg-amber-300/5 p-5">
               <p className="font-semibold text-amber-100">
-                No treasure was selected.
+                This treasure could not be loaded.
+              </p>
+
+              <p className="mt-2 text-sm leading-6 text-stone-400">
+                Return to the Treasure Deck and select
+                the listing again.
               </p>
             </div>
           )}
@@ -219,70 +230,61 @@ async function completeTestPurchase() {
 
         <div className="rounded-3xl border border-cyan-300/20 bg-gradient-to-b from-cyan-950/70 to-slate-950 p-6">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-300">
-            Test Payment
+            Secure Checkout
           </p>
 
           <h2 className="mt-2 font-serif text-2xl">
-            Choose a payment method
+            Continue to payment
           </h2>
 
-          <div className="mt-5 space-y-3">
-            {[
-              "Test Card",
-              "Test PayPal",
-              "Test Apple Pay",
-            ].map((method) => (
-              <label
-                key={method}
-                className="flex cursor-pointer items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3"
-              >
-                <input
-                  type="radio"
-                  name="payment"
-                  checked={paymentMethod === method}
-                  onChange={() => setPaymentMethod(method)}
-                />
-
-                <span className="font-semibold">{method}</span>
-              </label>
-            ))}
-          </div>
+          <p className="mt-4 leading-7 text-stone-400">
+            Your selected treasure will be passed to
+            Stripe using the listing stored in the
+            marketplace database.
+          </p>
 
           <button
             type="button"
-            onClick={completeTestPurchase}
-            disabled={!listing}
+            onClick={startStripeCheckout}
+            disabled={
+              !listing || isStartingCheckout
+            }
             className="mt-6 w-full rounded-full bg-amber-300 px-6 py-3 font-bold text-slate-950 transition hover:bg-amber-200 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Complete Test Purchase
+            {isStartingCheckout
+              ? "Opening Secure Checkout..."
+              : "Continue to Secure Checkout"}
           </button>
 
-          <p className="mt-3 text-center text-xs leading-5 text-stone-500">
-            No real payment will be collected.
-          </p>
+          {checkoutStatus && (
+            <p className="mt-4 text-sm leading-6 text-amber-100">
+              {checkoutStatus}
+            </p>
+          )}
 
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Link
-              href="/treasure-deck"
-              className="rounded-full border border-white/20 px-5 py-2.5 text-sm font-bold transition hover:bg-white/10"
-            >
-              Return to Treasure Deck
-            </Link>
-
+          <div className="mt-6 flex flex-wrap gap-3">
             {itemSlug && (
               <Link
                 href={`/listing/${itemSlug}`}
-                className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-5 py-2.5 text-sm font-bold text-cyan-100"
+                className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-5 py-2.5 text-sm font-bold text-cyan-100 transition hover:bg-cyan-300/20"
               >
                 Return to Listing
               </Link>
             )}
+
+            <Link
+              href="/treasure-deck"
+              className="rounded-full border border-white/20 px-5 py-2.5 text-sm font-bold transition hover:bg-white/10"
+            >
+              Keep Looking
+            </Link>
           </div>
         </div>
       </section>
     </main>
   );
 }
+
 export default function CheckoutPage() {
   return (
     <Suspense

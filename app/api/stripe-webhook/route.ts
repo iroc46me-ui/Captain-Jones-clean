@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { neon } from "@neondatabase/serverless";
 
 export async function POST(request: Request) {
   const secretKey = process.env.STRIPE_SECRET_KEY;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const databaseUrl = process.env.DATABASE_URL;
 
   if (!secretKey) {
     return NextResponse.json(
@@ -19,7 +21,15 @@ export async function POST(request: Request) {
     );
   }
 
+  if (!databaseUrl) {
+    return NextResponse.json(
+      { ok: false, error: "DATABASE_URL is missing" },
+      { status: 500 }
+    );
+  }
+
   const stripe = new Stripe(secretKey);
+  const sql = neon(databaseUrl);
 
   const signature = request.headers.get("stripe-signature");
 
@@ -41,7 +51,10 @@ export async function POST(request: Request) {
       webhookSecret
     );
   } catch (error) {
-    console.error("Webhook signature verification failed:", error);
+    console.error(
+      "Webhook signature verification failed:",
+      error
+    );
 
     return NextResponse.json(
       { ok: false, error: "Invalid webhook signature" },
@@ -51,7 +64,8 @@ export async function POST(request: Request) {
 
   try {
     if (event.type === "checkout.session.completed") {
-      const session = event.data.object as Stripe.Checkout.Session;
+      const session =
+        event.data.object as Stripe.Checkout.Session;
 
       if (session.payment_status !== "paid") {
         return NextResponse.json({ received: true });
@@ -59,103 +73,171 @@ export async function POST(request: Request) {
 
       const metadata = session.metadata || {};
 
-      const sellerStripeAccountId =
-        metadata.sellerStripeAccountId;
+      const listingId = metadata.listingId;
+      const listingSlug = metadata.listingSlug;
+      const buyerUserId = metadata.buyerUserId;
+      const sellerId = metadata.sellerId;
+
+      const harborFeeInCents = Number(
+        metadata.harborFeeInCents
+      );
 
       const sellerAmountInCents = Number(
         metadata.sellerAmountInCents
       );
 
-      const transferGroup = metadata.transferGroup;
-
       if (
-        !sellerStripeAccountId ||
-        !sellerAmountInCents ||
-        !transferGroup
+        !listingId ||
+        !listingSlug ||
+        !buyerUserId ||
+        !sellerId
       ) {
         console.error(
-          "Missing seller transfer metadata:",
+          "Marketplace order metadata is incomplete:",
           metadata
         );
 
         return NextResponse.json(
           {
             ok: false,
-            error: "Seller transfer metadata is incomplete",
+            error:
+              "Marketplace order metadata is incomplete",
           },
           { status: 400 }
         );
       }
+
+      if (
+        !Number.isInteger(harborFeeInCents) ||
+        harborFeeInCents < 0 ||
+        !Number.isInteger(sellerAmountInCents) ||
+        sellerAmountInCents < 0
+      ) {
+        return NextResponse.json(
+          {
+            ok: false,
+            error:
+              "Marketplace payment amounts are invalid.",
+          },
+          { status: 400 }
+        );
+      }
+
+      const listingRows = await sql`
+        SELECT
+          "id",
+          "priceCents",
+          "status"
+        FROM "Listing"
+        WHERE "id" = ${listingId}
+        LIMIT 1
+      `;
+
+      if (listingRows.length === 0) {
+        return NextResponse.json(
+          {
+            ok: false,
+            error: "Purchased listing was not found.",
+          },
+          { status: 404 }
+        );
+      }
+
+      const listing = listingRows[0];
+      const priceCents = Number(listing.priceCents);
 
       const paymentIntentId =
         typeof session.payment_intent === "string"
           ? session.payment_intent
-          : session.payment_intent?.id;
+          : session.payment_intent?.id || null;
 
-      if (!paymentIntentId) {
+      const existingOrders = await sql`
+        SELECT "id"
+        FROM "Order"
+        WHERE "stripeCheckoutSessionId" = ${session.id}
+        LIMIT 1
+      `;
+
+      if (existingOrders.length > 0) {
+        console.log(
+          "Order already recorded for Stripe session:",
+          session.id
+        );
+
+        return NextResponse.json({ received: true });
+      }
+
+      if (listing.status !== "ACTIVE") {
+        console.error(
+          "Paid listing is no longer ACTIVE:",
+          listingId,
+          listing.status
+        );
+
         return NextResponse.json(
           {
             ok: false,
-            error: "PaymentIntent ID is missing",
+            error:
+              "Paid listing is no longer available.",
           },
-          { status: 400 }
+          { status: 409 }
         );
       }
 
-      const paymentIntent =
-        await stripe.paymentIntents.retrieve(paymentIntentId);
+      await sql`
+        INSERT INTO "Order" (
+          "id",
+          "listingId",
+          "sellerId",
+          "buyerUserId",
+          "stripeCheckoutSessionId",
+          "stripePaymentIntentId",
+          "amountCents",
+          "harborFeeInCents",
+          "sellerAmountCents",
+          "paymentStatus",
+          "shippingStatus",
+          "createdAt",
+          "updatedAt"
+        )
+        VALUES (
+          ${crypto.randomUUID()},
+          ${listingId},
+          ${sellerId},
+          ${buyerUserId},
+          ${session.id},
+          ${paymentIntentId},
+          ${priceCents},
+          ${harborFeeInCents},
+          ${sellerAmountInCents},
+          'PAID',
+          'AWAITING_SHIPMENT',
+          NOW(),
+          NOW()
+        )
+      `;
 
-      const chargeId =
-        typeof paymentIntent.latest_charge === "string"
-          ? paymentIntent.latest_charge
-          : paymentIntent.latest_charge?.id;
+      await sql`
+        UPDATE "Listing"
+        SET
+          "status" = 'SOLD',
+          "updatedAt" = NOW()
+        WHERE "id" = ${listingId}
+      `;
 
-      if (!chargeId) {
-        return NextResponse.json(
-          {
-            ok: false,
-            error: "Charge ID is missing",
-          },
-          { status: 400 }
-        );
-      }
-
-      const existingTransfers = await stripe.transfers.list({
-        transfer_group: transferGroup,
-        limit: 10,
-      });
-
-      if (existingTransfers.data.length === 0) {
-        const transfer = await stripe.transfers.create({
-          amount: sellerAmountInCents,
-          currency: "usd",
-          destination: sellerStripeAccountId,
-          transfer_group: transferGroup,
-          source_transaction: chargeId,
-
-          metadata: {
-            listingSlug: metadata.listingSlug || "",
-            sellerId: metadata.sellerId || "",
-            sellerName: metadata.sellerName || "",
-            feePercent: metadata.feePercent || "",
-          },
-        });
-
-        console.log(
-          "Seller transfer created:",
-          transfer.id
-        );
-      } else {
-        console.log(
-          "Seller transfer already exists for:",
-          transferGroup
-        );
-      }
+      console.log(
+        "Marketplace order recorded:",
+        session.id,
+        listingSlug
+      );
     }
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error("Stripe webhook processing error:", error);
+    console.error(
+      "Stripe webhook processing error:",
+      error
+    );
 
     return NextResponse.json(
       {

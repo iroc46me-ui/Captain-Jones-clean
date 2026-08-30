@@ -3,6 +3,10 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import {
+  Show,
+  SignInButton,
+} from "@clerk/nextjs";
 import HarborWatchButton from "../../components/HarborWatchButton";
 
 type Listing = {
@@ -17,8 +21,6 @@ type Listing = {
   condition?: string;
   shipping?: string;
 };
-
-const PUBLISHED_LISTINGS_KEY = "davey-jones-published-listings";
 
 const sampleListings: Listing[] = [
   {
@@ -113,109 +115,126 @@ export default function ListingPage() {
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [isReady, setIsReady] = useState(false);
+
   const [showInquiryForm, setShowInquiryForm] = useState(false);
-  const [buyerName, setBuyerName] = useState("");
-const [buyerEmail, setBuyerEmail] = useState("");
-const [inquiryMessage, setInquiryMessage] = useState("");
-const [isSendingInquiry, setIsSendingInquiry] = useState(false);
-const [inquiryStatus, setInquiryStatus] = useState("");
+  const [inquiryMessage, setInquiryMessage] = useState("");
+  const [isSendingInquiry, setIsSendingInquiry] = useState(false);
+  const [inquiryStatus, setInquiryStatus] = useState("");
 
   useEffect(() => {
-  async function loadListing() {
-    try {
-      const response = await fetch("/api/listings", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ slug }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success && data.listing) {
-        const databaseListing = data.listing;
-
-        setListing({
-          title: databaseListing.title,
-          slug: databaseListing.slug,
-          price: `$${(databaseListing.priceCents / 100).toFixed(2)}`,
-          category: databaseListing.category,
-          image: databaseListing.imageUrl || undefined,
-          tag: "New Listing",
-          seller: databaseListing.seller,
-          description: databaseListing.description,
-          condition: databaseListing.condition || undefined,
-          shipping: databaseListing.shipping || undefined,
+    async function loadListing() {
+      try {
+        const response = await fetch("/api/listings", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ slug }),
         });
 
+        const data = await response.json();
+
+        if (response.ok && data.success && data.listing) {
+          const databaseListing = data.listing;
+
+          setListing({
+            title: databaseListing.title,
+            slug: databaseListing.slug,
+            price: `$${(
+              databaseListing.priceCents / 100
+            ).toFixed(2)}`,
+            category: databaseListing.category,
+            image: databaseListing.imageUrl || undefined,
+            tag: "New Listing",
+            seller: databaseListing.seller,
+            description: databaseListing.description,
+            condition:
+              databaseListing.condition || undefined,
+            shipping:
+              databaseListing.shipping || undefined,
+          });
+
+          setIsReady(true);
+          return;
+        }
+
+        const sampleListing = sampleListings.find(
+          (item) => item.slug === slug
+        );
+
+        setListing(sampleListing || null);
+      } catch {
+        const sampleListing = sampleListings.find(
+          (item) => item.slug === slug
+        );
+
+        setListing(sampleListing || null);
+      } finally {
         setIsReady(true);
-        return;
       }
-
-      const sampleListing = sampleListings.find(
-        (item) => item.slug === slug
-      );
-
-      setListing(sampleListing || null);
-    } catch {
-      const sampleListing = sampleListings.find(
-        (item) => item.slug === slug
-      );
-
-      setListing(sampleListing || null);
     }
 
-    setIsReady(true);
-  }
+    loadListing();
+  }, [slug]);
 
-  loadListing();
-}, [slug]);
-async function sendHarborInquiry() {
-  if (!listing) return;
+  async function sendHarborInquiry() {
+    if (!listing) return;
 
-  if (!buyerName.trim() || !buyerEmail.trim() || !inquiryMessage.trim()) {
-    setInquiryStatus("Please complete your name, email and message.");
-    return;
-  }
-
-  try {
-    setIsSendingInquiry(true);
-    setInquiryStatus("");
-
-    const response = await fetch("/api/harbor-inquiries", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        listingSlug: listing.slug,
-        buyerName,
-        buyerEmail,
-        message: inquiryMessage,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || !data.success) {
-      setInquiryStatus(data.error || "The Harbor message could not be sent.");
+    if (!inquiryMessage.trim()) {
+      setInquiryStatus(
+        "Write a message before sending."
+      );
       return;
     }
 
-    setInquiryStatus(
-      "⚓ Message sent into the Harbor. The seller can reply here without exchanging private contact information."
-    );
+    try {
+      setIsSendingInquiry(true);
+      setInquiryStatus("");
 
-    setBuyerName("");
-    setBuyerEmail("");
-    setInquiryMessage("");
-  } catch {
-    setInquiryStatus("The Harbor message could not be sent.");
-  } finally {
-    setIsSendingInquiry(false);
+      const response = await fetch(
+        "/api/harbor-inquiries",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            listingSlug: listing.slug,
+            message: inquiryMessage,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.status === 401) {
+        setInquiryStatus(
+          "Sign in before sending a Harbor message."
+        );
+        return;
+      }
+
+      if (!response.ok || !data.success) {
+        setInquiryStatus(
+          data.error ||
+            "The Harbor message could not be sent."
+        );
+        return;
+      }
+
+      setInquiryMessage("");
+
+      setInquiryStatus(
+        "⚓ Message sent. This conversation is now available in Captain's Locker."
+      );
+    } catch {
+      setInquiryStatus(
+        "The Harbor message could not be sent."
+      );
+    } finally {
+      setIsSendingInquiry(false);
+    }
   }
-}
 
   if (!isReady) {
     return (
@@ -236,7 +255,8 @@ async function sendHarborInquiry() {
           </h1>
 
           <p className="mt-4 text-stone-400">
-            This listing may have been removed or may no longer be available.
+            This listing may have been removed or may no
+            longer be available.
           </p>
 
           <Link
@@ -252,16 +272,17 @@ async function sendHarborInquiry() {
 
   return (
     <main
-  className="min-h-screen text-stone-100"
-  style={{
-    backgroundColor: "red",
-    backgroundImage: "url('/treasure-details-background.png')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundAttachment: "fixed",
-  }}
->
+      className="min-h-screen text-stone-100"
+      style={{
+        backgroundColor: "#071116",
+        backgroundImage:
+          "url('/treasure-details-background.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
+      }}
+    >
       <section className="border-b border-cyan-400/20 bg-transparent">
         <div className="mx-auto max-w-7xl px-6 py-7 sm:px-10 lg:px-16">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300">
@@ -279,19 +300,22 @@ async function sendHarborInquiry() {
       </section>
 
       <section className="mx-auto grid max-w-6xl gap-7 px-6 py-8 sm:px-10 lg:grid-cols-[0.88fr_0.9fr] lg:px-16">
- <div className="mx-auto flex aspect-[4/5] w-[88%] self-start items-center justify-center overflow-hidden rounded-3xl border border-cyan-300/20 bg-gradient-to-br from-cyan-700/30 to-slate-950">
-  {listing.image ? (
-    <img
-      src={listing.image}
-      alt={listing.title}
-      className="h-full min-h-[285px] w-full object-cover"
-    />
-  ) : (
-    <span className="text-8xl" aria-hidden="true">
-      {categoryIcons[listing.category] || "⚓"}
-    </span>
-  )}
-</div>
+        <div className="mx-auto flex aspect-[4/5] w-[88%] self-start items-center justify-center overflow-hidden rounded-3xl border border-cyan-300/20 bg-gradient-to-br from-cyan-700/30 to-slate-950">
+          {listing.image ? (
+            <img
+              src={listing.image}
+              alt={listing.title}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <span
+              className="text-8xl"
+              aria-hidden="true"
+            >
+              {categoryIcons[listing.category] || "⚓"}
+            </span>
+          )}
+        </div>
 
         <div className="relative rounded-3xl border border-white/10 bg-white/[0.05] p-7">
           <HarborWatchButton
@@ -310,26 +334,43 @@ async function sendHarborInquiry() {
 
           <dl className="mt-6 space-y-3 text-sm">
             <div className="flex justify-between gap-6 border-b border-white/10 pb-3">
-              <dt className="text-stone-400">Seller</dt>
-              <dd className="font-semibold">{listing.seller}</dd>
+              <dt className="text-stone-400">
+                Seller
+              </dt>
+
+              <dd className="font-semibold">
+                {listing.seller}
+              </dd>
             </div>
 
             <div className="flex justify-between gap-6 border-b border-white/10 pb-3">
-              <dt className="text-stone-400">Category</dt>
-              <dd className="font-semibold">{listing.category}</dd>
+              <dt className="text-stone-400">
+                Category
+              </dt>
+
+              <dd className="font-semibold">
+                {listing.category}
+              </dd>
             </div>
 
             <div className="flex justify-between gap-6 border-b border-white/10 pb-3">
-              <dt className="text-stone-400">Condition</dt>
+              <dt className="text-stone-400">
+                Condition
+              </dt>
+
               <dd className="font-semibold">
                 {listing.condition || "Not specified"}
               </dd>
             </div>
 
             <div className="flex justify-between gap-6 border-b border-white/10 pb-3">
-              <dt className="text-stone-400">Delivery</dt>
+              <dt className="text-stone-400">
+                Delivery
+              </dt>
+
               <dd className="font-semibold">
-                {listing.shipping || "Shipping calculated later"}
+                {listing.shipping ||
+                  "Shipping calculated later"}
               </dd>
             </div>
           </dl>
@@ -345,13 +386,34 @@ async function sendHarborInquiry() {
             >
               Claim This Treasure
             </Link>
-            <button
-  type="button"
-  onClick={() => setShowInquiryForm((current) => !current)}
-  className="rounded-full border border-amber-300/50 bg-amber-300/10 px-6 py-3 font-bold text-amber-100 transition hover:bg-amber-300/20"
->
-  {showInquiryForm ? "Close Harbor Message" : "Ask the Seller"}
-</button>
+
+            <Show when="signed-in">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowInquiryForm(
+                    (current) => !current
+                  );
+                  setInquiryStatus("");
+                }}
+                className="rounded-full border border-amber-300/50 bg-amber-300/10 px-6 py-3 font-bold text-amber-100 transition hover:bg-amber-300/20"
+              >
+                {showInquiryForm
+                  ? "Close Harbor Message"
+                  : "Ask the Seller"}
+              </button>
+            </Show>
+
+            <Show when="signed-out">
+              <SignInButton mode="modal">
+                <button
+                  type="button"
+                  className="rounded-full border border-amber-300/50 bg-amber-300/10 px-6 py-3 font-bold text-amber-100 transition hover:bg-amber-300/20"
+                >
+                  Sign In to Ask Seller
+                </button>
+              </SignInButton>
+            </Show>
 
             <Link
               href="/harbor-watch"
@@ -367,61 +429,67 @@ async function sendHarborInquiry() {
               Return to Treasure Deck
             </Link>
           </div>
-          {showInquiryForm && (
-  <div className="mt-6 rounded-2xl border border-cyan-300/20 bg-slate-950/50 p-5">
-    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">
-      Harbor Inquiry
-    </p>
 
-    <h2 className="mt-2 font-serif text-2xl text-amber-200">
-      Ask {listing.seller} about this treasure
-    </h2>
+          <Show when="signed-in">
+            {showInquiryForm && (
+              <div className="mt-6 rounded-2xl border border-cyan-300/20 bg-slate-950/50 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">
+                  Harbor Inquiry
+                </p>
 
-    <p className="mt-2 text-sm leading-6 text-stone-400">
-      Your message stays inside the Harbor.
-    </p>
+                <h2 className="mt-2 font-serif text-2xl text-amber-200">
+                  Ask {listing.seller} about this
+                  treasure
+                </h2>
 
-    <div className="mt-5 space-y-4">
-      <input
-  type="text"
-  placeholder="Your name"
-  value={buyerName}
-  onChange={(event) => setBuyerName(event.target.value)}
-  className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-stone-100 outline-none placeholder:text-stone-500 focus:border-cyan-300/50"
-/>
+                <p className="mt-2 text-sm leading-6 text-stone-400">
+                  Your identity comes from your signed-in
+                  Captain&apos;s Locker account. Your
+                  conversation stays inside the Harbor.
+                </p>
 
-      <input
-  type="email"
-  placeholder="Your email"
-  value={buyerEmail}
-  onChange={(event) => setBuyerEmail(event.target.value)}
-  className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-stone-100 outline-none placeholder:text-stone-500 focus:border-cyan-300/50"
-/>
+                <div className="mt-5 space-y-4">
+                  <textarea
+                    rows={5}
+                    placeholder="Ask the seller a question about this item..."
+                    value={inquiryMessage}
+                    onChange={(event) =>
+                      setInquiryMessage(
+                        event.target.value
+                      )
+                    }
+                    className="w-full resize-none rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-stone-100 outline-none placeholder:text-stone-500 focus:border-cyan-300/50"
+                  />
 
-      <textarea
-  rows={5}
-  placeholder="Ask the seller a question about this item..."
-  value={inquiryMessage}
-  onChange={(event) => setInquiryMessage(event.target.value)}
-  className="w-full resize-none rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-stone-100 outline-none placeholder:text-stone-500 focus:border-cyan-300/50"
-/>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={sendHarborInquiry}
+                      disabled={isSendingInquiry}
+                      className="rounded-full bg-cyan-300 px-6 py-3 font-bold text-slate-950 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {isSendingInquiry
+                        ? "Sending..."
+                        : "Send Harbor Message"}
+                    </button>
 
-      <button
-  type="button"
-  onClick={sendHarborInquiry}
-  disabled={isSendingInquiry}
-  className="rounded-full bg-cyan-300 px-6 py-3 font-bold text-slate-950 disabled:cursor-not-allowed disabled:opacity-60"
->
-  {isSendingInquiry ? "Sending..." : "Send Harbor Message"}
-</button>
-{inquiryStatus && (
-  <p className="text-sm leading-6 text-amber-100">
-    {inquiryStatus}
-  </p>
-)}
-    </div>
-  </div>
-)}
+                    <Link
+                      href="/captains-locker/messages"
+                      className="rounded-full border border-white/20 px-5 py-3 text-sm font-bold text-stone-200 transition hover:bg-white/10"
+                    >
+                      My Harbor Messages
+                    </Link>
+                  </div>
+
+                  {inquiryStatus && (
+                    <p className="text-sm leading-6 text-amber-100">
+                      {inquiryStatus}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+          </Show>
         </div>
       </section>
     </main>

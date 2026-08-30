@@ -16,6 +16,21 @@ type DatabaseListing = {
   createdAt?: string;
   seller: string;
 };
+type SellerOrder = {
+  id: string;
+  amountCents: number;
+  harborFeeInCents: number;
+  sellerAmountCents: number;
+  paymentStatus: string;
+  shippingStatus: string;
+  shippingCarrier?: string | null;
+  trackingNumber?: string | null;
+  shippedAt?: string | null;
+  createdAt: string;
+  listingId: string;
+  listingSlug: string;
+  listingTitle: string;
+};
 
 const SELLER_NAME = "Davey's Workshop";
 
@@ -24,6 +39,12 @@ export default function SellerChestPage() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
   const [harborMessageCount, setHarborMessageCount] = useState(0);
+  const [orders, setOrders] = useState<SellerOrder[]>([]);
+const [ordersLoading, setOrdersLoading] = useState(true);
+const [ordersLoadError, setOrdersLoadError] = useState("");
+const [shippingCarrier, setShippingCarrier] = useState<Record<string, string>>({});
+const [trackingNumber, setTrackingNumber] = useState<Record<string, string>>({});
+const [shippingSaving, setShippingSaving] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadSellerListings() {
@@ -66,7 +87,7 @@ export default function SellerChestPage() {
   async function loadHarborMessages() {
     try {
       const response = await fetch(
-        `/api/harbor-inquiries?seller=${encodeURIComponent(SELLER_NAME)}`,
+        "/api/harbor-inquiries?scope=seller",
         {
           cache: "no-store",
         }
@@ -83,6 +104,38 @@ export default function SellerChestPage() {
   }
 
   loadHarborMessages();
+}, []);
+useEffect(() => {
+  async function loadSellerOrders() {
+    try {
+      setOrdersLoading(true);
+      setOrdersLoadError("");
+
+      const response = await fetch("/api/seller-orders", {
+        cache: "no-store",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.error || "Seller orders could not be loaded."
+        );
+      }
+
+      setOrders(data.orders || []);
+    } catch (error) {
+      setOrdersLoadError(
+        error instanceof Error
+          ? error.message
+          : "Seller orders could not be loaded."
+      );
+    } finally {
+      setOrdersLoading(false);
+    }
+  }
+
+  loadSellerOrders();
 }, []);
 
 async function deactivateListing(slug: string) {
@@ -170,6 +223,23 @@ async function deactivateListing(slug: string) {
     ),
   [listings]
 );
+const soldOrders = useMemo(
+  () =>
+    orders.filter(
+      (order) => order.paymentStatus === "PAID"
+    ),
+  [orders]
+);
+
+const shippingOrders = useMemo(
+  () =>
+    orders.filter(
+      (order) =>
+        order.paymentStatus === "PAID" &&
+        order.shippingStatus === "AWAITING_SHIPMENT"
+    ),
+  [orders]
+);
 
   const sellerStats = [
     {
@@ -181,16 +251,71 @@ async function deactivateListing(slug: string) {
       value: "0",
     },
     {
-      label: "Sold Items",
-      value: "0",
-    },
+  label: "Sold Items",
+  value: String(soldOrders.length),
+},
     {
       label: "Harbor Messages",
       value: String(harborMessageCount) ,
     },
   ];
+async function markOrderShipped(orderId: string) {
+  const carrier = (shippingCarrier[orderId] || "").trim();
+  const tracking = (trackingNumber[orderId] || "").trim();
 
-  return (
+  if (!carrier) {
+    alert("Enter the shipping carrier.");
+    return;
+  }
+
+  if (!tracking) {
+    alert("Enter the tracking number.");
+    return;
+  }
+
+  try {
+    setShippingSaving(orderId);
+
+    const response = await fetch("/api/seller-orders", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        orderId,
+        shippingCarrier: carrier,
+        trackingNumber: tracking,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      alert(data.error || "The order could not be marked shipped.");
+      return;
+    }
+
+    setOrders((current) =>
+      current.map((order) =>
+        order.id === orderId
+          ? {
+              ...order,
+              shippingStatus: "SHIPPED",
+              shippingCarrier: carrier,
+              trackingNumber: tracking,
+              shippedAt:
+                data.order?.shippedAt || new Date().toISOString(),
+            }
+          : order
+      )
+    );
+  } catch {
+    alert("The order could not be marked shipped.");
+  } finally {
+    setShippingSaving(null);  
+  }
+}
+ return (
     <main className="min-h-screen bg-[#071116] text-stone-100">
       <section className="border-b border-amber-400/20 bg-gradient-to-r from-[#071116] via-[#10242c] to-[#071116]">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 px-6 py-7 sm:px-10 md:flex-row md:items-end lg:px-16">
@@ -399,26 +524,123 @@ async function deactivateListing(slug: string) {
 )}
 
           <aside className="rounded-3xl border border-amber-300/20 bg-gradient-to-b from-amber-300/10 to-transparent p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-300">
-              Shipping Queue
-            </p>
+  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-300">
+    Shipping Queue
+  </p>
 
-            <h2 className="mt-2 font-serif text-2xl">
-              No Orders Awaiting Shipment
-            </h2>
+  <h2 className="mt-2 font-serif text-2xl">
+    {shippingOrders.length === 0
+      ? "No Orders Awaiting Shipment"
+      : `${shippingOrders.length} ${
+          shippingOrders.length === 1 ? "Order" : "Orders"
+        } Awaiting Shipment`}
+  </h2>
 
-            <p className="mt-4 leading-7 text-stone-400">
-              Sold treasures requiring labels and tracking
-              information will appear here.
-            </p>
+  {ordersLoading && (
+    <p className="mt-4 text-cyan-200">
+      Loading sold treasures...
+    </p>
+  )}
 
+  {ordersLoadError && (
+    <div className="mt-4 rounded-2xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+      {ordersLoadError}
+    </div>
+  )}
+
+  {!ordersLoading &&
+    !ordersLoadError &&
+    shippingOrders.length === 0 && (
+      <p className="mt-4 leading-7 text-stone-400">
+        Sold treasures requiring labels and tracking
+        information will appear here.
+      </p>
+    )}
+
+  {!ordersLoading &&
+    !ordersLoadError &&
+    shippingOrders.length > 0 && (
+      <div className="mt-5 space-y-3">
+        {shippingOrders.map((order) => (
+          <div
+            key={order.id}
+            className="rounded-2xl border border-amber-300/20 bg-slate-950/50 p-4"
+          >
             <Link
-              href="/"
-              className="mt-7 inline-flex rounded-full border border-white/20 px-5 py-2.5 text-sm font-bold transition hover:bg-white/10"
+              href={`/listing/${order.listingSlug}`}
+              className="font-bold text-amber-100 transition hover:text-amber-200"
             >
-              Return Home
+              {order.listingTitle}
             </Link>
-          </aside>
+
+            <p className="mt-2 text-xl font-black text-amber-200">
+              ${(order.amountCents / 100).toFixed(2)}
+            </p>
+
+            <div className="mt-4 space-y-3">
+  <select
+    value={shippingCarrier[order.id] || ""}
+    onChange={(event) =>
+      setShippingCarrier((current) => ({
+        ...current,
+        [order.id]: event.target.value,
+      }))
+    }
+    className="w-full rounded-xl border border-white/15 bg-[#071116] px-3 py-2 text-sm text-stone-100"
+  >
+    <option value="">Select Carrier</option>
+    <option value="USPS">USPS</option>
+    <option value="UPS">UPS</option>
+    <option value="FedEx">FedEx</option>
+    <option value="DHL">DHL</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <input
+    type="text"
+    value={trackingNumber[order.id] || ""}
+    onChange={(event) =>
+      setTrackingNumber((current) => ({
+        ...current,
+        [order.id]: event.target.value,
+      }))
+    }
+    placeholder="Tracking number"
+    className="w-full rounded-xl border border-white/15 bg-[#071116] px-3 py-2 text-sm text-stone-100 placeholder:text-stone-500"
+  />
+
+  <button
+    type="button"
+    onClick={() => markOrderShipped(order.id)}
+    disabled={shippingSaving === order.id}
+    className="w-full rounded-full bg-amber-300 px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-amber-200 disabled:cursor-not-allowed disabled:opacity-60"
+  >
+    {shippingSaving === order.id
+      ? "Saving..."
+      : "Mark Shipped"}
+  </button>
+</div>
+          </div>
+        ))}
+      </div>
+    )}
+
+  <div className="mt-7 flex flex-wrap gap-3">
+  <Link
+    href="/captains-locker"
+    className="inline-flex rounded-full border border-cyan-300/30 px-5 py-2.5 text-sm font-bold text-cyan-200 transition hover:bg-cyan-300/10"
+  >
+    Captain&apos;s Locker
+  </Link>
+
+  <Link
+    href="/"
+    className="inline-flex rounded-full border border-white/20 px-5 py-2.5 text-sm font-bold transition hover:bg-white/10"
+  >
+    Return Home
+  </Link>
+</div>
+</aside>
         </div>
       </section>
     </main>

@@ -28,7 +28,7 @@ export default function HarborMessagesPage() {
         setLoadError("");
 
         const response = await fetch(
-          `/api/harbor-inquiries?seller=${encodeURIComponent(SELLER_NAME)}`,
+          "/api/harbor-inquiries?scope=seller",
           {
             cache: "no-store",
           }

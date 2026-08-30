@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import OceanFloorAmbience from "../components/OceanFloorAmbience";  
+import OceanFloorAmbience from "../components/OceanFloorAmbience";
 
 type HarborWatchItem = {
   title: string;
@@ -25,54 +25,87 @@ const ORDERS_KEY = "davey-jones-orders";
 export default function CaptainsLockerPage() {
   const [watchedItems, setWatchedItems] = useState<HarborWatchItem[]>([]);
   const [orders, setOrders] = useState<OrderItem[]>([]);
+  const [harborMessageCount, setHarborMessageCount] = useState(0);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    try {
-      const savedWatch = JSON.parse(
-        localStorage.getItem(HARBOR_WATCH_KEY) || "[]"
-      ) as HarborWatchItem[];
+    async function loadLocker() {
+      try {
+        const savedWatch = JSON.parse(
+          localStorage.getItem(HARBOR_WATCH_KEY) || "[]"
+        ) as HarborWatchItem[];
 
-      const savedOrders = JSON.parse(
-        localStorage.getItem(ORDERS_KEY) || "[]"
-      ) as OrderItem[];
+        const savedOrders = JSON.parse(
+          localStorage.getItem(ORDERS_KEY) || "[]"
+        ) as OrderItem[];
 
-      setWatchedItems(savedWatch);
-      setOrders(savedOrders);
-    } catch {
-      setWatchedItems([]);
-      setOrders([]);
+        setWatchedItems(savedWatch);
+        setOrders(savedOrders);
+      } catch {
+        setWatchedItems([]);
+        setOrders([]);
+      }
+
+      try {
+        const response = await fetch(
+          "/api/harbor-inquiries?scope=buyer",
+          {
+            cache: "no-store",
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+
+          if (data.success && Array.isArray(data.inquiries)) {
+            setHarborMessageCount(data.inquiries.length);
+          } else {
+            setHarborMessageCount(0);
+          }
+        } else {
+          setHarborMessageCount(0);
+        }
+      } catch {
+        setHarborMessageCount(0);
+      }
+
+      setIsReady(true);
     }
 
-    setIsReady(true);
+    loadLocker();
   }, []);
 
   const lockerStats = [
     {
       label: "Treasures Under Watch",
       value: isReady ? watchedItems.length : "—",
+      href: "/harbor-watch",
     },
     {
       label: "Orders",
       value: isReady ? orders.length : "—",
+      href: "/captains-locker/orders",
     },
     {
-      label: "Unread Messages",
-      value: 0,
+      label: "Harbor Messages",
+      value: isReady ? harborMessageCount : "—",
+      href: "/captains-locker/messages",
     },
     {
       label: "Saved Sellers",
       value: 0,
+      href: undefined,
     },
   ];
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#071116] text-stone-100">
       <OceanFloorAmbience
-  showDiver={true}
-  showBubbles={true}
-  density="light"
-/>
+        showDiver={true}
+        showBubbles={true}
+        density="light"
+      />
+
       <section className="border-b border-amber-400/20 bg-gradient-to-r from-[#071116] via-[#10242c] to-[#071116]">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 px-6 py-7 sm:px-10 md:flex-row md:items-end lg:px-16">
           <div>
@@ -85,8 +118,8 @@ export default function CaptainsLockerPage() {
             </h1>
 
             <p className="mt-3 max-w-2xl leading-7 text-stone-300">
-              Your personal harbor for watched treasures, purchases, messages
-              and account details.
+              Your personal harbor for watched treasures, purchases,
+              messages and account details.
             </p>
           </div>
 
@@ -101,18 +134,36 @@ export default function CaptainsLockerPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-8 sm:px-10 lg:px-16">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {lockerStats.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-2xl border border-white/10 bg-white/[0.05] p-5"
-            >
-              <p className="text-sm text-stone-400">{stat.label}</p>
+          {lockerStats.map((stat) =>
+            stat.href ? (
+              <Link
+                key={stat.label}
+                href={stat.href}
+                className="rounded-2xl border border-white/10 bg-white/[0.05] p-5 transition hover:border-cyan-300/40 hover:bg-white/[0.08]"
+              >
+                <p className="text-sm text-stone-400">
+                  {stat.label}
+                </p>
 
-              <p className="mt-2 text-3xl font-black text-amber-200">
-                {stat.value}
-              </p>
-            </div>
-          ))}
+                <p className="mt-2 text-3xl font-black text-amber-200">
+                  {stat.value}
+                </p>
+              </Link>
+            ) : (
+              <div
+                key={stat.label}
+                className="rounded-2xl border border-white/10 bg-white/[0.05] p-5"
+              >
+                <p className="text-sm text-stone-400">
+                  {stat.label}
+                </p>
+
+                <p className="mt-2 text-3xl font-black text-amber-200">
+                  {stat.value}
+                </p>
+              </div>
+            )
+          )}
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
@@ -166,8 +217,8 @@ export default function CaptainsLockerPage() {
                   </p>
 
                   <p className="mt-2 text-sm text-stone-500">
-                    Treasures saved with the Harbor Watch diver will appear
-                    here.
+                    Treasures saved with the Harbor Watch diver will
+                    appear here.
                   </p>
                 </div>
               )}
@@ -207,8 +258,8 @@ export default function CaptainsLockerPage() {
                 </div>
               ) : (
                 <p className="mt-4 leading-7 text-stone-400">
-                  Completed test purchases will appear here once the order
-                  confirmation pathway is connected.
+                  Completed test purchases will appear here once the
+                  order confirmation pathway is connected.
                 </p>
               )}
 
@@ -231,13 +282,18 @@ export default function CaptainsLockerPage() {
                   className="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 font-bold transition hover:border-cyan-300/40"
                 >
                   Harbor Messages
+                  {harborMessageCount > 0 && (
+                    <span className="ml-2 text-amber-200">
+                      ({harborMessageCount})
+                    </span>
+                  )}
                 </Link>
 
                 <Link
                   href="/captains-locker/profile"
                   className="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 font-bold transition hover:border-cyan-300/40"
                 >
-                  Account & Profile
+                  Account &amp; Profile
                 </Link>
 
                 <Link
