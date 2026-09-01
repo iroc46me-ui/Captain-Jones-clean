@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import TreasureCard from "./TreasureCard";
@@ -242,30 +242,37 @@ export default function Marketplace() {
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {["All Treasure", ...categories].map(
-            (category) => {
-              const isActive =
-                selectedCategory === category;
+  {["All Treasure", ...categories].map((category) => {
+    const isActive = selectedCategory === category;
 
-              return (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() =>
-                    setSelectedCategory(category)
-                  }
-                  className={`rounded-full border px-4 py-2 text-sm font-bold transition-all duration-300 ${
-                    isActive
-                      ? "scale-105 border-amber-300 bg-amber-300 text-slate-950 shadow-lg shadow-amber-300/40"
-                      : "border-cyan-300/30 bg-cyan-400/10 text-white hover:-translate-y-1 hover:border-amber-300/70"
-                  }`}
-                >
-                  {category}
-                </button>
-              );
-            }
-          )}
-        </div>
+    if (category === "Local Pickup") {
+      return (
+        <Link
+          key={category}
+          href="/local-pickup"
+          className="rounded-full border border-cyan-300/30 bg-cyan-400/10 px-4 py-2 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:border-amber-300/70"
+        >
+          {category}
+        </Link>
+      );
+    }
+
+    return (
+      <button
+        key={category}
+        type="button"
+        onClick={() => setSelectedCategory(category)}
+        className={`rounded-full border px-4 py-2 text-sm font-bold transition-all duration-300 ${
+          isActive
+            ? "scale-105 border-amber-300 bg-amber-300 text-slate-950 shadow-lg shadow-amber-300/40"
+            : "border-cyan-300/30 bg-cyan-400/10 text-white hover:-translate-y-1 hover:border-amber-300/70"
+        }`}
+      >
+        {category}
+      </button>
+    );
+  })}
+</div>
 
         <div
           key={`${selectedCategory}-${query}-${databaseItems.length}`}

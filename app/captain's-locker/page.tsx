@@ -7,7 +7,7 @@ type HarborWatchItem = {
   title: string;
   slug: string;
   price: string;
-  category?: string;
+  category?: string;  
   seller?: string;
 };
 
