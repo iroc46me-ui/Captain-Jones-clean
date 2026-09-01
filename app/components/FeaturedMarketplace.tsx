@@ -20,12 +20,12 @@ export default function FeaturedMarketplace({
     <section
       className="fresh-arrivals-reveal relative min-h-screen overflow-hidden px-6 py-16 text-white"
       style={{
-        backgroundImage:
-          "url('/marketplace-art/fresh-arrivals-harbor-bg.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
+  backgroundImage:
+    "linear-gradient(rgba(255,255,255,0.08), rgba(255,255,255,0.08)), url('/marketplace-art/fresh-arrivals-harbor-bg.png')",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+}}
     >
       
           <div className="mb-6 flex justify-end">
@@ -36,9 +36,7 @@ export default function FeaturedMarketplace({
       ⚓ Return Home
     </Link>
   </div>
-        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">
-          Captain Jones&apos; Featured Discoveries
-        </p>
+        
 
         <h2 className="mt-4 text-4xl font-bold">
           Fresh Arrivals at the Harbor

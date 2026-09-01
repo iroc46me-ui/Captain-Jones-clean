@@ -282,7 +282,7 @@ export default function Marketplace() {
 </div>
 
         <div
-          key={`${selectedCategory}-${query}-${databaseItems.length}`}
+          key={`${selectedCategory}-${query}`}
           className="mt-4 grid gap-4 animate-[fadeInUp_400ms_ease-out] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
           {visibleItems.map((item, index) => (

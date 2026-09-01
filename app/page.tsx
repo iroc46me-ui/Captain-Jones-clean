@@ -189,13 +189,13 @@ function Hero() {
     <>  
       <section
         id="home"
-        className="relative flex min-h-[calc(100svh-64px)] w-full items-center overflow-hidden bg-cover bg-center text-white"
+        className="relative flex min-h-screen w-full items-center overflow-hidden bg-cover bg-center text-white"
         style={{
           backgroundImage: "url('/harbor-hero.png')",
         }}
       >
         {/* Darkens the center slightly so the real text stays readable */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-slate-950/25 via-slate-950/45 to-slate-950/75" />
+       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-slate-950/10 via-slate-950/20 to-slate-950/45" />
 
         <motion.div
           className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-5 py-16 text-center sm:px-8 md:py-20"
