@@ -217,5 +217,5 @@ body {
 
 .land-sea-reveal {
   opacity: 0;
-  animation: landSeaReveal 1.4s ease-out 2s forwards;
+  animation: landSeaReveal 1.4s ease-out 3s forwards;
 }
