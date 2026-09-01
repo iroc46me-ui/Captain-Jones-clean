@@ -18,7 +18,7 @@ export default function FeaturedMarketplace({
 }: FeaturedMarketplaceProps) {
   return (
     <section
-      className="fresh-arrivals-reveal relative overflow-hidden px-6 py-16 text-white"
+      className="fresh-arrivals-reveal relative min-h-screen overflow-hidden px-6 py-16 text-white"
       style={{
         backgroundImage:
           "url('/marketplace-art/fresh-arrivals-harbor-bg.png')",
@@ -27,7 +27,15 @@ export default function FeaturedMarketplace({
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="mx-auto max-w-7xl">
+      
+          <div className="mb-6 flex justify-end">
+    <Link
+      href="/"
+      className="rounded-full border border-amber-300/50 bg-slate-950/60 px-5 py-2.5 text-sm font-bold text-amber-200 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-300 hover:bg-amber-300 hover:text-slate-950 hover:shadow-[0_0_20px_rgba(251,191,36,0.45)]"
+    >
+      ⚓ Return Home
+    </Link>
+  </div>
         <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">
           Captain Jones&apos; Featured Discoveries
         </p>
@@ -73,7 +81,7 @@ export default function FeaturedMarketplace({
             </div>
           ))}
         </div>
-      </div>
+      
     </section>
   );
 }

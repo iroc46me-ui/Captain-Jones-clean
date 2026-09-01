@@ -204,9 +204,16 @@ export default function Marketplace() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
-              Treasure Deck
-            </p>
+  <Link
+    href="/"
+    className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-300/40 bg-slate-950/60 px-4 py-2 text-sm font-bold text-amber-100 transition-all duration-300 hover:-translate-y-1 hover:border-amber-300 hover:shadow-[0_0_22px_rgba(252,211,77,0.35)]"
+  >
+    ⚓ Home
+  </Link>
+
+  <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
+    Treasure Deck
+  </p>
 
             <h2 className="mt-1 text-3xl font-black tracking-tight text-white sm:text-4xl">
               Treasure by Category

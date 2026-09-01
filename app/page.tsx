@@ -227,21 +227,28 @@ function Hero() {
   An adventurous marketplace for useful junk, rare finds, and honest Treasure.
 </p>
 
-          <div className="mt-8 flex w-full max-w-xl flex-col gap-4 sm:flex-row sm:justify-center">
-            <a
-              href="#join"
-              className="w-full rounded-xl border border-amber-300/70 bg-slate-950/75 px-6 py-4 text-center font-black text-amber-100 shadow-xl backdrop-blur-sm transition hover:-translate-y-1 hover:bg-amber-300 hover:text-slate-950 hover:shadow-amber-300/30 sm:w-auto"
-            >
-              ⚓ Open a Seller Chest
-            </a>
+          <div className="mt-8 flex w-full max-w-2xl flex-col gap-4 sm:flex-row">
+  <a
+    href="#join"
+    className="w-full rounded-xl border border-amber-300/70 bg-slate-950/75 px-5 py-4 text-center font-bold text-amber-200 transition hover:-translate-y-1 hover:border-amber-200 hover:shadow-[0_0_24px_rgba(252,211,77,0.35)]"
+  >
+    ⚓ Become a Seller
+  </a>
 
-            <a
-              href="/treasure-deck"
-              className="w-full rounded-xl border border-cyan-200/50 bg-slate-950/75 px-6 py-4 text-center font-black text-white shadow-xl backdrop-blur-sm transition hover:-translate-y-1 hover:border-amber-300 hover:bg-amber-300 hover:text-slate-950 hover:shadow-amber-300/30 sm:w-auto"
-            >
-              🧭 Explore the Treasure Deck
-            </a>
-          </div>
+  <a
+    href="/seller-chest"
+    className="w-full rounded-xl border border-amber-300/70 bg-slate-950/75 px-5 py-4 text-center font-bold text-amber-200 transition hover:-translate-y-1 hover:border-amber-200 hover:shadow-[0_0_24px_rgba(252,211,77,0.35)]"
+  >
+    🗝️ Open Seller Chest
+  </a>
+
+  <a
+    href="/treasure-deck"
+    className="w-full rounded-xl border border-cyan-200/50 bg-slate-950/75 px-5 py-4 text-center font-bold text-cyan-100 transition hover:-translate-y-1 hover:border-amber-300 hover:shadow-[0_0_24px_rgba(252,211,77,0.35)]"
+  >
+    🧭 Explore the Treasure Deck
+  </a>
+</div>``
         </motion.div>
       </section>
 

@@ -90,8 +90,8 @@ export default function FreshArrivalsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-950">
-      <FeaturedMarketplace items={items} />
-    </main>
-  );
+  <main className="bg-slate-950">
+    <FeaturedMarketplace items={items} />
+  </main>
+);
 }
