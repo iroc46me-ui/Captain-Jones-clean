@@ -108,7 +108,7 @@ const categories = [
   "Estate Finds",
   "Oddities",
   "Local Pickup",
-  "Captain's Picks",
+  
 ];
 
 export default function Marketplace() {
