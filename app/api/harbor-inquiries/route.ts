@@ -1,7 +1,21 @@
 import { NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
 import { ensureUser } from "../../../lib/ensure-user";
+// HARBOR MESSAGE PROTECTION
+// Shared screening for new inquiries and replies.
 
+function checkHarborMessage(message: string): boolean {
+  const outsidePaymentPatterns = [
+    /pay\s+me\s+(directly|outside)/i,
+    /avoid\s+(the\s+)?(website|platform|harbor)\s+fees?/i,
+    /send\s+(me\s+)?money\s+(through|via|on)\s+(venmo|paypal|cash\s?app|zelle)/i,
+    /buy\s+(it\s+)?(from\s+me\s+)?outside\s+(the\s+)?(website|platform|harbor)/i,
+  ];
+
+  return outsidePaymentPatterns.some((pattern) =>
+    pattern.test(message.trim())
+  );
+}
 export async function POST(request: Request) {
   try {
     const databaseUrl = process.env.DATABASE_URL;
@@ -28,18 +42,7 @@ export async function POST(request: Request) {
 // Initial screening for attempts to move transactions
 // outside Harbor's messaging and payment systems.
 
-const harborMessage = message.trim();
-
-const outsidePaymentPatterns = [
-  /pay\s+me\s+(directly|outside)/i,
-  /avoid\s+(the\s+)?(website|platform|harbor)\s+fees?/i,
-  /send\s+(me\s+)?money\s+(through|via|on)\s+(venmo|paypal|cash\s?app|zelle)/i,
-  /buy\s+(it\s+)?(from\s+me\s+)?outside\s+(the\s+)?(website|platform|harbor)/i,
-];
-
-const possibleViolation = outsidePaymentPatterns.some(
-  (pattern) => pattern.test(harborMessage)
-);
+const possibleViolation = checkHarborMessage(message);
 
 if (possibleViolation) {
   return NextResponse.json(
@@ -375,18 +378,7 @@ export async function PATCH(request: Request) {
     }
     // HARBOR MESSAGE PROTECTION — REPLIES
 
-const harborMessage = message.trim();
-
-const outsidePaymentPatterns = [
-  /pay\s+me\s+(directly|outside)/i,
-  /avoid\s+(the\s+)?(website|platform|harbor)\s+fees?/i,
-  /send\s+(me\s+)?money\s+(through|via|on)\s+(venmo|paypal|cash\s?app|zelle)/i,
-  /buy\s+(it\s+)?(from\s+me\s+)?outside\s+(the\s+)?(website|platform|harbor)/i,
-];
-
-const possibleViolation = outsidePaymentPatterns.some(
-  (pattern) => pattern.test(harborMessage)
-);
+const possibleViolation = checkHarborMessage(message);
 
 if (possibleViolation) {
   return NextResponse.json(
