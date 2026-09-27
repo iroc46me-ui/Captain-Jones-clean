@@ -24,6 +24,36 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+    // HARBOR MESSAGE PROTECTION
+// Initial screening for attempts to move transactions
+// outside Harbor's messaging and payment systems.
+
+const harborMessage = message.trim();
+
+const outsidePaymentPatterns = [
+  /pay\s+me\s+(directly|outside)/i,
+  /avoid\s+(the\s+)?(website|platform|harbor)\s+fees?/i,
+  /send\s+(me\s+)?money\s+(through|via|on)\s+(venmo|paypal|cash\s?app|zelle)/i,
+  /buy\s+(it\s+)?(from\s+me\s+)?outside\s+(the\s+)?(website|platform|harbor)/i,
+];
+
+const possibleViolation = outsidePaymentPatterns.some(
+  (pattern) => pattern.test(harborMessage)
+);
+
+if (possibleViolation) {
+  return NextResponse.json(
+    {
+      error:
+        "Keep Your Treasure Dealings Onboard! " +
+        "All buyer and seller communications and transactions " +
+        "must remain within Harbor's messaging and checkout systems. " +
+        "Please revise your message.",
+      code: "HARBOR_MESSAGE_BLOCKED",
+    },
+    { status: 400 }
+  );
+}
 
     if (!user.email) {
       return NextResponse.json(
@@ -343,6 +373,35 @@ export async function PATCH(request: Request) {
         { status: 400 }
       );
     }
+    // HARBOR MESSAGE PROTECTION — REPLIES
+
+const harborMessage = message.trim();
+
+const outsidePaymentPatterns = [
+  /pay\s+me\s+(directly|outside)/i,
+  /avoid\s+(the\s+)?(website|platform|harbor)\s+fees?/i,
+  /send\s+(me\s+)?money\s+(through|via|on)\s+(venmo|paypal|cash\s?app|zelle)/i,
+  /buy\s+(it\s+)?(from\s+me\s+)?outside\s+(the\s+)?(website|platform|harbor)/i,
+];
+
+const possibleViolation = outsidePaymentPatterns.some(
+  (pattern) => pattern.test(harborMessage)
+);
+
+if (possibleViolation) {
+  return NextResponse.json(
+    {
+      success: false,
+      error:
+        "Keep Your Treasure Dealings Onboard! " +
+        "All buyer and seller communications and transactions " +
+        "must remain within Harbor's messaging and checkout systems. " +
+        "Please revise your message.",
+      code: "HARBOR_MESSAGE_BLOCKED",
+    },
+    { status: 400 }
+  );
+}
 
     const sql = neon(databaseUrl);
 

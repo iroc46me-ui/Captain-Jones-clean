@@ -46,7 +46,7 @@ export default function AboutPage() {
               href="/captains-picks"
               className="transition hover:text-amber-300"
             >
-              The Captain&apos;s Picks
+              From Land and Sea
             </Link>
 
             <Link
