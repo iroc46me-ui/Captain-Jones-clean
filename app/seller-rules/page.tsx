@@ -58,7 +58,7 @@ export default function SellerRulesPage() {
           </Rule>
 
           <Rule title="Keep Communication Inside Harbor">
-            Buyer and seller communication should remain inside Harbor
+            Buyer and seller communication willremain inside Harbor
             messaging before purchase. Do not use phone numbers, outside payment
             links, social media, or other methods to bypass Harbor systems.
           </Rule>
