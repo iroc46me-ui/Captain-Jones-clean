@@ -7,6 +7,20 @@ const DEFAULT_HARBOR_FEE_PERCENT = 5;
 
 export async function POST(request: Request) {
   try {
+        // PUBLIC PREVIEW SAFETY LOCK
+    // Remove only when live marketplace payments are ready.
+    if (process.env.ENABLE_MARKETPLACE_PAYMENTS !== "true") {
+      return NextResponse.json(
+        {
+          ok: false,
+          error:
+            "The Harbor is currently open for preview. " +
+            "Purchases will become available soon.",
+          code: "HARBOR_PREVIEW_MODE",
+        },
+        { status: 503 }
+      );
+    }
     const secretKey = process.env.STRIPE_SECRET_KEY;
     const databaseUrl = process.env.DATABASE_URL;
 
