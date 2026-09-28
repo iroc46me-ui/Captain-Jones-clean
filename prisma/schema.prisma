@@ -84,6 +84,15 @@ shippingStatus String @default("AWAITING_SHIPMENT")
 shippingCarrier String?
 trackingNumber  String?
 shippedAt       DateTime?
+// Delivery and buyer inspection
+deliveredAt             DateTime?
+inspectionEndsAt        DateTime?
+buyerReportedProblemAt  DateTime?
+
+// Seller payment release
+sellerTransferStatus    String    @default("PENDING")
+stripeTransferId        String?   @unique
+sellerTransferredAt     DateTime?
 
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
