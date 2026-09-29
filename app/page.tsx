@@ -177,6 +177,8 @@ function Header() {
 </a>
           <a href="/fresh-arrivals" className={navLink}>Fresh Arrivals</a>
           <a href="about" className={navLink}>About</a>
+          <a href="/sign-up" className={navLink}>Join</a>
+<a href="/sign-in" className={navLink}>Sign In</a>
         </nav>
 
         
