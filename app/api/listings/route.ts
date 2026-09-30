@@ -1,5 +1,37 @@
 import { NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
+import { ensureUser } from "../../../lib/ensure-user";
+
+async function getCurrentSeller(databaseUrl: string) {
+  const user = await ensureUser();
+  const sql = neon(databaseUrl);
+
+  const sellers = await sql`
+    SELECT
+      "id",
+      "name"
+    FROM "Seller"
+    WHERE "userId" = ${user.id}
+    LIMIT 1
+  `;
+
+  if (sellers.length === 0) {
+    return null;
+  }
+
+  return sellers[0];
+}
+
+function unauthorizedResponse(error: unknown) {
+  if (error instanceof Error && error.message === "Unauthorized.") {
+    return NextResponse.json(
+      { error: "Unauthorized." },
+      { status: 401 }
+    );
+  }
+
+  return null;
+}
 
 export async function POST(request: Request) {
   try {
@@ -12,49 +44,51 @@ export async function POST(request: Request) {
       );
     }
 
+    const sellerRecord = await getCurrentSeller(databaseUrl);
+
+    if (!sellerRecord) {
+      return NextResponse.json(
+        { error: "Seller account was not found." },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
+    const sql = neon(databaseUrl);
+
     if (body.action === "reactivate") {
-  const databaseUrl = process.env.DATABASE_URL;
+      const { slug } = body;
 
-  if (!databaseUrl) {
-    return NextResponse.json(
-      { error: "DATABASE_URL is missing." },
-      { status: 500 }
-    );
-  }
+      if (!slug) {
+        return NextResponse.json(
+          { error: "Listing slug is required." },
+          { status: 400 }
+        );
+      }
 
-  const { slug } = body;
+      const listings = await sql`
+        UPDATE "Listing"
+        SET
+          "status" = 'ACTIVE',
+          "updatedAt" = NOW()
+        WHERE
+          "slug" = ${slug}
+          AND "sellerId" = ${sellerRecord.id}
+        RETURNING *
+      `;
 
-  if (!slug) {
-    return NextResponse.json(
-      { error: "Listing slug is required." },
-      { status: 400 }
-    );
-  }
+      if (listings.length === 0) {
+        return NextResponse.json(
+          { error: "Listing not found." },
+          { status: 404 }
+        );
+      }
 
-  const sql = neon(databaseUrl);
-
-  const listings = await sql`
-    UPDATE "Listing"
-    SET
-      "status" = 'ACTIVE',
-      "updatedAt" = NOW()
-    WHERE "slug" = ${slug}
-    RETURNING *
-  `;
-
-  if (listings.length === 0) {
-    return NextResponse.json(
-      { error: "Listing not found." },
-      { status: 404 }
-    );
-  }
-
-  return NextResponse.json({
-    success: true,
-    listing: listings[0],
-  });
-}
+      return NextResponse.json({
+        success: true,
+        listing: listings[0],
+      });
+    }
 
     const {
       title,
@@ -64,8 +98,7 @@ export async function POST(request: Request) {
       category,
       condition,
       shipping,
-      seller,
-      imageUrl
+      imageUrl,
     } = body;
 
     if (
@@ -73,8 +106,7 @@ export async function POST(request: Request) {
       !slug ||
       !description ||
       !price ||
-      !category ||
-      !seller
+      !category
     ) {
       return NextResponse.json(
         { error: "Required listing information is missing." },
@@ -97,24 +129,6 @@ export async function POST(request: Request) {
     }
 
     const priceCents = Math.round(numericPrice * 100);
-
-    const sql = neon(databaseUrl);
-
-    const sellers = await sql`
-      SELECT "id", "name"
-      FROM "Seller"
-      WHERE "name" = ${seller}
-      LIMIT 1
-    `;
-
-    if (sellers.length === 0) {
-      return NextResponse.json(
-        { error: "Seller was not found in the database." },
-        { status: 404 }
-      );
-    }
-
-    const sellerRecord = sellers[0];
 
     const listings = await sql`
       INSERT INTO "Listing"
@@ -160,15 +174,16 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error) {
+    const unauthorized = unauthorizedResponse(error);
+
+    if (unauthorized) {
+      return unauthorized;
+    }
+
     console.error("Unable to create listing:", error);
 
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "The listing could not be saved.",
-      },
+      { error: "The listing could not be saved." },
       { status: 500 }
     );
   }
@@ -187,8 +202,46 @@ export async function GET(request: Request) {
 
     const sql = neon(databaseUrl);
     const url = new URL(request.url);
-const includeInactive =
-  url.searchParams.get("includeInactive") === "true";
+
+    const includeInactive =
+      url.searchParams.get("includeInactive") === "true";
+
+    if (!includeInactive) {
+      const listings = await sql`
+        SELECT
+          l."id",
+          l."slug",
+          l."title",
+          l."description",
+          l."priceCents",
+          l."category",
+          l."condition",
+          l."shipping",
+          l."imageUrl",
+          l."status",
+          l."createdAt",
+          s."name" AS "seller"
+        FROM "Listing" l
+        JOIN "Seller" s
+          ON s."id" = l."sellerId"
+        WHERE l."status" = 'ACTIVE'
+        ORDER BY l."createdAt" DESC
+      `;
+
+      return NextResponse.json({
+        success: true,
+        listings,
+      });
+    }
+
+    const sellerRecord = await getCurrentSeller(databaseUrl);
+
+    if (!sellerRecord) {
+      return NextResponse.json(
+        { error: "Seller account was not found." },
+        { status: 403 }
+      );
+    }
 
     const listings = await sql`
       SELECT
@@ -207,11 +260,8 @@ const includeInactive =
       FROM "Listing" l
       JOIN "Seller" s
         ON s."id" = l."sellerId"
-      WHERE (
-  ${includeInactive} = true
-  OR l."status" = 'ACTIVE'
-)
-ORDER BY l."createdAt" DESC
+      WHERE l."sellerId" = ${sellerRecord.id}
+      ORDER BY l."createdAt" DESC
     `;
 
     return NextResponse.json({
@@ -219,15 +269,16 @@ ORDER BY l."createdAt" DESC
       listings,
     });
   } catch (error) {
+    const unauthorized = unauthorizedResponse(error);
+
+    if (unauthorized) {
+      return unauthorized;
+    }
+
     console.error("Unable to load listings:", error);
 
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Listings could not be loaded.",
-      },
+      { error: "Listings could not be loaded." },
       { status: 500 }
     );
   }
@@ -241,6 +292,15 @@ export async function PUT(request: Request) {
       return NextResponse.json(
         { error: "DATABASE_URL is missing." },
         { status: 500 }
+      );
+    }
+
+    const sellerRecord = await getCurrentSeller(databaseUrl);
+
+    if (!sellerRecord) {
+      return NextResponse.json(
+        { error: "Seller account was not found." },
+        { status: 403 }
       );
     }
 
@@ -273,7 +333,9 @@ export async function PUT(request: Request) {
       FROM "Listing" l
       JOIN "Seller" s
         ON s."id" = l."sellerId"
-      WHERE l."slug" = ${slug}
+      WHERE
+        l."slug" = ${slug}
+        AND l."sellerId" = ${sellerRecord.id}
       LIMIT 1
     `;
 
@@ -289,19 +351,21 @@ export async function PUT(request: Request) {
       listing: listings[0],
     });
   } catch (error) {
+    const unauthorized = unauthorizedResponse(error);
+
+    if (unauthorized) {
+      return unauthorized;
+    }
+
     console.error("Unable to load listing:", error);
 
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Listing could not be loaded.",
-      },
+      { error: "Listing could not be loaded." },
       { status: 500 }
     );
   }
 }
+
 export async function PATCH(request: Request) {
   try {
     const databaseUrl = process.env.DATABASE_URL;
@@ -310,6 +374,15 @@ export async function PATCH(request: Request) {
       return NextResponse.json(
         { error: "DATABASE_URL is missing." },
         { status: 500 }
+      );
+    }
+
+    const sellerRecord = await getCurrentSeller(databaseUrl);
+
+    if (!sellerRecord) {
+      return NextResponse.json(
+        { error: "Seller account was not found." },
+        { status: 403 }
       );
     }
 
@@ -353,7 +426,6 @@ export async function PATCH(request: Request) {
     }
 
     const priceCents = Math.round(numericPrice * 100);
-
     const sql = neon(databaseUrl);
 
     const listings = await sql`
@@ -366,7 +438,9 @@ export async function PATCH(request: Request) {
         "condition" = ${condition || null},
         "shipping" = ${shipping || null},
         "updatedAt" = NOW()
-      WHERE "slug" = ${slug}
+      WHERE
+        "slug" = ${slug}
+        AND "sellerId" = ${sellerRecord.id}
       RETURNING *
     `;
 
@@ -382,19 +456,21 @@ export async function PATCH(request: Request) {
       listing: listings[0],
     });
   } catch (error) {
+    const unauthorized = unauthorizedResponse(error);
+
+    if (unauthorized) {
+      return unauthorized;
+    }
+
     console.error("Unable to update listing:", error);
 
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "The listing could not be updated.",
-      },
+      { error: "The listing could not be updated." },
       { status: 500 }
     );
   }
 }
+
 export async function DELETE(request: Request) {
   try {
     const databaseUrl = process.env.DATABASE_URL;
@@ -403,6 +479,15 @@ export async function DELETE(request: Request) {
       return NextResponse.json(
         { error: "DATABASE_URL is missing." },
         { status: 500 }
+      );
+    }
+
+    const sellerRecord = await getCurrentSeller(databaseUrl);
+
+    if (!sellerRecord) {
+      return NextResponse.json(
+        { error: "Seller account was not found." },
+        { status: 403 }
       );
     }
 
@@ -423,7 +508,9 @@ export async function DELETE(request: Request) {
       SET
         "status" = 'INACTIVE',
         "updatedAt" = NOW()
-      WHERE "slug" = ${slug}
+      WHERE
+        "slug" = ${slug}
+        AND "sellerId" = ${sellerRecord.id}
       RETURNING *
     `;
 
@@ -439,15 +526,16 @@ export async function DELETE(request: Request) {
       listing: listings[0],
     });
   } catch (error) {
+    const unauthorized = unauthorizedResponse(error);
+
+    if (unauthorized) {
+      return unauthorized;
+    }
+
     console.error("Unable to deactivate listing:", error);
 
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "The listing could not be deactivated.",
-      },
+      { error: "The listing could not be deactivated." },
       { status: 500 }
     );
   }
