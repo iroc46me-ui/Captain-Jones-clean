@@ -35,25 +35,21 @@ function CheckoutContent() {
       }
 
       try {
-        const response = await fetch("/api/listings", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            slug: itemSlug,
-          }),
-        });
+        const response = await fetch("/api/listings");
 
-        const data = await response.json();
+const data = await response.json();
 
-        if (
-          response.ok &&
-          data.success &&
-          data.listing
-        ) {
-          const databaseListing = data.listing;
+const databaseListing =
+  response.ok &&
+  data.success &&
+  Array.isArray(data.listings)
+    ? data.listings.find(
+        (item: { slug?: string }) =>
+          item.slug === itemSlug
+      )
+    : null;
 
+if (databaseListing) {
           setListing({
             title: databaseListing.title,
             slug: databaseListing.slug,
