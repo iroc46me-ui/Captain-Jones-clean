@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { neon } from "@neondatabase/serverless";
+import { randomUUID } from "node:crypto";
 
 export async function POST(request: Request) {
   const secretKey = process.env.STRIPE_SECRET_KEY;
@@ -77,6 +78,7 @@ export async function POST(request: Request) {
       const listingSlug = metadata.listingSlug;
       const buyerUserId = metadata.buyerUserId;
       const sellerId = metadata.sellerId;
+      const reservationId = metadata.reservationId;
 
       const harborFeeInCents = Number(
         metadata.harborFeeInCents
@@ -90,7 +92,8 @@ export async function POST(request: Request) {
         !listingId ||
         !listingSlug ||
         !buyerUserId ||
-        !sellerId
+        !sellerId ||
+        !reservationId
       ) {
         console.error(
           "Marketplace order metadata is incomplete:",
@@ -123,11 +126,34 @@ export async function POST(request: Request) {
         );
       }
 
+      // Stripe may retry this webhook.
+      // If this Checkout Session already produced an order,
+      // acknowledge it without creating another one.
+      const existingOrders = await sql`
+        SELECT "id"
+        FROM "Order"
+        WHERE "stripeCheckoutSessionId" = ${session.id}
+        LIMIT 1
+      `;
+
+      if (existingOrders.length > 0) {
+        console.log(
+          "Order already recorded for Stripe session:",
+          session.id
+        );
+
+        return NextResponse.json({ received: true });
+      }
+
       const listingRows = await sql`
         SELECT
           "id",
+          "slug",
           "priceCents",
-          "status"
+          "status",
+          "sellerId",
+          "reservedByUserId",
+          "reservationId"
         FROM "Listing"
         WHERE "id" = ${listingId}
         LIMIT 1
@@ -146,25 +172,23 @@ export async function POST(request: Request) {
       const listing = listingRows[0];
       const priceCents = Number(listing.priceCents);
 
-      const paymentIntentId =
-        typeof session.payment_intent === "string"
-          ? session.payment_intent
-          : session.payment_intent?.id || null;
-
-      const existingOrders = await sql`
-        SELECT "id"
-        FROM "Order"
-        WHERE "stripeCheckoutSessionId" = ${session.id}
-        LIMIT 1
-      `;
-
-      if (existingOrders.length > 0) {
-        console.log(
-          "Order already recorded for Stripe session:",
-          session.id
+      if (
+        listing.slug !== listingSlug ||
+        listing.sellerId !== sellerId
+      ) {
+        console.error(
+          "Stripe metadata does not match listing:",
+          listingId
         );
 
-        return NextResponse.json({ received: true });
+        return NextResponse.json(
+          {
+            ok: false,
+            error:
+              "Marketplace listing metadata does not match.",
+          },
+          { status: 409 }
+        );
       }
 
       if (listing.status !== "ACTIVE") {
@@ -184,47 +208,162 @@ export async function POST(request: Request) {
         );
       }
 
-      await sql`
-        INSERT INTO "Order" (
-          "id",
-          "listingId",
-          "sellerId",
-          "buyerUserId",
-          "stripeCheckoutSessionId",
-          "stripePaymentIntentId",
-          "amountCents",
-          "harborFeeInCents",
-          "sellerAmountCents",
-          "paymentStatus",
-          "shippingStatus",
-          "createdAt",
-          "updatedAt"
+      if (
+        listing.reservationId !== reservationId ||
+        listing.reservedByUserId !== buyerUserId
+      ) {
+        console.error(
+          "Paid checkout does not own the listing reservation:",
+          listingId,
+          session.id
+        );
+
+        return NextResponse.json(
+          {
+            ok: false,
+            error:
+              "Checkout reservation does not match.",
+          },
+          { status: 409 }
+        );
+      }
+
+      if (
+        !Number.isInteger(priceCents) ||
+        priceCents <= 0
+      ) {
+        return NextResponse.json(
+          {
+            ok: false,
+            error: "Listing price is invalid.",
+          },
+          { status: 400 }
+        );
+      }
+
+      if (
+        harborFeeInCents + sellerAmountInCents !==
+        priceCents
+      ) {
+        console.error(
+          "Marketplace payment split does not match listing price:",
+          listingId
+        );
+
+        return NextResponse.json(
+          {
+            ok: false,
+            error:
+              "Marketplace payment amounts do not match listing price.",
+          },
+          { status: 409 }
+        );
+      }
+
+      if (
+        session.amount_total !== null &&
+        session.amount_total !== priceCents
+      ) {
+        console.error(
+          "Stripe amount does not match listing price:",
+          listingId,
+          session.amount_total,
+          priceCents
+        );
+
+        return NextResponse.json(
+          {
+            ok: false,
+            error:
+              "Stripe payment amount does not match listing price.",
+          },
+          { status: 409 }
+        );
+      }
+
+      const paymentIntentId =
+        typeof session.payment_intent === "string"
+          ? session.payment_intent
+          : session.payment_intent?.id || null;
+
+      /*
+       * Finalize only the listing that still owns this exact
+       * reservation. We deliberately do NOT reject merely because
+       * reservedUntil has passed: Stripe may legitimately deliver
+       * the successful webhook slightly after the hold time.
+       */
+            const finalizedRows = await sql`
+        WITH claimed_listing AS (
+          UPDATE "Listing"
+          SET
+            "status" = 'SOLD',
+            "reservedByUserId" = NULL,
+            "reservedUntil" = NULL,
+            "reservationId" = NULL,
+            "updatedAt" = NOW()
+          WHERE
+            "id" = ${listingId}
+            AND "status" = 'ACTIVE'
+            AND "sellerId" = ${sellerId}
+            AND "reservedByUserId" = ${buyerUserId}
+            AND "reservationId" = ${reservationId}
+          RETURNING
+            "id",
+            "priceCents"
+        ),
+        created_order AS (
+          INSERT INTO "Order" (
+            "id",
+            "listingId",
+            "sellerId",
+            "buyerUserId",
+            "stripeCheckoutSessionId",
+            "stripePaymentIntentId",
+            "amountCents",
+            "harborFeeInCents",
+            "sellerAmountCents",
+            "paymentStatus",
+            "shippingStatus",
+            "createdAt",
+            "updatedAt"
+          )
+          SELECT
+            ${randomUUID()},
+            "id",
+            ${sellerId},
+            ${buyerUserId},
+            ${session.id},
+            ${paymentIntentId},
+            "priceCents",
+            ${harborFeeInCents},
+            ${sellerAmountInCents},
+            'PAID',
+            'AWAITING_SHIPMENT',
+            NOW(),
+            NOW()
+          FROM claimed_listing
+          RETURNING "id"
         )
-        VALUES (
-          ${crypto.randomUUID()},
-          ${listingId},
-          ${sellerId},
-          ${buyerUserId},
-          ${session.id},
-          ${paymentIntentId},
-          ${priceCents},
-          ${harborFeeInCents},
-          ${sellerAmountInCents},
-          'PAID',
-          'AWAITING_SHIPMENT',
-          NOW(),
-          NOW()
-        )
+        SELECT "id"
+        FROM created_order
       `;
 
-      await sql`
-        UPDATE "Listing"
-        SET
-          "status" = 'SOLD',
-          "updatedAt" = NOW()
-        WHERE "id" = ${listingId}
-      `;
+      if (finalizedRows.length === 0) {
+        console.error(
+          "Reservation changed before sale could finalize:",
+          listingId,
+          session.id
+        );
 
+        return NextResponse.json(
+          {
+            ok: false,
+            error:
+              "The treasure reservation changed before payment could be finalized.",
+          },
+          { status: 409 }
+        );
+      }
       console.log(
         "Marketplace order recorded:",
         session.id,
