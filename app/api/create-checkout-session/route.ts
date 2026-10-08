@@ -146,6 +146,8 @@ export async function POST(request: Request) {
           "id",
           "status",
           "reservedUntil"
+          "reservationId",
+          "stripeCheckoutSessionId"
         FROM "Listing"
         WHERE "slug" = ${slug}
         LIMIT 1
@@ -160,7 +162,23 @@ export async function POST(request: Request) {
           { status: 404 }
         );
       }
+      const existingReservation = listingRows[0];
 
+      const reservationExpired =
+        existingReservation.reservedUntil !== null &&
+        new Date(
+          String(existingReservation.reservedUntil)
+        ).getTime() <= Date.now();
+
+      const existingReservationId =
+        existingReservation.reservationId
+          ? String(existingReservation.reservationId)
+          : null;
+
+      const existingStripeSessionId =
+        existingReservation.stripeCheckoutSessionId
+          ? String(existingReservation.stripeCheckoutSessionId)
+          : null;
       if (listingRows[0].status !== "ACTIVE") {
         return NextResponse.json(
           {
@@ -171,7 +189,20 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
-
+      if (
+        reservationExpired &&
+        existingReservationId &&
+        existingStripeSessionId
+      ) {
+        console.log(
+          "Expired checkout reservation identified:",
+          {
+            listingId: String(existingReservation.id),
+            reservationId: existingReservationId,
+            stripeSessionId: existingStripeSessionId,
+          }
+        );
+      }
       return NextResponse.json(
         {
           ok: false,
