@@ -52,6 +52,7 @@ model Listing {
   reservedByUserId String?
   reservedUntil    DateTime?
   reservationId   String?   @unique
+  stripeCheckoutSessionId String?
 
   sellerId String
   seller   Seller @relation(fields: [sellerId], references: [id])

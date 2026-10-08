@@ -16,6 +16,21 @@ type CheckoutListing = {
 function CheckoutContent() {
   const searchParams = useSearchParams();
   const itemSlug = searchParams.get("item");
+  const cancelReservation = searchParams.get("cancel_reservation");
+
+  useEffect(() => {
+    if (!cancelReservation) return;
+    void fetch("/api/cancel-checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reservationId: cancelReservation }),
+    }).catch(() => {
+      // A failed cancellation remains reserved; the server never releases it blindly.
+    }).finally(() => {
+      // Remove the cancellation token to avoid repeat requests on refresh.
+      window.history.replaceState(null, "", `/checkout?item=${encodeURIComponent(itemSlug || "")}`);
+    });
+  }, [cancelReservation, itemSlug]);
 
   const [listing, setListing] =
     useState<CheckoutListing | null>(null);

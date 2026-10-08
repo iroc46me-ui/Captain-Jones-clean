@@ -119,13 +119,14 @@ export async function POST(request: Request) {
         "reservedUntil" =
           NOW() + (${RESERVATION_MINUTES} * INTERVAL '1 minute'),
         "reservationId" = ${reservationId},
+        "stripeCheckoutSessionId" = NULL,
         "updatedAt" = NOW()
       WHERE
         "slug" = ${slug}
         AND "status" = 'ACTIVE'
         AND (
           "reservedUntil" IS NULL
-          OR "reservedUntil" <= NOW()
+          
         )
       RETURNING
         "id",
@@ -307,15 +308,25 @@ export async function POST(request: Request) {
           `${origin}/order-confirmed?session_id={CHECKOUT_SESSION_ID}`,
 
         cancel_url:
-          `${origin}/checkout?item=${encodeURIComponent(
-            listingSlug
-          )}`,
+          `${origin}/checkout?item=${encodeURIComponent(listingSlug)}` +
+          `&cancel_reservation=${encodeURIComponent(reservationId)}`,
 
         
         expires_at:
           Math.floor(Date.now() / 1000) +
           30 * 60,
       });
+
+    // Save the session before giving the customer a payable URL.
+    const linked = await sql`
+      UPDATE "Listing" SET "stripeCheckoutSessionId" = ${session.id}
+      WHERE "id" = ${listingId} AND "reservationId" = ${reservationId}
+      RETURNING "id"
+    `;
+    if (linked.length !== 1) {
+      await stripe.checkout.sessions.expire(session.id);
+      throw new Error("Reservation changed while preparing checkout.");
+    }
 
     return NextResponse.json({
       ok: true,
@@ -336,6 +347,7 @@ export async function POST(request: Request) {
             "reservedByUserId" = NULL,
             "reservedUntil" = NULL,
             "reservationId" = NULL,
+            "stripeCheckoutSessionId" = NULL,
             "updatedAt" = NOW()
           WHERE
             "id" = ${reservationContext.listingId}

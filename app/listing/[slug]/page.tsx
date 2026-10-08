@@ -121,41 +121,44 @@ export default function ListingPage() {
   const [isSendingInquiry, setIsSendingInquiry] = useState(false);
   const [inquiryStatus, setInquiryStatus] = useState("");
 
-  useEffect(() => {
+    useEffect(() => {
     async function loadListing() {
       try {
-        const response = await fetch("/api/listings", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ slug }),
-        });
+        const response = await fetch("/api/listings");
 
         const data = await response.json();
 
-        if (response.ok && data.success && data.listing) {
-          const databaseListing = data.listing;
+        if (response.ok && data.success && Array.isArray(data.listings)) {
+          const databaseListing = data.listings.find(
+            (item: {
+              slug: string;
+              title: string;
+              priceCents: number;
+              category: string;
+              imageUrl?: string | null;
+              seller: string;
+              description: string;
+              condition?: string | null;
+              shipping?: string | null;
+            }) => item.slug === slug
+          );
 
-          setListing({
-            title: databaseListing.title,
-            slug: databaseListing.slug,
-            price: `$${(
-              databaseListing.priceCents / 100
-            ).toFixed(2)}`,
-            category: databaseListing.category,
-            image: databaseListing.imageUrl || undefined,
-            tag: "New Listing",
-            seller: databaseListing.seller,
-            description: databaseListing.description,
-            condition:
-              databaseListing.condition || undefined,
-            shipping:
-              databaseListing.shipping || undefined,
-          });
+          if (databaseListing) {
+            setListing({
+              title: databaseListing.title,
+              slug: databaseListing.slug,
+              price: `$${(databaseListing.priceCents / 100).toFixed(2)}`,
+              category: databaseListing.category,
+              image: databaseListing.imageUrl || undefined,
+              tag: "New Listing",
+              seller: databaseListing.seller,
+              description: databaseListing.description,
+              condition: databaseListing.condition || undefined,
+              shipping: databaseListing.shipping || undefined,
+            });
 
-          setIsReady(true);
-          return;
+            return;
+          }
         }
 
         const sampleListing = sampleListings.find(

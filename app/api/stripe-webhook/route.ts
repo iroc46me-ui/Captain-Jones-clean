@@ -64,6 +64,20 @@ export async function POST(request: Request) {
   }
 
   try {
+    if (event.type === "checkout.session.expired") {
+      const expired = event.data.object as Stripe.Checkout.Session;
+      const reservationId = expired.metadata?.reservationId;
+      if (reservationId) {
+        await sql`
+          UPDATE "Listing" SET "reservedByUserId" = NULL, "reservedUntil" = NULL,
+          "reservationId" = NULL, "stripeCheckoutSessionId" = NULL, "updatedAt" = NOW()
+          WHERE "reservationId" = ${reservationId} AND "stripeCheckoutSessionId" = ${expired.id}
+          AND "status" = 'ACTIVE'
+        `;
+      }
+      return NextResponse.json({ received: true });
+    }
+
     if (event.type === "checkout.session.completed") {
       const session =
         event.data.object as Stripe.Checkout.Session;
@@ -300,6 +314,7 @@ export async function POST(request: Request) {
             "reservedByUserId" = NULL,
             "reservedUntil" = NULL,
             "reservationId" = NULL,
+            "stripeCheckoutSessionId" = NULL,
             "updatedAt" = NOW()
           WHERE
             "id" = ${listingId}
