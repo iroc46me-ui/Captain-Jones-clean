@@ -189,19 +189,72 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
-      if (
+            if (
         reservationExpired &&
         existingReservationId &&
         existingStripeSessionId
       ) {
-        console.log(
-          "Expired checkout reservation identified:",
-          {
-            listingId: String(existingReservation.id),
-            reservationId: existingReservationId,
-            stripeSessionId: existingStripeSessionId,
+        const stripe = new Stripe(secretKey);
+
+        try {
+          let oldSession =
+            await stripe.checkout.sessions.retrieve(
+              existingStripeSessionId
+            );
+
+          if (oldSession.status === "open") {
+            try {
+              oldSession =
+                await stripe.checkout.sessions.expire(
+                  existingStripeSessionId
+                );
+            } catch {
+              oldSession =
+                await stripe.checkout.sessions.retrieve(
+                  existingStripeSessionId
+                );
+            }
           }
-        );
+
+          if (
+            oldSession.status === "expired" &&
+            oldSession.payment_status !== "paid"
+          ) {
+            const released = await sql`
+              UPDATE "Listing"
+              SET
+                "reservedByUserId" = NULL,
+                "reservedUntil" = NULL,
+                "reservationId" = NULL,
+                "stripeCheckoutSessionId" = NULL,
+                "updatedAt" = NOW()
+              WHERE
+                "id" = ${String(existingReservation.id)}
+                AND "status" = 'ACTIVE'
+                AND "reservationId" = ${existingReservationId}
+                AND "stripeCheckoutSessionId" = ${existingStripeSessionId}
+                AND "reservedUntil" <= NOW()
+              RETURNING "id"
+            `;
+
+            if (released.length === 1) {
+              return NextResponse.json(
+                {
+                  ok: false,
+                  error:
+                    "The previous checkout has expired. Please try purchasing this treasure again.",
+                  code: "TREASURE_RESERVATION_RELEASED",
+                },
+                { status: 409 }
+              );
+            }
+          }
+        } catch (recoveryError) {
+          console.error(
+            "Unable to safely recover expired checkout:",
+            recoveryError
+          );
+        }
       }
       return NextResponse.json(
         {
