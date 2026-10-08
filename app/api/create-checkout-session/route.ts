@@ -13,6 +13,9 @@ export async function POST(request: Request) {
     listingId: string;
     reservationId: string;
   } | null = null;
+  let stripeSessionCreationAttempted = false;
+  let createdStripeSessionId: string | null = null;
+
 
   try {
     // PUBLIC PREVIEW SAFETY LOCK
@@ -266,6 +269,8 @@ export async function POST(request: Request) {
       transferGroup,
     };
 
+        stripeSessionCreationAttempted = true;
+
     const session =
       await stripe.checkout.sessions.create({
         mode: "payment",
@@ -316,6 +321,7 @@ export async function POST(request: Request) {
           Math.floor(Date.now() / 1000) +
           30 * 60,
       });
+      createdStripeSessionId = session.id;
 
     // Save the session before giving the customer a payable URL.
     const linked = await sql`
@@ -332,14 +338,43 @@ export async function POST(request: Request) {
       ok: true,
       url: session.url,
     });
-  } catch (error) {
-    // If Stripe checkout creation fails after we reserved
-    // the treasure, release only this request's reservation.
-    if (reservationContext) {
+    } catch (error) {
+    let safeToRelease = !stripeSessionCreationAttempted;
+
+    if (stripeSessionCreationAttempted && createdStripeSessionId) {
       try {
-        const releaseSql = neon(
-          reservationContext.databaseUrl
+        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+        let session = await stripe.checkout.sessions.retrieve(
+          createdStripeSessionId
         );
+
+        if (session.status === "open") {
+          try {
+            session = await stripe.checkout.sessions.expire(
+              createdStripeSessionId
+            );
+          } catch {
+            session = await stripe.checkout.sessions.retrieve(
+              createdStripeSessionId
+            );
+          }
+        }
+
+        safeToRelease =
+          session.status === "expired" &&
+          session.payment_status !== "paid";
+      } catch (stripeError) {
+        console.error(
+          "Unable to verify Stripe checkout expiration:",
+          stripeError
+        );
+      }
+    }
+
+    if (reservationContext && safeToRelease) {
+      try {
+        const releaseSql = neon(reservationContext.databaseUrl);
 
         await releaseSql`
           UPDATE "Listing"
@@ -351,8 +386,8 @@ export async function POST(request: Request) {
             "updatedAt" = NOW()
           WHERE
             "id" = ${reservationContext.listingId}
-            AND "reservationId" =
-              ${reservationContext.reservationId}
+            AND "reservationId" = ${reservationContext.reservationId}
+            AND "status" = 'ACTIVE'
         `;
       } catch (releaseError) {
         console.error(
@@ -362,15 +397,18 @@ export async function POST(request: Request) {
       }
     }
 
-    console.error(
-      "Stripe checkout session error:",
-      error
-    );
+    if (reservationContext && !safeToRelease) {
+      console.error(
+        "Checkout reservation retained because Stripe expiration is unconfirmed:",
+        reservationContext.reservationId
+      );
+    }
+
+    console.error("Stripe checkout session error:", error);
 
     return NextResponse.json(
       {
         ok: false,
-
         error:
           error instanceof Error
             ? error.message
