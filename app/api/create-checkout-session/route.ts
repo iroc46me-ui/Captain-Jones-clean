@@ -145,7 +145,7 @@ export async function POST(request: Request) {
         SELECT
           "id",
           "status",
-          "reservedUntil"
+          "reservedUntil",
           "reservationId",
           "stripeCheckoutSessionId"
         FROM "Listing"
