@@ -91,8 +91,38 @@ export async function POST(request: Request) {
       const listingId = metadata.listingId;
       const listingSlug = metadata.listingSlug;
       const buyerUserId = metadata.buyerUserId;
+      const buyerEmail =
+  session.customer_details?.email ?? null;
+  if (!buyerEmail) {
+  console.error(
+    "Paid checkout is missing buyer email:",
+    session.id
+  );
+
+  return NextResponse.json(
+    {
+      ok: false,
+      error: "Buyer email is missing from Stripe checkout.",
+    },
+    { status: 400 }
+  );
+}
+
+
+const buyerName =
+  session.customer_details?.name ?? null;
       const sellerId = metadata.sellerId;
       const reservationId = metadata.reservationId;
+      if (
+  session.client_reference_id &&
+  session.client_reference_id !== reservationId
+) {
+  console.error("Stripe checkout reservation reference mismatch");
+  return NextResponse.json(
+    { ok: false, error: "Checkout reservation mismatch." },
+    { status: 400 }
+  );
+}
 
       const harborFeeInCents = Number(
         metadata.harborFeeInCents

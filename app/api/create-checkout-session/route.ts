@@ -57,6 +57,7 @@ export async function POST(request: Request) {
     }
 
     const { userId: clerkUserId } = await auth();
+    
 
     if (!clerkUserId) {
       return NextResponse.json(
@@ -333,9 +334,11 @@ export async function POST(request: Request) {
     const transferGroup =
       `DJ-${listingId}-${Date.now()}`;
 
-    const origin =
-      request.headers.get("origin") ||
-      "http://localhost:3000";
+    const origin = process.env.MARKETPLACE_SITE_URL?.replace(/\/$/, "");
+
+if (!origin || !/^https?:\/\/[^/]+$/i.test(origin)) {
+  throw new Error("MARKETPLACE_SITE_URL is missing or invalid.");
+}
 
     const metadata = {
       listingId,
@@ -358,6 +361,10 @@ export async function POST(request: Request) {
     const session =
       await stripe.checkout.sessions.create({
         mode: "payment",
+        client_reference_id: reservationId,
+        customer_creation: "always",
+billing_address_collection: "required",
+        
 
         line_items: [
           {

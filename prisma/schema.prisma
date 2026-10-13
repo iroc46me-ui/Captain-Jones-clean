@@ -71,10 +71,13 @@ model Order {
 
   sellerId String
   seller   Seller @relation(fields: [sellerId], references: [id])
+  
+  buyerEmail String?
+buyerName  String?
 
-  buyerUserId String
-  buyerUser   User @relation(fields: [buyerUserId], references: [id])
-
+  buyerUserId String?
+buyerUser   User? @relation(fields: [buyerUserId], references: [id])
+  
   stripeCheckoutSessionId String  @unique
   stripePaymentIntentId   String? @unique
 
@@ -113,11 +116,11 @@ model Inquiry {
 
   buyerUserId String?
   buyerUser   User? @relation(fields: [buyerUserId], references: [id])
-
-  buyerName  String
+ 
   buyerEmail String
+buyerName  String
 
-  status String @default("OPEN")
+   status String @default("OPEN")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
