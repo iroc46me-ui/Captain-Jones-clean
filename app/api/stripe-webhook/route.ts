@@ -352,6 +352,7 @@ const buyerName =
             AND "sellerId" = ${sellerId}
             AND "reservedByUserId" = ${buyerUserId}
             AND "reservationId" = ${reservationId}
+            AND "stripeCheckoutSessionId" = ${session.id}
           RETURNING
             "id",
             "priceCents"
@@ -394,6 +395,16 @@ const buyerName =
       `;
 
       if (finalizedRows.length === 0) {
+        const existingOrders = await sql`
+  SELECT "id"
+  FROM "Order"
+  WHERE "stripeCheckoutSessionId" = ${session.id}
+  LIMIT 1
+`;
+
+if (existingOrders.length > 0) {
+  return NextResponse.json({ ok: true });
+}
         console.error(
           "Reservation changed before sale could finalize:",
           listingId,

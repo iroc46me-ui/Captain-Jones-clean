@@ -385,14 +385,6 @@ billing_address_collection: "required",
         ],
 
         payment_intent_data: {
-          application_fee_amount:
-            harborFeeInCents,
-
-          transfer_data: {
-            destination:
-              sellerStripeAccountId,
-          },
-
           transfer_group: transferGroup,
 
           metadata,
