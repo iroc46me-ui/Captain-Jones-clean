@@ -261,33 +261,14 @@ export async function PATCH(request: Request) {
         "createdAt"
     `;
     if (updatedRows.length === 0) {
-  return NextResponse.json(
-    {
-      success: false,
-      error: "Order was already shipped or could not be updated.",
-    },
-    { status: 409 }
-  );
-}
-
-    if (updatedRows.length === 0) {
       return NextResponse.json(
         {
           success: false,
-          error: "Order could not be updated.",
+          error: "Order was already shipped or could not be updated.",
         },
-        { status: 500 }
+        { status: 409 }
       );
     }
-    if (updatedRows.length === 0) {
-  return NextResponse.json(
-    {
-      success: false,
-      error: "Order was already shipped or could not be updated.",
-    },
-    { status: 409 }
-  );
-}
 
     return NextResponse.json({
       success: true,
