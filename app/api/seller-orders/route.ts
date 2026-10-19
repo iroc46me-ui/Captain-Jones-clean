@@ -244,6 +244,7 @@ export async function PATCH(request: Request) {
         "updatedAt" = NOW()
       WHERE "id" = ${orderId}
         AND "sellerId" = ${sellerResult.sellerId}
+        AND "shippingStatus" <> 'SHIPPED'
       RETURNING
         "id",
         "amountCents",
