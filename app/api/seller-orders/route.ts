@@ -257,6 +257,15 @@ export async function PATCH(request: Request) {
         "shippedAt",
         "createdAt"
     `;
+    if (updatedRows.length === 0) {
+  return NextResponse.json(
+    {
+      success: false,
+      error: "Order was already shipped or could not be updated.",
+    },
+    { status: 409 }
+  );
+}
 
     if (updatedRows.length === 0) {
       return NextResponse.json(
@@ -267,6 +276,15 @@ export async function PATCH(request: Request) {
         { status: 500 }
       );
     }
+    if (updatedRows.length === 0) {
+  return NextResponse.json(
+    {
+      success: false,
+      error: "Order was already shipped or could not be updated.",
+    },
+    { status: 409 }
+  );
+}
 
     return NextResponse.json({
       success: true,
