@@ -197,6 +197,9 @@ export async function PATCH(request: Request) {
         "id",
         "sellerId",
         "shippingStatus"
+        "inspectionEndsAt",
+    "buyerReportedProblemAt",
+    "sellerTransferStatus"
       FROM "Order"
       WHERE "id" = ${orderId}
       LIMIT 1
