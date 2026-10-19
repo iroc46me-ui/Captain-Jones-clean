@@ -196,7 +196,7 @@ export async function PATCH(request: Request) {
       SELECT
         "id",
         "sellerId",
-        "shippingStatus"
+        "shippingStatus",
         "inspectionEndsAt",
     "buyerReportedProblemAt",
     "sellerTransferStatus"
