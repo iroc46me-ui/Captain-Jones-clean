@@ -248,6 +248,7 @@ export async function PATCH(request: Request) {
       WHERE "id" = ${orderId}
         AND "sellerId" = ${sellerResult.sellerId}
         AND "shippingStatus" <> 'SHIPPED'
+         AND "paymentStatus" = 'PAID'
       RETURNING
         "id",
         "amountCents",
