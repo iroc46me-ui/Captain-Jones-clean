@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { neon } from "@neondatabase/serverless";
 import { getSellerById } from "../../../lib/sellers";
 
@@ -40,7 +41,32 @@ export async function POST(request: Request) {
     }
 
     const sql = neon(databaseUrl);
+// SECURITY: Only the signed-in seller may connect their Stripe account.
+const { userId: clerkUserId } = await auth();
 
+if (!clerkUserId) {
+  return NextResponse.json(
+    { ok: false, error: "You must be signed in." },
+    { status: 401 }
+  );
+}
+
+const ownerRows = await sql`
+  SELECT s."id"
+  FROM "Seller" s
+  INNER JOIN "User" u
+    ON u."id" = s."userId"
+  WHERE s."id" = ${sellerId}
+    AND u."clerkUserId" = ${clerkUserId}
+  LIMIT 1
+`;
+
+if (ownerRows.length === 0) {
+  return NextResponse.json(
+    { ok: false, error: "You do not own this seller account." },
+    { status: 403 }
+  );
+}
     const existing = await sql`
       SELECT "stripeAccountId"
       FROM "Seller"
