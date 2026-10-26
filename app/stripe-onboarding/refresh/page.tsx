@@ -6,14 +6,12 @@ export default function StripeOnboardingRefreshPage() {
   useEffect(() => {
     async function refreshOnboarding() {
       try {
-        const accountId = "acct_1U6f1KAP0ztOQFEL";
-
         const response = await fetch("/api/create-account-link", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ accountId }),
+          body: JSON.stringify({}),
         });
 
         const data = await response.json();
