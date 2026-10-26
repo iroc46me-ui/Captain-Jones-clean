@@ -1,4 +1,6 @@
 "use client";
+
+import { Show, UserButton } from "@clerk/nextjs";
 import CaptainsLog from "./components/CaptainsJournal";
 import React, { useMemo, useState } from "react";
 import MarketplacePreview from "./components/MarketplacePreview";
@@ -11,6 +13,7 @@ import HarborWatchButton from "./components/HarborWatchButton";
 import HarborSecrets from "./components/HarborSecrets";
 import ChartOurCourse from "./components/ChartOurCourse";
 import {
+  
 
   Anchor,
   BadgeCheck,
@@ -177,8 +180,14 @@ function Header() {
 </a>
           <a href="/fresh-arrivals" className={navLink}>Fresh Arrivals</a>
           <a href="about" className={navLink}>About</a>
-          <a href="#join" className={navLink}>Join</a>
-<a href="/sign-in" className={navLink}>Sign In</a>
+          <a href="#join" className={navLink}>Join</a> 
+          <Show when="signed-out">
+  <a href="/sign-up" className={navLink}>Sign Up</a>
+  <a href="/sign-in" className={navLink}>Sign In</a>
+</Show>
+<Show when="signed-in">
+  <UserButton />
+</Show>
         </nav>
 
         
