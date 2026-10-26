@@ -22,16 +22,26 @@ export async function POST(request: Request) {
       );
     }
 
-    const { sellerId } = await request.json();
+    // SECURITY: Require authentication before checking seller information.
+const { userId: clerkUserId } = await auth();
 
-    if (!sellerId) {
-      return NextResponse.json(
-        { ok: false, error: "sellerId is required" },
-        { status: 400 }
-      );
-    }
+if (!clerkUserId) {
+  return NextResponse.json(
+    { ok: false, error: "You must be signed in." },
+    { status: 401 }
+  );
+}
 
-    const sellerInfo = getSellerById(sellerId);
+const { sellerId } = await request.json();
+
+if (!sellerId) {
+  return NextResponse.json(
+    { ok: false, error: "sellerId is required" },
+    { status: 400 }
+  );
+}
+
+const sellerInfo = getSellerById(sellerId);
 
     if (!sellerInfo) {
       return NextResponse.json(
@@ -41,15 +51,7 @@ export async function POST(request: Request) {
     }
 
     const sql = neon(databaseUrl);
-// SECURITY: Only the signed-in seller may connect their Stripe account.
-const { userId: clerkUserId } = await auth();
 
-if (!clerkUserId) {
-  return NextResponse.json(
-    { ok: false, error: "You must be signed in." },
-    { status: 401 }
-  );
-}
 
 const ownerRows = await sql`
   SELECT s."id"
