@@ -523,7 +523,7 @@ function SellerProfiles() {
   id="sellers"
   className="relative bg-slate-950 bg-cover bg-center bg-no-repeat px-4 py-20 text-white sm:px-6 lg:px-8"
   style={{
-    backgroundImage: "url('/harbor-sellers.png')",
+    backgroundImage: "url('/harbor-sellers-background.png')",
   }}
 >
       <div className="mx-auto max-w-7xl">
