@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function StripeOnboardingRefreshPage() {
+  const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
     async function refreshOnboarding() {
       try {
@@ -17,12 +19,26 @@ export default function StripeOnboardingRefreshPage() {
         const data = await response.json();
 
         if (!response.ok || !data.url) {
-          throw new Error("Could not create a fresh Stripe onboarding link.");
+          if (response.status === 401) {
+            throw new Error(
+              "Please sign in to your seller account before continuing."
+            );
+          }
+
+          throw new Error(
+            "Unable to create your Stripe onboarding link. Please return to your seller dashboard and try again."
+          );
         }
 
         window.location.href = data.url;
       } catch (error) {
-        console.error(error);
+        console.error("Stripe onboarding refresh failed:", error);
+
+        setErrorMessage(
+          error instanceof Error
+            ? error.message
+            : "Something went wrong. Please try again."
+        );
       }
     }
 
@@ -41,9 +57,14 @@ export default function StripeOnboardingRefreshPage() {
         fontFamily: "sans-serif",
       }}
     >
-      <div style={{ textAlign: "center" }}>
-        <h1>Returning to Stripe…</h1>
-        <p>Creating a fresh onboarding link.</p>
+      <div style={{ textAlign: "center", padding: "20px" }}>
+        <h1>
+          {errorMessage ? "Stripe Connection Unavailable" : "Returning to Stripe…"}
+        </h1>
+
+        <p>
+          {errorMessage || "Creating a fresh onboarding link."}
+        </p>
       </div>
     </main>
   );
