@@ -437,14 +437,53 @@ export async function PATCH(request: Request) {
     const body = await request.json();
 
     const {
-      slug,
-      title,
-      price,
-      category,
-      condition,
-      description,
-      shipping,
-    } = body;
+  slug,
+  title,
+  price,
+  category,
+  condition,
+  description,
+  shipping,
+  imageUrl,
+  imageUrls,
+} = body;
+
+const photosProvided =
+  imageUrl !== undefined || imageUrls !== undefined;
+
+if (photosProvided) {
+  const isValidPhotoUrl = (value: unknown): boolean => {
+    if (typeof value !== "string") return false;
+
+    try {
+      const url = new URL(value);
+
+      return (
+        url.protocol === "https:" &&
+        url.hostname ===
+          "mp0rpnpfnhyvhhfy.public.blob.vercel-storage.com" &&
+        url.pathname.startsWith("/listing-images/")
+      );
+    } catch {
+      return false;
+    }
+  };
+
+  if (
+    typeof imageUrl !== "string" ||
+    !isValidPhotoUrl(imageUrl) ||
+    !Array.isArray(imageUrls) ||
+    imageUrls.length > 5 ||
+    imageUrls.some(
+      (url: unknown) => !isValidPhotoUrl(url)
+    )
+  ) {
+    return NextResponse.json(
+      { error: "Please provide one main photo and up to five valid additional photos." },
+      { status: 400 }
+    );
+  }
+}
 
     if (
       !slug ||
@@ -485,7 +524,21 @@ export async function PATCH(request: Request) {
         "category" = ${category},
         "condition" = ${condition || null},
         "shipping" = ${shipping || null},
-        "updatedAt" = NOW()
+"imageUrl" = CASE
+  WHEN ${photosProvided}
+  THEN ${imageUrl ?? null}
+  ELSE "imageUrl"
+END,
+"imageUrls" = CASE
+  WHEN ${photosProvided}
+  THEN ARRAY(
+  SELECT jsonb_array_elements_text(
+    ${JSON.stringify(imageUrls ?? [])}::jsonb
+  )
+)::text[]
+  ELSE "imageUrls"
+END,
+"updatedAt" = NOW()
       WHERE
         "slug" = ${slug}
         AND "sellerId" = ${sellerRecord.id}

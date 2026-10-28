@@ -33,11 +33,15 @@ export default function EditListingPage() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
+  const [photos, setPhotos] = useState<string[]>([]);
+const [newPhotoFiles, setNewPhotoFiles] = useState<File[]>([]);
+const [photosChanged, setPhotosChanged] = useState(false);
+const [newPhotoPreviews, setNewPhotoPreviews] = useState<string[]>([]);
 
-  useEffect(() => {
+  useEffect(() => { 
     async function loadListing() {
       try {
-        const response = await fetch("/api/listings", {
+         const response = await fetch("/api/listings", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -55,6 +59,12 @@ export default function EditListingPage() {
         }
 
         const item = data.listing;
+        setPhotos(
+  [item.imageUrl, ...(item.imageUrls || [])].filter(
+    (url): url is string =>
+      typeof url === "string" && url.length > 0
+  )
+);
 
         setListing({
           title: item.title,
@@ -89,6 +99,7 @@ export default function EditListingPage() {
     event: FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
+    if (saving) return;
 
     const cleanTitle = listing.title.trim();
     const cleanPrice = listing.price.trim();
@@ -100,25 +111,75 @@ export default function EditListingPage() {
       );
       return;
     }
+const totalPhotos = photos.length + newPhotoFiles.length;
 
+if (totalPhotos < 1 || totalPhotos > 6) {
+  setMessage("A listing must have between one and six photographs.");
+  return;
+}
     setSaving(true);
-    setMessage("");
+setMessage("");
 
-    try {
-      const response = await fetch("/api/listings", {
-        method: "PATCH",
+try {
+  const uploadedPhotoUrls: string[] = [];
+
+  for (let index = 0; index < newPhotoFiles.length; index++) {
+    setMessage(
+      `Uploading photograph ${index + 1} of ${newPhotoFiles.length}...`
+    );
+
+    const formData = new FormData();
+    formData.append("file", newPhotoFiles[index]);
+
+    const uploadResponse = await fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    const uploadData = await uploadResponse.json();
+
+    if (
+      !uploadResponse.ok ||
+      !uploadData.success ||
+      !uploadData.url
+    ) {
+      setMessage(
+        uploadData.error ||
+          `Photograph ${index + 1} could not be uploaded.`
+      );
+      return;
+    }
+
+    uploadedPhotoUrls.push(uploadData.url);
+  }
+
+  const finalPhotos = [...photos, ...uploadedPhotoUrls];
+
+  if (finalPhotos.length === 0 || finalPhotos.length > 6) {
+    setMessage("A listing must have between one and six photographs.");
+    return;
+  }
+
+  const response = await fetch("/api/listings", {
+    method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          slug,
-          title: cleanTitle,
-          price: cleanPrice,
-          category: listing.category,
-          condition: listing.condition,
-          description: cleanDescription,
-          shipping: listing.shipping,
-        }),
+  slug,
+  title: cleanTitle,
+  price: cleanPrice,
+  category: listing.category,
+  condition: listing.condition,
+  description: cleanDescription,
+  shipping: listing.shipping,
+  ...(photosChanged || newPhotoFiles.length > 0
+    ? {
+        imageUrl: finalPhotos[0],
+        imageUrls: finalPhotos.slice(1),
+      }
+    : {}),
+}),
       });
 
       const data = await response.json();
@@ -301,16 +362,131 @@ export default function EditListingPage() {
             </p>
 
             <div className="mt-5 flex min-h-[190px] items-center justify-center rounded-2xl border border-dashed border-white/20 bg-slate-950/50 px-6 text-center">
-              <div>
-                <p className="font-serif text-xl text-stone-200">
-                  Image Management Coming Next
-                </p>
+              <div className="mt-5">
+  {photos.length > 0 ? (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      {photos.map((photo, index) => (
+        <div
+          key={`${photo}-${index}`}
+          className="overflow-hidden rounded-xl border border-white/20 bg-slate-950/50"
+        >
+          <img
+            src={photo}
+            alt={`Treasure photograph ${index + 1}`}
+            className="aspect-square w-full object-cover"
+          />
+          <p className="px-2 py-2 text-center text-xs text-stone-300">
+            {index === 0 ? "Main Photo" : `Photo ${index + 1}`}
+          </p>
+          <button
+  type="button"
+  disabled={index === 0}
+  onClick={() => {
+    setPhotos((current) => {
+      const updated = [...current];
+      [updated[index - 1], updated[index]] = [
+        updated[index],
+        updated[index - 1],
+      ];
+      return updated;
+    });
+    setPhotosChanged(true);
+  }}
+  className="mb-2 w-full rounded-lg border border-amber-300/30 px-3 py-2 text-sm font-semibold text-amber-200 hover:bg-amber-300/10 disabled:cursor-not-allowed disabled:opacity-30"
+>
+  {index === 0 ? "Main Photo" : "Move Left"}
+</button>
+          <button
+  type="button"
+  disabled={photos.length <= 1}
+  onClick={() => {
+    setPhotos((current) =>
+      current.filter((_, photoIndex) => photoIndex !== index)
+    );
+    setPhotosChanged(true);
+  }}
+  className="mb-3 w-full rounded-lg border border-red-400/30 px-3 py-2 text-sm font-semibold text-red-200 hover:bg-red-400/10 disabled:cursor-not-allowed disabled:opacity-30"
+>
+  Remove Photo
+</button>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <p className="rounded-xl border border-dashed border-white/20 p-6 text-center text-sm text-stone-400">
+      No photographs are attached to this listing.
+    </p>
+  )}
+  <p className="mt-4 text-xs text-stone-400">
+    Up to six photographs per listing.
+  </p>
+  <label className="mt-4 block text-sm font-semibold text-amber-200">
+  Add Replacement Photos
+  <input
+    type="file"
+    accept="image/*"
+    multiple
+    disabled={photos.length >= 6}
+    onChange={(event) => {
+      const selected = Array.from(event.target.files || []);
+      const available = 6 - photos.length - newPhotoFiles.length;
 
-                <p className="mt-2 text-sm leading-6 text-stone-500">
-                  Existing and replacement photographs will
-                  be managed here.
-                </p>
-              </div>
+      if (selected.length > available) {
+        setMessage(`You can add only ${available} more photograph(s).`);
+        event.target.value = "";
+        return;
+      }
+
+      setNewPhotoFiles((current) => [...current, ...selected]);
+      setNewPhotoPreviews((current) => [
+  ...current,
+  ...selected.map((file) => URL.createObjectURL(file)),
+]);
+      setMessage("");
+      event.target.value = "";
+    }}
+    className="mt-2 block w-full text-sm text-stone-300"
+  />
+</label>
+{newPhotoPreviews.length > 0 && (
+  <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+    {newPhotoPreviews.map((preview, index) => (
+      <div
+        key={preview}
+        className="overflow-hidden rounded-xl border border-amber-300/30 bg-slate-950/50"
+      >
+        <img
+          src={preview}
+          alt={`New photograph ${index + 1}`}
+          className="aspect-square w-full object-cover"
+        />
+        <p className="px-2 py-2 text-center text-xs text-amber-200">
+          New Photo {index + 1} — Not Saved
+        </p>
+        <button
+  type="button"
+  onClick={() => {
+    URL.revokeObjectURL(preview);
+
+    setNewPhotoFiles((current) =>
+      current.filter((_, fileIndex) => fileIndex !== index)
+    );
+
+    setNewPhotoPreviews((current) =>
+      current.filter((_, previewIndex) => previewIndex !== index)
+    );
+
+    setMessage("");
+  }}
+  className="mb-3 w-full rounded-lg border border-red-400/30 px-3 py-2 text-sm font-semibold text-red-200 hover:bg-red-400/10"
+>
+  Remove Selected Photo
+</button>
+      </div>
+    ))}
+  </div>
+)}
+</div>
             </div>
           </section>
 
