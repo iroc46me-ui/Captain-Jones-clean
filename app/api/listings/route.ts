@@ -112,14 +112,23 @@ export async function POST(request: Request) {
 
         return (
           url.protocol === "https:" &&
-          url.hostname.endsWith(".public.blob.vercel-storage.com") &&
+          url.hostname === "mp0rpnpfnhyvhhfy.public.blob.vercel-storage.com" &&
           url.pathname.startsWith("/listing-images/")
         );
       } catch {
         return false;
       }
     };
-
+    if (
+      imageUrl != null &&
+      imageUrl !== "" &&
+      !isValidListingImageUrl(imageUrl)
+    ) {
+      return NextResponse.json(
+        { error: "Please provide a valid main photo URL." },
+        { status: 400 }
+      );
+    }
     if (
       !Array.isArray(additionalImages) ||
       additionalImages.length > 5 ||
