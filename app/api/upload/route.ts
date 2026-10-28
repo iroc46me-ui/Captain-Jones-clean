@@ -63,7 +63,7 @@ export async function POST(request: Request) {
 
     if (file.size === 0 || file.size > MAX_IMAGE_SIZE) {
       return NextResponse.json(
-        { error: "Image must be smaller than 5 MB." },
+        { error: "Image must be 4 MB or smaller." },
         { status: 400 }
       );
     }
