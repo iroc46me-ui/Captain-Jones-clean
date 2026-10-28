@@ -99,8 +99,39 @@ export async function POST(request: Request) {
       condition,
       shipping,
       imageUrl,
+      imageUrls,
     } = body;
 
+    const additionalImages = imageUrls === undefined ? [] : imageUrls;
+
+    const isValidListingImageUrl = (value: unknown): boolean => {
+      if (typeof value !== "string") return false;
+
+      try {
+        const url = new URL(value);
+
+        return (
+          url.protocol === "https:" &&
+          url.hostname.endsWith(".public.blob.vercel-storage.com") &&
+          url.pathname.startsWith("/listing-images/")
+        );
+      } catch {
+        return false;
+      }
+    };
+
+    if (
+      !Array.isArray(additionalImages) ||
+      additionalImages.length > 5 ||
+      additionalImages.some(
+        (url: unknown) => !isValidListingImageUrl(url)
+      )
+    ) {
+      return NextResponse.json(
+        { error: "Please provide up to five valid additional photo URLs." },
+        { status: 400 }
+      );
+    }
     if (
       !title ||
       !slug ||
@@ -113,7 +144,6 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-
     const numericPrice = Number(
       String(price)
         .replace("$", "")
@@ -142,6 +172,7 @@ export async function POST(request: Request) {
           "condition",
           "shipping",
           "imageUrl",
+          "imageUrls",
           "status",
           "sellerId",
           "createdAt",
@@ -158,6 +189,11 @@ export async function POST(request: Request) {
           ${condition || null},
           ${shipping || null},
           ${imageUrl || null},
+          ARRAY(
+  SELECT jsonb_array_elements_text(
+    ${JSON.stringify(additionalImages)}::jsonb
+  )
+),
           'ACTIVE',
           ${sellerRecord.id},
           NOW(),
@@ -218,6 +254,7 @@ export async function GET(request: Request) {
           l."condition",
           l."shipping",
           l."imageUrl",
+          l."imageUrls",
           l."status",
           l."createdAt",
           s."name" AS "seller"
@@ -254,6 +291,7 @@ export async function GET(request: Request) {
         l."condition",
         l."shipping",
         l."imageUrl",
+        l."imageUrls",
         l."status",
         l."createdAt",
         s."name" AS "seller"
@@ -327,6 +365,7 @@ export async function PUT(request: Request) {
         l."condition",
         l."shipping",
         l."imageUrl",
+        l."imageUrls",
         l."status",
         l."createdAt",
         s."name" AS "seller"

@@ -31,8 +31,8 @@ export default function NewListingPage() {
   const router = useRouter();
   const [listing, setListing] = useState<ListingDraft>(EMPTY_LISTING);
   const [message, setMessage] = useState("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
-const [imagePreview, setImagePreview] = useState("");
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   function updateField(
     field: keyof ListingDraft,
@@ -91,29 +91,41 @@ const [imagePreview, setImagePreview] = useState("");
     .replace(/^-|-$/g, "");
 
   try {
-    let imageUrl: string | null = null;
+        let imageUrl: string | null = null;
+    const imageUrls: string[] = [];
 
-    if (imageFile) {
-      setMessage("Uploading treasure photo...");
+    for (let index = 0; index < imageFiles.length; index++) {
+      setMessage(
+        `Uploading treasure photo ${index + 1} of ${imageFiles.length}...`
+      );
 
       const formData = new FormData();
-      formData.append("file", imageFile);
+      formData.append("file", imageFiles[index]);
 
       const uploadResponse = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
 
+      if (!uploadResponse.ok) {
+        setMessage(`Photo ${index + 1} could not be uploaded.`);
+        return;
+      }
+
       const uploadData = await uploadResponse.json();
 
-      if (!uploadResponse.ok || !uploadData.url) {
+      if (!uploadData.success || !uploadData.url) {
         setMessage(
-          uploadData.error || "The treasure photo could not be uploaded."
+          uploadData.error || `Photo ${index + 1} could not be uploaded.`
         );
         return;
       }
 
-      imageUrl = uploadData.url;
+      if (index === 0) {
+        imageUrl = uploadData.url;
+      } else {
+        imageUrls.push(uploadData.url);
+      }
     }
 
     setMessage("Publishing treasure...");
@@ -128,6 +140,7 @@ const [imagePreview, setImagePreview] = useState("");
         : `$${cleanPrice}`,
       slug,
       imageUrl,
+      imageUrls,
       status: "Active",
       createdAt: new Date().toISOString(),
     };
@@ -320,9 +333,9 @@ const [imagePreview, setImagePreview] = useState("");
   </p>
 
   <div className="mt-5 rounded-2xl border border-dashed border-white/20 bg-slate-950/50 p-5">
-    {imagePreview ? (
-      <img
-        src={imagePreview}
+    {imagePreviews.length > 0 ? (
+  <img
+    src={imagePreviews[0]}
         alt="Treasure preview"
         className="mb-4 h-56 w-full rounded-xl object-cover"
       />
@@ -331,7 +344,38 @@ const [imagePreview, setImagePreview] = useState("");
         Your treasure photo will appear here.
       </div>
     )}
-
+    {imagePreviews.length > 0 && (
+      <div className="mb-4 grid grid-cols-3 gap-3">
+        {imagePreviews.map((preview, index) => (
+          <div key={preview} className="relative">
+            <img
+              src={preview}
+              alt={`Treasure photo ${index + 1}`}
+              className="h-24 w-full rounded-lg object-cover"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                URL.revokeObjectURL(preview);
+                setImageFiles((current) =>
+                  current.filter((_, i) => i !== index)
+                );
+                setImagePreviews((current) =>
+                  current.filter((_, i) => i !== index)
+                );
+              }}
+              className="absolute right-1 top-1 rounded-full bg-red-700 px-2 py-1 text-xs font-bold text-white"
+              aria-label={`Remove photo ${index + 1}`}
+            >
+              ×
+            </button>
+            <p className="mt-1 text-center text-xs text-stone-400">
+              {index === 0 ? "Main photo" : `Photo ${index + 1}`}
+            </p>
+          </div>
+        ))}
+      </div>
+    )}
     <label className="block">
       <span className="mb-2 block text-sm font-semibold text-stone-300">
         Choose a photo
@@ -340,23 +384,38 @@ const [imagePreview, setImagePreview] = useState("");
       <input
         type="file"
         accept="image/jpeg,image/png,image/webp"
-        onChange={(event) => {
-          const file = event.target.files?.[0];
+        multiple
+onChange={(event) => {
+  const selectedFiles = Array.from(event.target.files || []);
+    const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
 
-          if (!file) {
-            return;
-          }
+  if (selectedFiles.some((file) => file.size > MAX_IMAGE_SIZE)) {
+    setMessage("Each treasure photo must be smaller than 4 MB.");
+    event.target.value = "";
+    return;
+  }
 
-          setImageFile(file);
-          setImagePreview(URL.createObjectURL(file));
-        }}
+  if (selectedFiles.length + imageFiles.length > 6) {
+    setMessage("You may select up to six treasure photos.");
+    event.target.value = "";
+    return;
+  }
+
+  setImageFiles((current) => [...current, ...selectedFiles]);
+  setImagePreviews((current) => [
+    ...current,
+    ...selectedFiles.map((file) => URL.createObjectURL(file)),
+  ]);
+
+  event.target.value = "";
+}}
         className="block w-full text-sm text-stone-300 file:mr-4 file:rounded-full file:border-0 file:bg-amber-300 file:px-4 file:py-2 file:font-bold file:text-slate-950 hover:file:bg-amber-200"
       />
     </label>
 
     <p className="mt-3 text-xs leading-5 text-stone-500">
-      JPG, PNG or WebP. We&apos;ll begin with one main listing photo and add
-      multiple-photo support later.
+            JPG, PNG or WebP. Upload up to six photos per listing.
+      The first photo will be your main listing image.
     </p>
   </div>
 </section>

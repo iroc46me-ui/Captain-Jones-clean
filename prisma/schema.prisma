@@ -47,6 +47,7 @@ model Listing {
   condition   String?
   shipping    String?
   imageUrl    String?
+  imageUrls   String[] @default([])
   status      String  @default("ACTIVE")
 
   reservedByUserId String?

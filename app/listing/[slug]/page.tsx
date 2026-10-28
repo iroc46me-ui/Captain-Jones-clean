@@ -18,6 +18,7 @@ type Listing = {
   seller: string;
   description: string;
   image?: string;
+  imageUrls?: string[];
   condition?: string;
   shipping?: string;
 };
@@ -115,6 +116,7 @@ export default function ListingPage() {
 
   const [listing, setListing] = useState<Listing | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const [showInquiryForm, setShowInquiryForm] = useState(false);
   const [inquiryMessage, setInquiryMessage] = useState("");
@@ -136,6 +138,7 @@ export default function ListingPage() {
               priceCents: number;
               category: string;
               imageUrl?: string | null;
+              imageUrls?: string[] | null;
               seller: string;
               description: string;
               condition?: string | null;
@@ -150,6 +153,7 @@ export default function ListingPage() {
               price: `$${(databaseListing.priceCents / 100).toFixed(2)}`,
               category: databaseListing.category,
               image: databaseListing.imageUrl || undefined,
+              imageUrls: databaseListing.imageUrls || [],
               tag: "New Listing",
               seller: databaseListing.seller,
               description: databaseListing.description,
@@ -302,11 +306,17 @@ export default function ListingPage() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-6xl gap-7 px-6 py-8 sm:px-10 lg:grid-cols-[0.88fr_0.9fr] lg:px-16">
-        <div className="mx-auto flex aspect-[4/5] w-[88%] self-start items-center justify-center overflow-hidden rounded-3xl border border-cyan-300/20 bg-gradient-to-br from-cyan-700/30 to-slate-950">
-          {listing.image ? (
+            <section className="mx-auto grid max-w-6xl gap-7 px-6 py-8 sm:px-10 lg:grid-cols-[0.88fr_0.9fr] lg:px-16">
+        <div className="flex flex-col items-center gap-3">
+          <div className="mx-auto flex aspect-[4/5] w-[88%] self-start items-center justify-center overflow-hidden rounded-3xl border border-cyan-300/20 bg-gradient-to-br from-cyan-700/30 to-slate-950">
+                    {(listing.image || listing.imageUrls?.length) ? (
             <img
-              src={listing.image}
+              src={
+                [listing.image, ...(listing.imageUrls || [])]
+                  .filter((url): url is string => Boolean(url))[
+                    selectedImageIndex
+                  ] || listing.image || listing.imageUrls?.[0]
+              }
               alt={listing.title}
               className="h-full w-full object-cover"
             />
@@ -318,6 +328,33 @@ export default function ListingPage() {
               {categoryIcons[listing.category] || "⚓"}
             </span>
           )}
+                  
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-3">
+          {[listing.image, ...(listing.imageUrls || [])]
+            .filter((url): url is string => Boolean(url))
+            .map((url, index) => (
+              <button
+                key={`${url}-${index}`}
+                type="button"
+                onClick={() => setSelectedImageIndex(index)}
+                aria-label={`View treasure photo ${index + 1}`}
+                aria-pressed={selectedImageIndex === index}
+                className={`h-16 w-16 overflow-hidden rounded-lg border-2 ${
+                  selectedImageIndex === index
+                    ? "border-amber-300"
+                    : "border-white/20"
+                }`}
+              >
+                <img
+                  src={url}
+                  alt={`${listing.title} photo ${index + 1}`}
+                  className="h-full w-full object-cover"
+                />
+              </button>
+            ))}
+        </div>
         </div>
 
         <div className="relative rounded-3xl border border-white/10 bg-white/[0.05] p-7">

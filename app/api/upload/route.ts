@@ -4,7 +4,7 @@ import { neon } from "@neondatabase/serverless";
 import { NextResponse } from "next/server";
 import { ensureUser } from "../../../lib/ensure-user";
 
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
 
 const ALLOWED_IMAGE_TYPES = new Set([
   "image/jpeg",
