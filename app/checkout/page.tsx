@@ -18,18 +18,45 @@ function CheckoutContent() {
   const itemSlug = searchParams.get("item");
   const cancelReservation = searchParams.get("cancel_reservation");
 
-  useEffect(() => {
+    useEffect(() => {
     if (!cancelReservation) return;
-    void fetch("/api/cancel-checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ reservationId: cancelReservation }),
-    }).catch(() => {
-      // A failed cancellation remains reserved; the server never releases it blindly.
-    }).finally(() => {
-      // Remove the cancellation token to avoid repeat requests on refresh.
-      window.history.replaceState(null, "", `/checkout?item=${encodeURIComponent(itemSlug || "")}`);
-    });
+
+    async function cancelCheckoutReservation() {
+      try {
+        const response = await fetch("/api/cancel-checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            reservationId: cancelReservation,
+          }),
+        });
+
+        if (!response.ok) {
+          setCheckoutStatus(
+            "Your checkout cancellation could not be confirmed. " +
+            "The treasure may remain reserved until Stripe expires the session."
+          );
+          return;
+        }
+
+        setCheckoutStatus(
+          "Checkout canceled. Your treasure is available for other buyers."
+        );
+
+        window.history.replaceState(
+          null,
+          "",
+          `/checkout?item=${encodeURIComponent(itemSlug || "")}`
+        );
+      } catch {
+        setCheckoutStatus(
+          "Unable to confirm cancellation. " +
+          "The reservation will remain protected until safely released."
+        );
+      }
+    }
+
+    void cancelCheckoutReservation();
   }, [cancelReservation, itemSlug]);
 
   const [listing, setListing] =
