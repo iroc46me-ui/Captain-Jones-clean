@@ -13,7 +13,11 @@ type ListingForm = {
   description: string;
   shipping: string;
 };
-
+type ListingPhoto = {
+  id: string;
+  url: string;
+  file?: File;
+};
 export default function EditListingPage() {
   const params = useParams<{ slug: string }>();
   const router = useRouter();
@@ -33,10 +37,8 @@ export default function EditListingPage() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
-  const [photos, setPhotos] = useState<string[]>([]);
-const [newPhotoFiles, setNewPhotoFiles] = useState<File[]>([]);
+  const [photos, setPhotos] = useState<ListingPhoto[]>([]);
 const [photosChanged, setPhotosChanged] = useState(false);
-const [newPhotoPreviews, setNewPhotoPreviews] = useState<string[]>([]);
 
   useEffect(() => { 
     async function loadListing() {
@@ -60,10 +62,15 @@ const [newPhotoPreviews, setNewPhotoPreviews] = useState<string[]>([]);
 
         const item = data.listing;
         setPhotos(
-  [item.imageUrl, ...(item.imageUrls || [])].filter(
-    (url): url is string =>
-      typeof url === "string" && url.length > 0
-  )
+  [item.imageUrl, ...(item.imageUrls || [])]
+    .filter(
+      (url): url is string =>
+        typeof url === "string" && url.length > 0
+    )
+    .map((url, index) => ({
+      id: `saved-${index}`,
+      url,
+    }))
 );
 
         setListing({
@@ -111,7 +118,7 @@ const [newPhotoPreviews, setNewPhotoPreviews] = useState<string[]>([]);
       );
       return;
     }
-const totalPhotos = photos.length + newPhotoFiles.length;
+const totalPhotos = photos.length;
 
 if (totalPhotos < 1 || totalPhotos > 6) {
   setMessage("A listing must have between one and six photographs.");
@@ -121,15 +128,16 @@ if (totalPhotos < 1 || totalPhotos > 6) {
 setMessage("");
 
 try {
-  const uploadedPhotoUrls: string[] = [];
+  const newPhotos = photos.filter((photo) => photo.file);
+const uploadedPhotoUrls = new Map<string, string>();
 
-  for (let index = 0; index < newPhotoFiles.length; index++) {
+  for (let index = 0; index < newPhotos.length; index++) {
     setMessage(
-      `Uploading photograph ${index + 1} of ${newPhotoFiles.length}...`
+      `Uploading photograph ${index + 1} of ${newPhotos.length}...`
     );
 
     const formData = new FormData();
-    formData.append("file", newPhotoFiles[index]);
+    formData.append("file", newPhotos[index].file!);
 
     const uploadResponse = await fetch("/api/upload", {
       method: "POST",
@@ -150,10 +158,12 @@ try {
       return;
     }
 
-    uploadedPhotoUrls.push(uploadData.url);
+    uploadedPhotoUrls.set(newPhotos[index].id, uploadData.url);
   }
 
-  const finalPhotos = [...photos, ...uploadedPhotoUrls];
+  const finalPhotos = photos.map(
+  (photo) => uploadedPhotoUrls.get(photo.id) ?? photo.url
+);
 
   if (finalPhotos.length === 0 || finalPhotos.length > 6) {
     setMessage("A listing must have between one and six photographs.");
@@ -173,12 +183,12 @@ try {
   condition: listing.condition,
   description: cleanDescription,
   shipping: listing.shipping,
-  ...(photosChanged || newPhotoFiles.length > 0
-    ? {
-        imageUrl: finalPhotos[0],
-        imageUrls: finalPhotos.slice(1),
-      }
-    : {}),
+  ...(photosChanged
+  ? {
+      imageUrl: finalPhotos[0],
+      imageUrls: finalPhotos.slice(1),
+    }
+  : {}),
 }),
       });
 
@@ -367,11 +377,11 @@ try {
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
       {photos.map((photo, index) => (
         <div
-          key={`${photo}-${index}`}
+          key={photo.id}
           className="overflow-hidden rounded-xl border border-white/20 bg-slate-950/50"
         >
           <img
-            src={photo}
+            src={photo.url}
             alt={`Treasure photograph ${index + 1}`}
             className="aspect-square w-full object-cover"
           />
@@ -400,11 +410,16 @@ try {
   type="button"
   disabled={photos.length <= 1}
   onClick={() => {
-    setPhotos((current) =>
-      current.filter((_, photoIndex) => photoIndex !== index)
-    );
-    setPhotosChanged(true);
-  }}
+  if (photo.file) {
+    URL.revokeObjectURL(photo.url);
+  }
+
+  setPhotos((current) =>
+    current.filter((_, photoIndex) => photoIndex !== index)
+  );
+
+  setPhotosChanged(true);
+}}
   className="mb-3 w-full rounded-lg border border-red-400/30 px-3 py-2 text-sm font-semibold text-red-200 hover:bg-red-400/10 disabled:cursor-not-allowed disabled:opacity-30"
 >
   Remove Photo
@@ -429,7 +444,7 @@ try {
     disabled={photos.length >= 6}
     onChange={(event) => {
       const selected = Array.from(event.target.files || []);
-      const available = 6 - photos.length - newPhotoFiles.length;
+      const available = 6 - photos.length;
 
       if (selected.length > available) {
         setMessage(`You can add only ${available} more photograph(s).`);
@@ -437,55 +452,22 @@ try {
         return;
       }
 
-      setNewPhotoFiles((current) => [...current, ...selected]);
-      setNewPhotoPreviews((current) => [
+      setPhotos((current) => [
   ...current,
-  ...selected.map((file) => URL.createObjectURL(file)),
+  ...selected.map((file) => ({
+    id: crypto.randomUUID(),
+    url: URL.createObjectURL(file),
+    file,
+  })),
 ]);
+setPhotosChanged(true);
       setMessage("");
       event.target.value = "";
     }}
     className="mt-2 block w-full text-sm text-stone-300"
   />
 </label>
-{newPhotoPreviews.length > 0 && (
-  <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-    {newPhotoPreviews.map((preview, index) => (
-      <div
-        key={preview}
-        className="overflow-hidden rounded-xl border border-amber-300/30 bg-slate-950/50"
-      >
-        <img
-          src={preview}
-          alt={`New photograph ${index + 1}`}
-          className="aspect-square w-full object-cover"
-        />
-        <p className="px-2 py-2 text-center text-xs text-amber-200">
-          New Photo {index + 1} — Not Saved
-        </p>
-        <button
-  type="button"
-  onClick={() => {
-    URL.revokeObjectURL(preview);
 
-    setNewPhotoFiles((current) =>
-      current.filter((_, fileIndex) => fileIndex !== index)
-    );
-
-    setNewPhotoPreviews((current) =>
-      current.filter((_, previewIndex) => previewIndex !== index)
-    );
-
-    setMessage("");
-  }}
-  className="mb-3 w-full rounded-lg border border-red-400/30 px-3 py-2 text-sm font-semibold text-red-200 hover:bg-red-400/10"
->
-  Remove Selected Photo
-</button>
-      </div>
-    ))}
-  </div>
-)}
 </div>
             </div>
           </section>
