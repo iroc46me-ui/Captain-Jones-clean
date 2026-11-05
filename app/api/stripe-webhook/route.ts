@@ -69,8 +69,13 @@ export async function POST(request: Request) {
       const reservationId = expired.metadata?.reservationId;
       if (reservationId) {
         await sql`
-          UPDATE "Listing" SET "reservedByUserId" = NULL, "reservedUntil" = NULL,
-          "reservationId" = NULL, "stripeCheckoutSessionId" = NULL, "updatedAt" = NOW()
+          UPDATE "Listing" SET
+  "reservedByUserId" = NULL,
+  "guestCheckoutTokenHash" = NULL,
+  "reservedUntil" = NULL,
+  "reservationId" = NULL,
+  "stripeCheckoutSessionId" = NULL,
+  "updatedAt" = NOW()
           WHERE "reservationId" = ${reservationId} AND "stripeCheckoutSessionId" = ${expired.id}
           AND "status" = 'ACTIVE'
         `;
@@ -202,8 +207,7 @@ const buyerName =
           "sellerId",
         "reservedByUserId",
         "guestCheckoutTokenHash",
-        "reservationId"
-          "reservationId"
+"reservationId"
         FROM "Listing"
         WHERE "id" = ${listingId}
         LIMIT 1
