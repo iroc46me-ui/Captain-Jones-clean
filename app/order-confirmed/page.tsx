@@ -25,6 +25,7 @@ function OrderConfirmedContent() {
 
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -53,7 +54,45 @@ function OrderConfirmedContent() {
           return;
         }
 
-       const confirmedOrder = data.order as Order;
+       if (data.orderRecorded !== true) {
+  setIsProcessing(true);
+  setIsLoading(false);
+
+  for (let attempt = 0; attempt < 10; attempt++) {
+    await new Promise<void>((resolve) =>
+      setTimeout(resolve, 2000)
+    );
+
+    const retryResponse = await fetch(
+      `/api/checkout-session?session_id=${encodeURIComponent(sessionId)}`,
+      { cache: "no-store" }
+    );
+
+    if (!retryResponse.ok) {
+      continue;
+    }
+
+    const retryData = await retryResponse.json();
+
+    if (retryData.ok && retryData.orderRecorded === true) {
+      data.order = retryData.order;
+      data.orderRecorded = true;
+      break;
+    }
+  }
+
+  if (data.orderRecorded !== true) {
+  setIsProcessing(false);
+  setErrorMessage(
+    "Your payment was received, but order recording is taking longer than expected. Please retain your Stripe confirmation and contact support if the order does not appear."
+  );
+  return;
+}
+}
+
+setIsProcessing(false);
+
+const confirmedOrder = data.order as Order;
 
 setOrder(confirmedOrder);
 
@@ -112,14 +151,26 @@ try {
         </p>
 
         <h1 className="mt-3 font-serif text-4xl font-semibold text-amber-200 sm:text-5xl">
-          Treasure Claimed
+          {isLoading
+  ? "Confirming Treasure"
+  : isProcessing
+    ? "Payment Received"
+    : order
+      ? "Treasure Claimed"
+      : "Confirmation Unavailable"}
         </h1>
 
         {isLoading ? (
           <p className="mt-5 text-stone-400">
             Confirming your Stripe payment...
           </p>
-        ) : order ? (
+        ) : isProcessing ? (
+  <p className="mt-5 text-stone-300">
+    Your payment was confirmed. We are still recording
+    your order. Please keep your Stripe confirmation
+    for reference.
+  </p>
+) : order ? (
           <>
             <p className="mt-5 text-xl font-semibold">
               {order.title}
