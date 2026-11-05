@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { neon } from "@neondatabase/serverless";
 
 export async function GET(request: Request) {
   try {
@@ -48,11 +49,34 @@ export async function GET(request: Request) {
     }
 
     const metadata = session.metadata || {};
+    const databaseUrl = process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+  return NextResponse.json(
+    {
+      ok: false,
+      error: "Order verification is unavailable.",
+    },
+    { status: 503 }
+  );
+}
+
+const sql = neon(databaseUrl);
+
+const recordedOrders = await sql`
+  SELECT "id"
+  FROM "Order"
+  WHERE "stripeCheckoutSessionId" = ${session.id}
+  LIMIT 1
+`;
+
+const orderRecorded = recordedOrders.length === 1;
 
     return NextResponse.json({
-      ok: true,
+  ok: true,
+  orderRecorded,
 
-      order: {
+  order: {
         title: metadata.listingSlug
           ? metadata.listingSlug
               .split("-")
