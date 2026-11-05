@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { neon } from "@neondatabase/serverless";
 import { auth } from "@clerk/nextjs/server";
 import { randomUUID } from "node:crypto";
+import { createGuestCheckoutCredential } from "../../../lib/guest-checkout";
 
 const DEFAULT_HARBOR_FEE_PERCENT = 5;
 const RESERVATION_MINUTES = 35;
@@ -57,17 +58,10 @@ export async function POST(request: Request) {
     }
 
     const { userId: clerkUserId } = await auth();
+    const isGuestCheckout = !clerkUserId;
     
 
-    if (!clerkUserId) {
-      return NextResponse.json(
-        {
-          ok: false,
-          error: "You must be signed in to purchase a treasure.",
-        },
-        { status: 401 }
-      );
-    }
+    
 
     const body = await request.json();
 
@@ -88,7 +82,7 @@ export async function POST(request: Request) {
 
     const sql = neon(databaseUrl);
 
-    const buyerRows = await sql`
+    const buyerRows = clerkUserId ? await sql`
       SELECT
         "id",
         "email",
@@ -96,9 +90,9 @@ export async function POST(request: Request) {
       FROM "User"
       WHERE "clerkUserId" = ${clerkUserId}
       LIMIT 1
-    `;
+    ` : [];
 
-    if (buyerRows.length === 0) {
+    if (!isGuestCheckout && buyerRows.length === 0) {
       return NextResponse.json(
         {
           ok: false,
@@ -109,10 +103,14 @@ export async function POST(request: Request) {
       );
     }
 
-    const buyer = buyerRows[0];
-    const buyerUserId = String(buyer.id);
+    const buyerUserId = isGuestCheckout
+  ? null
+  : String(buyerRows[0].id);
 
     const reservationId = randomUUID();
+    const guestCredential = isGuestCheckout
+  ? createGuestCheckoutCredential()
+  : null;
 
     // Atomically reserve the treasure.
     // Only one request can successfully claim an available listing.
@@ -120,6 +118,7 @@ export async function POST(request: Request) {
       UPDATE "Listing"
       SET
         "reservedByUserId" = ${buyerUserId},
+        "guestCheckoutTokenHash" = ${guestCredential?.tokenHash ?? null},
         "reservedUntil" =
           NOW() + (${RESERVATION_MINUTES} * INTERVAL '1 minute'),
         "reservationId" = ${reservationId},
@@ -225,6 +224,7 @@ export async function POST(request: Request) {
               UPDATE "Listing"
               SET
                 "reservedByUserId" = NULL,
+                "guestCheckoutTokenHash" = NULL,
                 "reservedUntil" = NULL,
                 "reservationId" = NULL,
                 "stripeCheckoutSessionId" = NULL,
@@ -343,7 +343,8 @@ if (!origin || !/^https?:\/\/[^/]+$/i.test(origin)) {
     const metadata = {
       listingId,
       listingSlug,
-      buyerUserId,
+      checkoutType: isGuestCheckout ? "guest" : "registered",
+...(buyerUserId ? { buyerUserId } : {}),
       sellerId,
       sellerName,
       sellerStripeAccountId,
@@ -419,7 +420,8 @@ billing_address_collection: "required",
 
     return NextResponse.json({
       ok: true,
-      url: session.url,
+      url: session.url,...(guestCredential ? { reservationId } : {}),
+      ...(guestCredential ? { guestCheckoutToken: guestCredential.token } : {}),
     });
     } catch (error) {
     let safeToRelease = !stripeSessionCreationAttempted;
@@ -463,6 +465,7 @@ billing_address_collection: "required",
           UPDATE "Listing"
           SET
             "reservedByUserId" = NULL,
+            "guestCheckoutTokenHash" = NULL,
             "reservedUntil" = NULL,
             "reservationId" = NULL,
             "stripeCheckoutSessionId" = NULL,

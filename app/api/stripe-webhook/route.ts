@@ -90,7 +90,10 @@ export async function POST(request: Request) {
 
       const listingId = metadata.listingId;
       const listingSlug = metadata.listingSlug;
-      const buyerUserId = metadata.buyerUserId;
+      const buyerUserId =
+  metadata.checkoutType === "guest"
+    ? null
+    : metadata.buyerUserId;
       const buyerEmail =
   session.customer_details?.email ?? null;
   if (!buyerEmail) {
@@ -135,7 +138,8 @@ const buyerName =
       if (
         !listingId ||
         !listingSlug ||
-        !buyerUserId ||
+        (metadata.checkoutType === "registered" && !buyerUserId) ||
+(metadata.checkoutType !== "registered" && metadata.checkoutType !== "guest") ||
         !sellerId ||
         !reservationId
       ) {
@@ -196,7 +200,9 @@ const buyerName =
           "priceCents",
           "status",
           "sellerId",
-          "reservedByUserId",
+        "reservedByUserId",
+        "guestCheckoutTokenHash",
+        "reservationId"
           "reservationId"
         FROM "Listing"
         WHERE "id" = ${listingId}
@@ -254,7 +260,9 @@ const buyerName =
 
       if (
         listing.reservationId !== reservationId ||
-        listing.reservedByUserId !== buyerUserId
+listing.reservedByUserId !== buyerUserId ||
+(metadata.checkoutType === "guest" &&
+  !listing.guestCheckoutTokenHash)
       ) {
         console.error(
           "Paid checkout does not own the listing reservation:",
@@ -342,6 +350,7 @@ const buyerName =
           SET
             "status" = 'SOLD',
             "reservedByUserId" = NULL,
+            "guestCheckoutTokenHash" = NULL,
             "reservedUntil" = NULL,
             "reservationId" = NULL,
             "stripeCheckoutSessionId" = NULL,
@@ -350,7 +359,12 @@ const buyerName =
             "id" = ${listingId}
             AND "status" = 'ACTIVE'
             AND "sellerId" = ${sellerId}
-            AND "reservedByUserId" = ${buyerUserId}
+            AND "reservedByUserId" IS NOT DISTINCT FROM ${buyerUserId}
+            AND (
+  (${metadata.checkoutType} = 'guest' AND "guestCheckoutTokenHash" IS NOT NULL)
+  OR
+  (${metadata.checkoutType} = 'registered' AND "guestCheckoutTokenHash" IS NULL)
+)
             AND "reservationId" = ${reservationId}
             AND "stripeCheckoutSessionId" = ${session.id}
           RETURNING
@@ -362,8 +376,10 @@ const buyerName =
             "id",
             "listingId",
             "sellerId",
-            "buyerUserId",
-            "stripeCheckoutSessionId",
+"buyerUserId",
+"buyerEmail",
+"buyerName",
+"stripeCheckoutSessionId",
             "stripePaymentIntentId",
             "amountCents",
             "harborFeeInCents",
@@ -377,8 +393,10 @@ const buyerName =
             ${randomUUID()},
             "id",
             ${sellerId},
-            ${buyerUserId},
-            ${session.id},
+${buyerUserId},
+${buyerEmail},
+${buyerName},
+${session.id},
             ${paymentIntentId},
             "priceCents",
             ${harborFeeInCents},

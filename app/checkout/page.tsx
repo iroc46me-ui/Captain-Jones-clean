@@ -23,12 +23,16 @@ function CheckoutContent() {
 
     async function cancelCheckoutReservation() {
       try {
+        const guestToken = sessionStorage.getItem(
+  `djjt-guest-checkout-${cancelReservation}`
+);
         const response = await fetch("/api/cancel-checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            reservationId: cancelReservation,
-          }),
+  reservationId: cancelReservation,
+  guestToken,
+}),
         });
 
         if (!response.ok) {
@@ -38,10 +42,15 @@ function CheckoutContent() {
           );
           return;
         }
-
+sessionStorage.removeItem(
+  `djjt-guest-checkout-${cancelReservation}`
+);
         setCheckoutStatus(
           "Checkout canceled. Your treasure is available for other buyers."
         );
+        sessionStorage.removeItem(
+  `djjt-guest-checkout-${cancelReservation}`
+);
 
         window.history.replaceState(
           null,
@@ -153,7 +162,15 @@ if (databaseListing) {
 
         return;
       }
-
+if (
+  typeof data.reservationId === "string" &&
+  typeof data.guestCheckoutToken === "string"
+) {
+  sessionStorage.setItem(
+    `djjt-guest-checkout-${data.reservationId}`,
+    data.guestCheckoutToken
+  );
+}
       window.location.href = data.url;
     } catch (error) {
       console.error(

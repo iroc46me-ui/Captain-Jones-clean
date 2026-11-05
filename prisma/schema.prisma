@@ -53,6 +53,7 @@ model Listing {
   reservedByUserId String?
   reservedUntil    DateTime?
   reservationId   String?   @unique
+    guestCheckoutTokenHash String?
   stripeCheckoutSessionId String?
 
   sellerId String
