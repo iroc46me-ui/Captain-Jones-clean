@@ -265,8 +265,9 @@ export async function GET(request: Request) {
           l."imageUrl",
           l."imageUrls",
           l."status",
-          l."createdAt",
-          s."name" AS "seller"
+l."createdAt",
+l."sellerId",
+s."name" AS "seller"
         FROM "Listing" l
         JOIN "Seller" s
           ON s."id" = l."sellerId"

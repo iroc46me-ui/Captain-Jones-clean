@@ -32,10 +32,11 @@ type SellerOrder = {
   listingTitle: string;
 };
 
-const SELLER_NAME = "Davey's Workshop";
+
 
 export default function SellerChestPage() {
     const [listings, setListings] = useState<DatabaseListing[]>([]);
+    const [sellerName, setSellerName] = useState("Loading seller...");
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
   const [harborMessageCount, setHarborMessageCount] = useState(0);
@@ -64,13 +65,21 @@ const [shippingSaving, setShippingSaving] = useState<string | null>(null);
           );
         }
 
-        const sellerListings = (data.listings || []).filter(
-          (listing: DatabaseListing) =>
-            listing.seller === SELLER_NAME
-        );
+        setListings(data.listings || []);
+        const accountResponse = await fetch("/api/me", {
+  cache: "no-store",
+});
 
-        setListings(sellerListings);
-      } catch (error) {
+const accountData = await accountResponse.json();
+
+if (!accountResponse.ok || !accountData.success) {
+  throw new Error(
+    accountData.error || "Seller profile could not be loaded."
+  );
+}
+
+setSellerName(accountData.seller?.name || "No seller profile");
+          } catch (error) {
         setLoadError(
           error instanceof Error
             ? error.message
@@ -334,7 +343,7 @@ async function markOrderShipped(orderId: string) {
             </p>
 
             <p className="mt-2 text-sm text-cyan-200">
-              Seller: {SELLER_NAME}
+              Seller: {sellerName}
             </p>
           </div>
 
