@@ -13,11 +13,14 @@ type HarborWatchItem = {
 };
 
 type OrderItem = {
-  title: string;
+   title: string;
   price: string;
   seller?: string;
   status?: string;
+  orderId?: string;
+  stripeCheckoutSessionId?: string;
 };
+
 
 const HARBOR_WATCH_KEY = "davey-jones-harbor-watch";
 const ORDERS_KEY = "davey-jones-orders";
@@ -25,6 +28,7 @@ const ORDERS_KEY = "davey-jones-orders";
 export default function CaptainsLockerPage() {
   const [watchedItems, setWatchedItems] = useState<HarborWatchItem[]>([]);
   const [orders, setOrders] = useState<OrderItem[]>([]);
+  const [accountOrders, setAccountOrders] = useState<OrderItem[]>([]);
   const [harborMessageCount, setHarborMessageCount] = useState(0);
   const [isReady, setIsReady] = useState(false);
 
@@ -45,7 +49,40 @@ export default function CaptainsLockerPage() {
         setWatchedItems([]);
         setOrders([]);
       }
+      try {
+        const response = await fetch("/api/buyer-orders", {
+          cache: "no-store",
+        });
 
+        if (response.ok) {
+          const data = await response.json();
+
+          if (data.success && Array.isArray(data.orders)) {
+            setAccountOrders(
+  data.orders.map((order: {
+    id: string;
+    stripeCheckoutSessionId: string | null;
+    listingTitle: string;
+    amountCents: number;
+    sellerName: string;
+    shippingStatus: string;
+  }) => ({
+    orderId: order.id,
+    stripeCheckoutSessionId: order.stripeCheckoutSessionId ?? undefined,
+    title: order.listingTitle,
+    price: (order.amountCents / 100).toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+    }),
+    seller: order.sellerName,
+    status: order.shippingStatus,
+  }))
+);
+          }
+        }
+      } catch (error) {
+        console.error("Unable to load account orders:", error);
+      }
       try {
         const response = await fetch(
           "/api/harbor-inquiries?scope=buyer",
@@ -74,7 +111,23 @@ export default function CaptainsLockerPage() {
 
     loadLocker();
   }, []);
+  const accountStripeIds = new Set(
+    accountOrders
+      .map((order) => order.stripeCheckoutSessionId)
+      .filter((id): id is string => Boolean(id))
+  );
 
+  const uniqueBrowserOrders = orders.filter(
+    (order) =>
+      !order.orderId || !accountStripeIds.has(order.orderId)
+  );
+
+  const totalOrderCount =
+    accountOrders.length + uniqueBrowserOrders.length;
+      const combinedOrders = [
+    ...accountOrders,
+    ...uniqueBrowserOrders,
+  ];
   const lockerStats = [
     {
       label: "Treasures Under Watch",
@@ -83,7 +136,7 @@ export default function CaptainsLockerPage() {
     },
     {
       label: "Orders",
-      value: isReady ? orders.length : "—",
+      value: isReady ? totalOrderCount : "—",
       href: "/captains-locker/orders",
     },
     {
@@ -235,9 +288,9 @@ export default function CaptainsLockerPage() {
                 Purchase History
               </h2>
 
-              {orders.length > 0 ? (
+              {combinedOrders.length > 0 ? (
                 <div className="mt-5 space-y-3">
-                  {orders.slice(0, 3).map((order, index) => (
+                  {combinedOrders.slice(0, 3).map((order, index) => (
                     <div
                       key={`${order.title}-${index}`}
                       className="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3"
@@ -258,8 +311,8 @@ export default function CaptainsLockerPage() {
                 </div>
               ) : (
                 <p className="mt-4 leading-7 text-stone-400">
-                  Completed test purchases will appear here once the
-                  order confirmation pathway is connected.
+                  No purchases have been recorded yet. Your account purchases
+and browser-saved orders will appear here when available.
                 </p>
               )}
 

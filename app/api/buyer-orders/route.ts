@@ -53,6 +53,7 @@ export async function GET() {
     const orders = await sql`
       SELECT
         o."id",
+        o."stripeCheckoutSessionId",
         o."amountCents",
         o."paymentStatus",
         o."shippingStatus",
