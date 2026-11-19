@@ -42,14 +42,11 @@ export default function HarborSellersPage() {
                     </h2>
 
                     <a
-                      href={`#${seller.name
-                        .replaceAll(" ", "-")
-                        .replaceAll("'", "")
-                        .toLowerCase()}`}
-                      className="mt-4 inline-block rounded-full border border-amber-300/40 px-5 py-2 font-black text-amber-200 transition hover:bg-amber-300 hover:text-slate-950"
-                    >
-                      Visit Seller Harbor
-                    </a>
+  href={`/harbor-sellers/${seller.id}`}
+  className="mt-4 inline-block rounded-full border border-amber-300/40 px-5 py-2 font-black text-amber-200 transition hover:bg-amber-300 hover:text-slate-950"
+>
+  Visit Seller Harbor
+</a>
                     <p className="mt-4 text-sm text-slate-300">
   Explore this seller&apos;s treasures and available listings.
 </p>
