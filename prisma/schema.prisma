@@ -16,6 +16,7 @@ model User {
   seller      Seller?
   inquiries   Inquiry[]
   orders      Order[]
+  savedSellers SavedSeller[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -29,9 +30,10 @@ model Seller {
   userId String? @unique
   user   User?   @relation(fields: [userId], references: [id])
 
-  listings  Listing[]
-  inquiries Inquiry[]
-  orders    Order[]
+  listings     Listing[]
+  inquiries    Inquiry[]
+  orders       Order[]
+  savedByUsers SavedSeller[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -142,4 +144,18 @@ model InquiryMessage {
   flagged Boolean @default(false)
 
   createdAt DateTime @default(now())
+}
+model SavedSeller {
+  id String @id @default(cuid())
+
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  sellerId String
+  seller   Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, sellerId])
+  @@index([sellerId])
 }

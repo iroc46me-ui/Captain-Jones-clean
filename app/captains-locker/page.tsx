@@ -3,7 +3,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import OceanFloorAmbience from "../components/OceanFloorAmbience";
-
+type SavedSellerItem = {
+  id: string;
+  name: string;
+  savedAt: string;
+};
 type HarborWatchItem = {
   title: string;
   slug: string;
@@ -27,6 +31,7 @@ const ORDERS_KEY = "davey-jones-orders";
 
 export default function CaptainsLockerPage() {
   const [watchedItems, setWatchedItems] = useState<HarborWatchItem[]>([]);
+  const [savedSellers, setSavedSellers] = useState<SavedSellerItem[]>([]);
   const [orders, setOrders] = useState<OrderItem[]>([]);
   const [accountOrders, setAccountOrders] = useState<OrderItem[]>([]);
   const [harborMessageCount, setHarborMessageCount] = useState(0);
@@ -34,6 +39,23 @@ export default function CaptainsLockerPage() {
 
   useEffect(() => {
     async function loadLocker() {
+
+      try {
+        const response = await fetch("/api/saved-sellers", {
+          cache: "no-store",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+
+          if (data.success && Array.isArray(data.sellers)) {
+            setSavedSellers(data.sellers);
+          }
+        }
+      } catch (error) {
+        console.error("Unable to load saved sellers:", error);
+      }
+
       try {
         const savedWatch = JSON.parse(
           localStorage.getItem(HARBOR_WATCH_KEY) || "[]"
@@ -145,10 +167,10 @@ export default function CaptainsLockerPage() {
       href: "/captains-locker/messages",
     },
     {
-      label: "Saved Sellers",
-      value: 0,
-      href: undefined,
-    },
+  label: "Saved Sellers",
+  value: isReady ? savedSellers.length : "—",
+  href: "/captains-locker/saved-sellers",
+},
   ];
 
   return (

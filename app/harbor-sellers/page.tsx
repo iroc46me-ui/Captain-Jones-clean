@@ -1,8 +1,89 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { sellers } from "../../lib/sellers";
 
 export default function HarborSellersPage() {
+    const [savedSellerIds, setSavedSellerIds] = useState<string[]>([]);
+  const [savingSellerId, setSavingSellerId] = useState<string | null>(null);
+  const [saveSellerError, setSaveSellerError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadSavedSellers() {
+      try {
+        const response = await fetch("/api/saved-sellers", {
+          cache: "no-store",
+        });
+
+        if (response.status === 401) {
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error("Unable to load saved sellers.");
+        }
+
+        const data = await response.json();
+
+        if (data.success && Array.isArray(data.sellers)) {
+          setSavedSellerIds(
+            data.sellers.map((seller: { id: string }) => seller.id)
+          );
+        }
+      } catch (error) {
+        console.error("Unable to load saved sellers:", error);
+        setSaveSellerError("Saved sellers could not be loaded.");
+      }
+    }
+
+    loadSavedSellers();
+  }, []);
+
+  async function toggleSavedSeller(sellerId: string) {
+    if (savingSellerId) return;
+
+    const alreadySaved = savedSellerIds.includes(sellerId);
+
+    setSavingSellerId(sellerId);
+    setSaveSellerError(null);
+
+    try {
+      const response = await fetch("/api/saved-sellers", {
+        method: alreadySaved ? "DELETE" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ sellerId }),
+      });
+
+      if (response.status === 401) {
+        setSaveSellerError(
+          "Please sign in to save your favorite sellers."
+        );
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error("Unable to update saved seller.");
+      }
+
+      setSavedSellerIds((current) =>
+        alreadySaved
+          ? current.filter((id) => id !== sellerId)
+          : current.includes(sellerId)
+            ? current
+            : [...current, sellerId]
+      );
+    } catch (error) {
+      console.error("Save Seller failed:", error);
+      setSaveSellerError(
+        "Unable to update your saved sellers. Please try again."
+      );
+    } finally {
+      setSavingSellerId(null);
+    }
+  }
+
   return (
     <main
       className="min-h-screen bg-slate-950 bg-cover bg-center bg-fixed bg-no-repeat text-white"
@@ -19,7 +100,14 @@ export default function HarborSellersPage() {
           <h1 className="mt-4 text-5xl font-black tracking-tight text-white sm:text-6xl">
             The Crew&apos;s Nest
           </h1>
-
+{saveSellerError && (
+  <div
+    role="alert"
+    className="mt-5 max-w-3xl rounded-xl border border-amber-300/40 bg-slate-950/80 px-5 py-3 text-amber-200"
+  >
+    {saveSellerError}
+  </div>
+)}
           <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-200">
             Trusted sellers, unusual treasures, and independent storefronts
             from around the Harbor.
@@ -47,6 +135,21 @@ export default function HarborSellersPage() {
 >
   Visit Seller Harbor
 </a>
+
+                    <button
+                      type="button"
+                      onClick={() => toggleSavedSeller(seller.id)}
+                      disabled={savingSellerId !== null}
+                      aria-pressed={savedSellerIds.includes(seller.id)}
+                      className="mt-3 ml-3 inline-block rounded-full border border-cyan-300/50 bg-slate-950/60 px-5 py-2 font-black text-cyan-200 transition hover:bg-cyan-300 hover:text-slate-950 disabled:cursor-wait disabled:opacity-60"
+                    >
+                      {savingSellerId === seller.id
+                        ? "Saving..."
+                        : savedSellerIds.includes(seller.id)
+                          ? "★ Saved Seller"
+                          : "☆ Save Seller"}
+                    </button>
+
                     <p className="mt-4 text-sm text-slate-300">
   Explore this seller&apos;s treasures and available listings.
 </p>
