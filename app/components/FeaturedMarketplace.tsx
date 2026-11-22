@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 
 type Item = {
@@ -18,68 +19,67 @@ export default function FeaturedMarketplace({
 }: FeaturedMarketplaceProps) {
   return (
     <section
-      className="fresh-arrivals-reveal relative min-h-screen overflow-hidden px-6 py-16 text-white"
+      className="relative min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat px-3 py-8 text-white sm:px-6 md:py-16"
       style={{
-  backgroundImage:
-    "linear-gradient(rgba(255,255,255,0.08), rgba(255,255,255,0.08)), url('/marketplace-art/fresh-arrivals-harbor-bg.png')",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
-}}
+        backgroundImage:
+          "url('/marketplace-art/fresh-arrivals-harbor-bg.png')",
+      }}
     >
-      
-          <div className="mb-6 flex justify-end">
-    <Link
-      href="/"
-      className="rounded-full border border-amber-300/50 bg-slate-950/60 px-5 py-2.5 text-sm font-bold text-amber-200 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-300 hover:bg-amber-300 hover:text-slate-950 hover:shadow-[0_0_20px_rgba(251,191,36,0.45)]"
-    >
-      ⚓ Return Home
-    </Link>
-  </div>
-        
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-6 flex justify-end">
+          <Link
+            href="/"
+            className="rounded-full border border-amber-300/50 bg-slate-950/60 px-4 py-2 text-sm font-bold text-amber-200 transition hover:bg-amber-300 hover:text-slate-950"
+          >
+            ⚓ Return Home
+          </Link>
+        </div>
 
-        <h2 className="mt-4 text-4xl font-bold">
+        <h1 className="mt-4 text-3xl font-black leading-tight text-white [text-shadow:0_2px_6px_rgba(0,0,0,0.95)] sm:text-4xl">
           Fresh Arrivals at the Harbor
-        </h2>
+        </h1>
 
-        <div className="fresh-arrivals-grid mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-5">
+        <div className="fresh-arrivals-cards mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
           {items.map((item) => (
-            <div
+            <article
               key={item.slug}
-              className="rounded-2xl border border-amber-400/20 bg-slate-900/85 p-5 backdrop-blur-sm transition hover:-translate-y-1 hover:border-amber-400/50"
+              className="min-w-0 rounded-2xl border border-amber-300/25 bg-slate-950/35 p-3 shadow-lg transition hover:-translate-y-1 hover:border-amber-300/60 sm:p-4"
             >
-              <div className="mb-4 flex h-40 items-center justify-center rounded-xl bg-slate-800 text-5xl">
-                ⚓
-              </div>
+              <Link
+                href={`/listing/${item.slug}`}
+                className="block"
+              >
+                <div className="mb-3 flex aspect-[3/4] items-center justify-center overflow-hidden rounded-xl bg-slate-900/65 text-5xl">
+                  <span aria-hidden="true">⚓</span>
+                </div>
 
-              <p className="text-xs uppercase tracking-widest text-amber-400">
-                {item.tag}
-              </p>
+                <p className="text-[10px] font-black uppercase leading-tight tracking-wide text-amber-300 sm:text-xs">
+                  {item.tag}
+                </p>
 
-              <h3 className="mt-2 text-lg font-bold">
-                {item.title}
-              </h3>
+                <h2 className="mt-2 break-words text-base font-black leading-snug text-white sm:text-lg">
+                  {item.title}
+                </h2>
 
-              <p className="mt-2 text-sm text-slate-400">
-                {item.description}
-              </p>
+                <p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-100 sm:text-sm">
+                  {item.description}
+                </p>
 
-              <div className="mt-5 flex items-center justify-between">
-                <span className="font-bold text-amber-300">
+                <p className="mt-3 text-xl font-black text-amber-300 sm:text-2xl">
                   {item.price}
-                </span>
+                </p>
+              </Link>
 
-                <Link
-                  href={`/listing/${item.slug}`}
-                  className="rounded-full border border-amber-400/50 px-2.5 py-1 text-[11px] font-semibold tracking-wide transition-all duration-300 hover:bg-amber-400 hover:text-slate-900 hover:shadow-[0_0_16px_rgba(251,191,36,0.45)]"
-                >
-                  Open Chest
-                </Link>
-              </div>
-            </div>
+              <Link
+                href={`/listing/${item.slug}`}
+                className="mt-3 inline-flex rounded-full border border-amber-300/50 bg-slate-950/60 px-3 py-1.5 text-xs font-bold text-amber-100 transition hover:bg-amber-300 hover:text-slate-950"
+              >
+                Open Chest
+              </Link>
+            </article>
           ))}
         </div>
-      
+      </div>
     </section>
   );
 }
