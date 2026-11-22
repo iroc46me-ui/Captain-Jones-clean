@@ -192,15 +192,21 @@ export default function Marketplace() {
     });
   }, [allItems, query, selectedCategory]);
 
-  return (
+    return (
     <section
       id="marketplace"
-      className="relative min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat px-4 py-5 text-[#062432] [paint-order:stroke_fill] [-webkit-text-stroke:0.5px_#ffffff]"
-      style={{
-        backgroundImage:
-          "linear-gradient(to bottom, rgba(0,20,34,0.48) 0%, rgba(0,20,34,0.18) 35%, transparent 65%), url('/public-marketplace-background-clean.png')",
-      }}
+      className="relative isolate min-h-screen overflow-hidden px-4 py-5 text-[#062432] [paint-order:stroke_fill] [-webkit-text-stroke:0.5px_#ffffff]"
     >
+      {/* Stationary underwater background */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage:
+            "linear-gradient(to bottom, rgba(0,20,34,0.48) 0%, rgba(0,20,34,0.18) 35%, transparent 65%), url('/public-marketplace-background-clean.png')",
+        }}
+      />
+
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
