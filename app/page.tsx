@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Show, UserButton } from "@clerk/nextjs";
 import CaptainsLog from "./components/CaptainsJournal";
@@ -158,40 +158,84 @@ function LogoBust() {
   );
 }
 function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const links = [
+    { href: "#home", label: "Home" },
+    { href: "#join", label: "Sell Your Treasure" },
+    { href: "/treasure-deck", label: "Treasure Deck" },
+    { href: "/captains-picks", label: "From Land & Sea" },
+    { href: "/harbor-sellers", label: "Harbor Sellers" },
+    { href: "/captains-log", label: "Captain's Log" },
+    { href: "/fresh-arrivals", label: "Fresh Arrivals" },
+    { href: "/about", label: "About" },
+    { href: "#join", label: "Join" },
+  ];
+
   const navLink =
-    "rounded-md px-3 py-2 text-sm font-bold text-white transition hover:bg-amber-300/20 hover:text-amber-200";
+    "block rounded-md px-3 py-2 text-sm font-bold text-white transition hover:bg-amber-300/20 hover:text-amber-200";
 
   return (
-    <header className="sticky top-0 z-[9999] border-b border-white/10 bg-slate-950/90 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
-        <div className="text-3xl text-amber-300">⚓</div>
+    <header className="sticky top-0 z-[9999] w-full border-b border-white/10 bg-slate-950/90 backdrop-blur-xl">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+        <a href="#home" className="shrink-0 text-3xl text-cyan-400" aria-label="Davey Jones Home">
+          <Anchor size={30} />
+        </a>
 
-        <nav className="flex overflow-x-auto items-center gap-3 text-xs">
-          <a href="#home" className={navLink}>Home</a>
-          <a href="#join" className={navLink}>Sell Your Treasure</a>
-          <a href="/treasure-deck" className={navLink}>Treasure Deck</a>
-          <a href="/captains-picks" className={navLink}>From Land & Sea</a>
-          <a href="/harbor-sellers" className={navLink}>
-  Harbor Sellers
-</a>
-
-<a href="/captains-log" className={navLink}>
-  Captain's Log 
-</a>
-          <a href="/fresh-arrivals" className={navLink}>Fresh Arrivals</a>
-          <a href="about" className={navLink}>About</a>
-          <a href="#join" className={navLink}>Join</a> 
+        <nav className="hidden min-w-0 flex-wrap items-center justify-end gap-1 xl:flex">
+          {links.map((link) => (
+            <a key={link.href + link.label} href={link.href} className={navLink}>
+              {link.label}
+            </a>
+          ))}
           <Show when="signed-out">
-  <a href="/sign-up" className={navLink}>Sign Up</a>
-  <a href="/sign-in" className={navLink}>Sign In</a>
-</Show>
-<Show when="signed-in">
-  <UserButton />
-</Show>
+            <a href="/sign-up" className={navLink}>Sign Up</a>
+            <a href="/sign-in" className={navLink}>Sign In</a>
+          </Show>
+          <Show when="signed-in">
+            <UserButton />
+          </Show>
         </nav>
 
-        
+        <button
+          type="button"
+          className="inline-flex items-center justify-center rounded-lg border border-amber-300/40 p-2 text-amber-300 xl:hidden"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-home-navigation"
+        >
+          {menuOpen ? <X size={25} /> : <Menu size={25} />}
+        </button>
       </div>
+
+      {menuOpen && (
+        <nav
+          id="mobile-home-navigation"
+          className="max-h-[75dvh] overflow-y-auto border-t border-white/10 bg-slate-950/95 px-4 py-3 xl:hidden"
+          aria-label="Mobile navigation"
+        >
+          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-1 sm:grid-cols-2">
+            {links.map((link) => (
+              <a
+                key={link.href + link.label}
+                href={link.href}
+                className={navLink}
+                onClick={() => setMenuOpen(false)}
+              >
+                {link.label}
+              </a>
+            ))}
+            <Show when="signed-out">
+              <a href="/sign-up" className={navLink} onClick={() => setMenuOpen(false)}>Sign Up</a>
+              <a href="/sign-in" className={navLink} onClick={() => setMenuOpen(false)}>Sign In</a>
+            </Show>
+            <Show when="signed-in">
+              <div className="px-3 py-2"><UserButton /></div>
+            </Show>
+          </div>
+        </nav>
+      )}
     </header>
   );
 }
@@ -1377,3 +1421,4 @@ export default function Home() {
     </div>
   );
 }
+
