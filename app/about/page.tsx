@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 export default function AboutPage() {
   return (
@@ -13,17 +13,16 @@ export default function AboutPage() {
       }}
     >
       {/* TOP NAVIGATION */}
-      <header className="border-b border-white/10 bg-[#030711]/95">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4 sm:px-10 lg:px-16">
+      <header className="border-b border-white/10 bg-[#030711]/35">
+        <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:justify-between lg:px-12">
           <Link
             href="/"
             className="text-3xl text-cyan-400"
             aria-label="Davey Jones Junk-N-Treasure Home"
           >
-            ⚓
-          </Link>
+            {"\u2693"}</Link>
 
-          <nav className="flex flex-wrap items-center justify-end gap-x-8 gap-y-3 text-sm font-bold text-stone-100">
+          <nav className="flex w-full min-w-0 flex-wrap items-center justify-center gap-x-4 gap-y-3 text-center text-xs font-bold text-stone-100 sm:gap-x-6 sm:text-sm lg:justify-end">
             <Link href="/" className="transition hover:text-amber-300">
               Home
             </Link>
@@ -82,14 +81,14 @@ export default function AboutPage() {
 
       {/* MAIN ABOUT CONTENT */}
       <section className="mx-auto flex min-h-[calc(100vh-145px)] max-w-7xl items-center px-6 py-10 sm:px-10 lg:px-16">
-        <div className="w-full max-w-[560px] rounded-[28px] border border-amber-300/70 bg-[#05070c]/90 p-8 shadow-2xl backdrop-blur-[2px] sm:p-10">
+        <div className="w-full max-w-[560px] min-w-0 rounded-2xl border border-amber-300/20 bg-transparent p-3 text-white [text-shadow:0_2px_6px_rgba(0,0,0,1)] sm:p-6">
 
           {/* ABOUT INTRO */}
           <p className="text-sm font-black uppercase tracking-[0.28em] text-amber-300">
             About the Harbor
           </p>
 
-          <h1 className="mt-5 font-serif text-4xl font-bold leading-[1.05] text-white sm:text-5xl">
+          <h1 className="mt-5 font-serif text-3xl font-bold leading-tight text-white sm:text-5xl">
             Built for useful junk,
             <br />
             rare finds, and
@@ -99,7 +98,7 @@ export default function AboutPage() {
 
           <div className="my-7 flex items-center gap-4">
             <div className="h-px flex-1 bg-amber-300/60" />
-            <span className="text-2xl text-amber-300">⚓</span>
+            <span className="text-2xl text-amber-300">{"\u2693"}</span>
             <div className="h-px flex-1 bg-amber-300/60" />
           </div>
 
@@ -120,7 +119,7 @@ export default function AboutPage() {
           <div className="my-7 flex items-center gap-4">
             <div className="h-px flex-1 bg-amber-300/60" />
 
-            <h2 className="whitespace-nowrap text-sm font-black uppercase tracking-[0.22em] text-amber-300">
+            <h2 className="text-center text-xs font-black uppercase tracking-wider text-amber-300 sm:text-sm">
               How the Harbor Works
             </h2>
 
@@ -131,8 +130,7 @@ export default function AboutPage() {
 
             <div className="flex gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-amber-300 text-xl text-amber-300">
-                🧰
-              </div>
+                {"\u{1F9F0}"}</div>
 
               <div>
                 <h3 className="font-bold text-amber-200">
@@ -147,8 +145,7 @@ export default function AboutPage() {
 
             <div className="flex gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-amber-300 text-xl text-amber-300">
-                ⚙️
-              </div>
+                {"\u2699\uFE0F"}</div>
 
               <div>
                 <h3 className="font-bold text-amber-200">
@@ -164,8 +161,7 @@ export default function AboutPage() {
 
             <div className="flex gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-amber-300 text-xl text-amber-300">
-                🧭
-              </div>
+                {"\u{1F9ED}"}</div>
 
               <div>
                 <h3 className="font-bold text-amber-200">
@@ -180,8 +176,7 @@ export default function AboutPage() {
 
             <div className="flex gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-amber-300 text-xl text-amber-300">
-                🔒
-              </div>
+                {"\u{1F512}"}</div>
 
               <div>
                 <h3 className="font-bold text-amber-200">
@@ -199,9 +194,9 @@ export default function AboutPage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-amber-300/30 bg-[#030711]/95">
+      <footer className="border-t border-amber-300/30 bg-[#030711]/35">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-8 gap-y-3 px-6 py-5 text-sm text-stone-300 sm:px-10 lg:px-16">
-          <span>© 2026 Davey Jones Junk-N-Treasure</span>
+          <span>Â© 2026 Davey Jones Junk-N-Treasure</span>
 
           <span className="hidden text-amber-300 sm:inline">|</span>
 
@@ -243,3 +238,7 @@ export default function AboutPage() {
     </main>
   );
 }
+
+
+
+
