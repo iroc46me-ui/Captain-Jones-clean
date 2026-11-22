@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import HarborWatchButton from "./HarborWatchButton";
 
 export type TreasureCardItem = {
@@ -24,8 +24,8 @@ export default function TreasureCard({
   return (
     <article
       className={`
-        group relative overflow-visible rounded-[2rem] border
-        bg-slate-950/80 p-5 backdrop-blur-sm
+        group relative overflow-visible rounded-[2rem] border [text-shadow:none]
+        bg-slate-950/35 p-3 backdrop-blur-none
         transition-all duration-300 ease-out
         hover:-translate-y-3
         ${
@@ -64,7 +64,7 @@ export default function TreasureCard({
               aria-hidden="true"
               className="text-6xl"
             >
-              ⚓
+              {"\u2693"}
             </span>
           )}
 
@@ -86,12 +86,12 @@ export default function TreasureCard({
           {item.title}
         </h3>
 
-        <div className="mt-5 flex items-center justify-between gap-4">
+        <div className="mt-5 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-3xl font-black text-amber-300">
             {item.price}
           </p>
 
-          <span className="rounded-full bg-slate-950 px-4 py-2 text-xs font-bold text-slate-100">
+          <span className="inline-block max-w-full break-words rounded-full bg-slate-950/75 px-3 py-1.5 text-[10px] font-bold leading-tight text-slate-100">
             {item.category}
           </span>
         </div>
@@ -114,3 +114,6 @@ export default function TreasureCard({
     </article>
   );
 }
+
+
+

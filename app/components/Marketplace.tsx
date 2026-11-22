@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
@@ -195,10 +195,10 @@ export default function Marketplace() {
   return (
     <section
       id="marketplace"
-      className="relative min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat px-4 py-5 text-white"
+      className="relative min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat px-4 py-5 text-[#062432] [paint-order:stroke_fill] [-webkit-text-stroke:0.5px_#ffffff]"
       style={{
         backgroundImage:
-          "url('/public-marketplace-background-clean.png')",
+          "linear-gradient(to bottom, rgba(0,20,34,0.48) 0%, rgba(0,20,34,0.18) 35%, transparent 65%), url('/public-marketplace-background-clean.png')",
       }}
     >
       <div className="mx-auto max-w-7xl">
@@ -208,18 +208,18 @@ export default function Marketplace() {
     href="/"
     className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-300/40 bg-slate-950/60 px-4 py-2 text-sm font-bold text-amber-100 transition-all duration-300 hover:-translate-y-1 hover:border-amber-300 hover:shadow-[0_0_22px_rgba(252,211,77,0.35)]"
   >
-    ⚓ Home
+    âš“ Home
   </Link>
 
   <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
     Treasure Deck
   </p>
 
-            <h2 className="mt-1 text-3xl font-black tracking-tight text-white sm:text-4xl">
+            <h2 className="mt-1 text-3xl font-black tracking-tight text-[#062432] [paint-order:stroke_fill] [-webkit-text-stroke:0.5px_#ffffff] sm:text-4xl">
               Treasure by Category
             </h2>
 
-            <p className="mt-3 max-w-2xl text-slate-300">
+            <p className="mt-3 max-w-2xl font-semibold text-[#062432] [paint-order:stroke_fill] [-webkit-text-stroke:0.5px_#ffffff]">
               Search the deck, explore the categories and place
               memorable finds under Harbor Watch.
             </p>
@@ -283,7 +283,7 @@ export default function Marketplace() {
 
         <div
           key={`${selectedCategory}-${query}`}
-          className="mt-4 grid gap-4 animate-[fadeInUp_400ms_ease-out] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          className="mt-4 grid gap-4 animate-[fadeInUp_400ms_ease-out] grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
         >
           {visibleItems.map((item, index) => (
             <TreasureCard
@@ -313,3 +313,9 @@ export default function Marketplace() {
     </section>
   );
 }
+
+
+
+
+
+
