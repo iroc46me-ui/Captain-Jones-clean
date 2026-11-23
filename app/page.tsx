@@ -160,17 +160,23 @@ function LogoBust() {
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const links = [
-    { href: "#home", label: "Home" },
-    { href: "#join", label: "Sell Your Treasure" },
-    { href: "/treasure-deck", label: "Treasure Deck" },
-    { href: "/captains-picks", label: "From Land & Sea" },
-    { href: "/harbor-sellers", label: "Harbor Sellers" },
-    { href: "/captains-log", label: "Captain's Log" },
-    { href: "/fresh-arrivals", label: "Fresh Arrivals" },
-    { href: "/about", label: "About" },
-    { href: "#join", label: "Join" },
-  ];
+  
+const links = [
+  { href: "#home", label: "Home" },
+  { href: "#join", label: "Sell Your Treasure" },
+  { href: "/treasure-deck", label: "Treasure Deck" },
+  { href: "/captains-picks", label: "From Land & Sea" },
+  { href: "/harbor-sellers", label: "Harbor Sellers" },
+  { href: "/captains-log", label: "Captain's Log" },
+  { href: "/fresh-arrivals", label: "Fresh Arrivals" },
+  {
+    href: "https://davey-jones-junkntreasure.printify.me/",
+    label: "Pirate Apparel & Merchandise",
+  },
+  { href: "/about", label: "About" },
+  { href: "#join", label: "Join" },
+];
+
 
   const navLink =
     "block rounded-md px-3 py-2 text-sm font-bold text-white transition hover:bg-amber-300/20 hover:text-amber-200";
