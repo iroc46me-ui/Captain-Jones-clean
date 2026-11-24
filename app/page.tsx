@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Show, UserButton } from "@clerk/nextjs";
 import CaptainsLog from "./components/CaptainsJournal";
@@ -48,7 +48,7 @@ const sampleItems = [
     category: "Antiques",
     tag: "Captain's Pick",
     seller: "Old Harbor Finds",
-    description: "A weathered brass-style ship lantern with old harbor character, perfect for collectors, nautical décor, cabins, RVs, or treasure-room display.",
+    description: "A weathered brass-style ship lantern with old harbor character, perfect for collectors, nautical d�cor, cabins, RVs, or treasure-room display.",
   },
   {
     title: "Desert Nugget Digger",
@@ -171,7 +171,7 @@ const links = [
   { href: "/fresh-arrivals", label: "Fresh Arrivals" },
   {
     href: "https://davey-jones-junkntreasure.printify.me/",
-    label: "Pirate Apparel & Merchandise",
+    label: "Apparel & Merch",
   },
   { href: "/about", label: "About" },
   { href: "#join", label: "Join" },
@@ -293,21 +293,21 @@ function Hero() {
     href="#join"
     className="w-full rounded-xl border border-amber-300/70 bg-slate-950/75 px-5 py-4 text-center font-bold text-amber-200 transition hover:-translate-y-1 hover:border-amber-200 hover:shadow-[0_0_24px_rgba(252,211,77,0.35)]"
   >
-    ⚓ Become a Seller
+    ? Become a Seller
   </a>
 
   <a
     href="/seller-chest"
     className="w-full rounded-xl border border-amber-300/70 bg-slate-950/75 px-5 py-4 text-center font-bold text-amber-200 transition hover:-translate-y-1 hover:border-amber-200 hover:shadow-[0_0_24px_rgba(252,211,77,0.35)]"
   >
-    🗝️ Open Seller Chest
+    ??? Open Seller Chest
   </a>
 
   <a
     href="/treasure-deck"
     className="w-full rounded-xl border border-cyan-200/50 bg-slate-950/75 px-5 py-4 text-center font-bold text-cyan-100 transition hover:-translate-y-1 hover:border-amber-300 hover:shadow-[0_0_24px_rgba(252,211,77,0.35)]"
   >
-    🧭 Explore the Treasure Deck
+    ?? Explore the Treasure Deck
   </a>
 </div>``
         </motion.div>
@@ -444,7 +444,7 @@ function Marketplace() {
     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
   />
 ) : (
-  <span className="text-5xl">📦</span>
+  <span className="text-5xl">??</span>
 )}
 </div>
             <p className="mt-5 text-xs font-black uppercase tracking-[0.22em] text-cyan-200">{item.tag}</p>
@@ -490,7 +490,7 @@ function ListingDetails() {
     />
   ) : (
     <div className="flex h-full w-full items-center justify-center bg-black/30">
-      <span className="text-7xl">⚓</span>
+      <span className="text-7xl">?</span>
     </div>
   )}
 
@@ -530,10 +530,10 @@ function ListingDetails() {
                 </h3>
 
                 <ul className="mt-4 space-y-2 text-slate-300">
-                  <li>• Handmade Tool</li>
-                  <li>• Arizona Built</li>
-                  <li>• Small Batch Production</li>
-                  <li>• Ships from Seller Location</li>
+                  <li>� Handmade Tool</li>
+                  <li>� Arizona Built</li>
+                  <li>� Small Batch Production</li>
+                  <li>� Ships from Seller Location</li>
                 </ul>
               </div>
 
@@ -590,13 +590,13 @@ function SellerProfiles() {
             >
 
               <div className="mb-3 flex h-24 w-24 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-5xl">
-                {seller === "Davey's Workshop" && "⚒️"}
-                {seller === "Road Dog Salvage" && "🚐"}
-                {seller === "Relic Rider" && "🏺"}
-                {seller === "Old Harbor Finds" && "🏮"}
-                {seller === "Quartzsite Cache" && "⛏️"}
-                {seller === "Second Drawer Co." && "🗃️"}
-                {!["Davey's Workshop", "Road Dog Salvage", "Relic Rider", "Old Harbor Finds", "Quartzsite Cache", "Second Drawer Co."].includes(seller) && "⚓"}
+                {seller === "Davey's Workshop" && "??"}
+                {seller === "Road Dog Salvage" && "??"}
+                {seller === "Relic Rider" && "??"}
+                {seller === "Old Harbor Finds" && "??"}
+                {seller === "Quartzsite Cache" && "??"}
+                {seller === "Second Drawer Co." && "???"}
+                {!["Davey's Workshop", "Road Dog Salvage", "Relic Rider", "Old Harbor Finds", "Quartzsite Cache", "Second Drawer Co."].includes(seller) && "?"}
               </div>
 
               <h3 className="text-3xl font-black text-amber-200">{seller}</h3>
@@ -607,15 +607,15 @@ function SellerProfiles() {
                 Visit Seller Harbor
               </a>
               <div className="mt-4 space-y-2 text-slate-300">
-                <p>📍 Arizona</p>
-                <p>⚒️ Gold Prospecting Tools & Field Equipment</p>
-                <p>⭐ Trusted Harbor Seller</p>
-                <p>📦 Ships Throughout the United States</p>
-                <p>🏴‍☠️ Harbor Member Since 2026</p>
+                <p>?? Arizona</p>
+                <p>?? Gold Prospecting Tools & Field Equipment</p>
+                <p>? Trusted Harbor Seller</p>
+                <p>?? Ships Throughout the United States</p>
+                <p>????? Harbor Member Since 2026</p>
               </div>
-              <p>⭐⭐⭐⭐⭐ 5.0 Harbor Rating</p>
-              <p>⚡ Replies Within 24 Hours</p>
-              <p>🎯 Specialty: Curated Treasure Finds</p>
+              <p>????? 5.0 Harbor Rating</p>
+              <p>? Replies Within 24 Hours</p>
+              <p>?? Specialty: Curated Treasure Finds</p>
 
               <p className="mt-2 text-slate-300">
                 Listings: {sampleItems.filter((item) => item.seller === seller).length}
@@ -635,7 +635,7 @@ function SellerProfiles() {
                         href={`#item-${item.slug}`}
                         className="block rounded-xl border border-white/10 bg-white/[0.04] p-3 font-bold text-white hover:bg-white/[0.08]"
                       >
-                        {item.title} — {item.price}
+                        {item.title} � {item.price}
                       </a>
                     ))}
                 </div>
@@ -695,7 +695,7 @@ function SellerHarbors() {
                         href={`#item-${item.slug}`}
                         className="block rounded-xl border border-white/10 bg-white/[0.04] p-4 font-bold text-white hover:bg-white/[0.08]"
                       >
-                        {item.title} — {item.price}
+                        {item.title} � {item.price}
                       </a>
                     ))}
                 </div>
@@ -751,10 +751,10 @@ function MessageBottles() {
         <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6 text-slate-200">
           <h3 className="font-black text-amber-200">Harbor Communication Rules</h3>
           <ul className="mt-4 space-y-2">
-            <li>⚓ All buyer-seller communication stays inside Harbor before purchase.</li>
-            <li>⚓ No phone numbers, emails, outside payment links, or social handles before purchase.</li>
-            <li>⚓ Buyer and seller information remains private until the transaction is completed.</li>
-            <li>⚓ Harbor provides the message channel, but does not guarantee items, payments, delivery, or outcomes.</li>
+            <li>? All buyer-seller communication stays inside Harbor before purchase.</li>
+            <li>? No phone numbers, emails, outside payment links, or social handles before purchase.</li>
+            <li>? Buyer and seller information remains private until the transaction is completed.</li>
+            <li>? Harbor provides the message channel, but does not guarantee items, payments, delivery, or outcomes.</li>
           </ul>
         </div>
 
@@ -779,19 +779,19 @@ function HarborRules() {
         </h2>
 
         <div className="mt-8 space-y-5 text-slate-300">
-          <p>⚓ All buyer and seller communication must remain inside Harbor until purchase is completed.</p>
-          <p>⚓ No phone numbers, emails, payment links, social handles, or outside contact information before purchase.</p>
-          <p>⚓ Buyer and seller information remains private until a transaction is completed.</p>
-          <p>⚓ Davey Jones Junk-N-Treasure provides marketplace, listing, and communication tools only.</p>
-          <p>⚓ Sellers are responsible for item condition, accuracy, shipping, pickup, fulfillment, and seller policies.</p>
-          <p>⚓ Buyers are responsible for reading listings, asking questions, and understanding what they purchase.</p>
-          <p>⚓ Harbor does not guarantee item authenticity, condition, delivery, refunds, payment outcomes, or seller claims.</p>
-          <p>⚓ Harbor may remove listings, sellers, buyers, or messages that violate the Harbor Code.</p>
+          <p>? All buyer and seller communication must remain inside Harbor until purchase is completed.</p>
+          <p>? No phone numbers, emails, payment links, social handles, or outside contact information before purchase.</p>
+          <p>? Buyer and seller information remains private until a transaction is completed.</p>
+          <p>? Davey Jones Junk-N-Treasure provides marketplace, listing, and communication tools only.</p>
+          <p>? Sellers are responsible for item condition, accuracy, shipping, pickup, fulfillment, and seller policies.</p>
+          <p>? Buyers are responsible for reading listings, asking questions, and understanding what they purchase.</p>
+          <p>? Harbor does not guarantee item authenticity, condition, delivery, refunds, payment outcomes, or seller claims.</p>
+          <p>? Harbor may remove listings, sellers, buyers, or messages that violate the Harbor Code.</p>
         </div>
 
         <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
           <h3 className="font-black text-amber-200">
-            Captain’s Note
+            Captain�s Note
           </h3>
           <p className="mt-3 text-slate-200">
             This is an early Harbor Alpha rules draft. Formal legal terms, privacy policy,
@@ -821,21 +821,21 @@ function SafeHarbor() {
 
         <div className="mt-8 space-y-5 text-slate-300">
 
-          <p>⚓ Stolen property and fraudulent listings.</p>
+          <p>? Stolen property and fraudulent listings.</p>
 
-          <p>⚓ Counterfeit goods and copyright violations.</p>
+          <p>? Counterfeit goods and copyright violations.</p>
 
-          <p>⚓ Illegal items and prohibited materials.</p>
+          <p>? Illegal items and prohibited materials.</p>
 
-          <p>⚓ Dangerous chemicals and hazardous substances.</p>
+          <p>? Dangerous chemicals and hazardous substances.</p>
 
-          <p>⚓ Adult material and exploitative content.</p>
+          <p>? Adult material and exploitative content.</p>
 
-          <p>⚓ Scam listings, deceptive practices, and misrepresentation.</p>
+          <p>? Scam listings, deceptive practices, and misrepresentation.</p>
 
-          <p>⚓ Harassment, threats, and abusive behavior.</p>
+          <p>? Harassment, threats, and abusive behavior.</p>
 
-          <p>⚓ Attempts to bypass Harbor communication and payment systems.</p>
+          <p>? Attempts to bypass Harbor communication and payment systems.</p>
 
         </div>
 
@@ -865,7 +865,7 @@ function CaptainsPromise() {
     >
       <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl">
         <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
-          Captain’s Promise
+          Captain�s Promise
         </p>
 
         <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
@@ -873,12 +873,12 @@ function CaptainsPromise() {
         </h2>
 
         <div className="mt-8 space-y-5 text-slate-300">
-          <p>⚓ Buyer and seller contact information stays private before purchase.</p>
-          <p>⚓ Harbor messages remain inside the site to protect both sides.</p>
-          <p>⚓ Payment details are handled through secure payment providers, not stored openly by Harbor.</p>
-          <p>⚓ Seller payout information should be handled by approved payment systems, not manually collected by Harbor.</p>
-          <p>⚓ Harbor may review messages or listings when safety, fraud, or rule violations are suspected.</p>
-          <p>⚓ Personal information should only be released when needed to complete a paid transaction.</p>
+          <p>? Buyer and seller contact information stays private before purchase.</p>
+          <p>? Harbor messages remain inside the site to protect both sides.</p>
+          <p>? Payment details are handled through secure payment providers, not stored openly by Harbor.</p>
+          <p>? Seller payout information should be handled by approved payment systems, not manually collected by Harbor.</p>
+          <p>? Harbor may review messages or listings when safety, fraud, or rule violations are suspected.</p>
+          <p>? Personal information should only be released when needed to complete a paid transaction.</p>
         </div>
 
         <div className="mt-8 rounded-[2rem] border border-cyan-300/20 bg-cyan-300/10 p-6">
@@ -916,23 +916,23 @@ function HarborFees() {
         <div className="mt-8 space-y-5 text-slate-300">
 
           <p>
-            ⚓ Harbor keeps a simple percentage from completed sales.
+            ? Harbor keeps a simple percentage from completed sales.
           </p>
 
           <p>
-            ⚓ Sellers receive the remainder through approved payment systems.
+            ? Sellers receive the remainder through approved payment systems.
           </p>
 
           <p>
-            ⚓ No listing fees during Harbor Alpha.
+            ? No listing fees during Harbor Alpha.
           </p>
 
           <p>
-            ⚓ Premium seller features may be offered in future voyages.
+            ? Premium seller features may be offered in future voyages.
           </p>
 
           <p>
-            ⚓ Fees help support fraud prevention, development, and Harbor operations.
+            ? Fees help support fraud prevention, development, and Harbor operations.
           </p>
 
         </div>
@@ -971,17 +971,17 @@ function ShippingReturns() {
         </h2>
 
         <div className="mt-8 space-y-5 text-slate-300">
-          <p>⚓ Harbor does not own, store, inspect, pack, or ship seller items.</p>
-          <p>⚓ Sellers are responsible for accurate descriptions, item condition, packaging, shipping, pickup, and fulfillment.</p>
-          <p>⚓ Buyers should review listings carefully and ask questions through Message Bottles before purchase.</p>
-          <p>⚓ Shipping costs, pickup options, timelines, and return policies are set by the individual seller unless Harbor later creates site-wide rules.</p>
-          <p>⚓ Harbor does not issue refunds directly unless a future payment policy specifically allows it.</p>
-          <p>⚓ Disputes may be reviewed by Harbor when fraud, misrepresentation, or Harbor Code violations are suspected.</p>
+          <p>? Harbor does not own, store, inspect, pack, or ship seller items.</p>
+          <p>? Sellers are responsible for accurate descriptions, item condition, packaging, shipping, pickup, and fulfillment.</p>
+          <p>? Buyers should review listings carefully and ask questions through Message Bottles before purchase.</p>
+          <p>? Shipping costs, pickup options, timelines, and return policies are set by the individual seller unless Harbor later creates site-wide rules.</p>
+          <p>? Harbor does not issue refunds directly unless a future payment policy specifically allows it.</p>
+          <p>? Disputes may be reviewed by Harbor when fraud, misrepresentation, or Harbor Code violations are suspected.</p>
         </div>
 
         <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
           <h3 className="font-black text-amber-200">
-            Captain’s Reminder
+            Captain�s Reminder
           </h3>
 
           <p className="mt-3 text-slate-200">
@@ -1012,23 +1012,23 @@ function HarborReputation() {
         <div className="mt-8 space-y-5 text-slate-300">
 
           <p>
-            ⭐ Harbor Reputation is earned through honesty, communication, and successful voyages.
+            ? Harbor Reputation is earned through honesty, communication, and successful voyages.
           </p>
 
           <p>
-            ⭐ Buyers may someday leave ratings, reviews, and notes about their experience.
+            ? Buyers may someday leave ratings, reviews, and notes about their experience.
           </p>
 
           <p>
-            ⭐ Response times, completed sales, and repeat customers help build a seller's standing.
+            ? Response times, completed sales, and repeat customers help build a seller's standing.
           </p>
 
           <p>
-            ⭐ Harbor recognizes Trusted Harbor Sellers, Captain's Picks, and Featured Captains.
+            ? Harbor recognizes Trusted Harbor Sellers, Captain's Picks, and Featured Captains.
           </p>
 
           <p>
-            ⭐ Reputation takes time to earn and can be lost through dishonesty or Harbor Code violations.
+            ? Reputation takes time to earn and can be lost through dishonesty or Harbor Code violations.
           </p>
 
         </div>
@@ -1070,15 +1070,15 @@ function TreasureChest() {
 
         <div className="mt-8 space-y-5 text-slate-300">
 
-          <p>❤️ Save favorite treasures for future voyages.</p>
+          <p>?? Save favorite treasures for future voyages.</p>
 
-          <p>❤️ Follow trusted captains and their harbors.</p>
+          <p>?? Follow trusted captains and their harbors.</p>
 
-          <p>❤️ Watch treasures before committing to purchase.</p>
+          <p>?? Watch treasures before committing to purchase.</p>
 
-          <p>❤️ Return to recently viewed items.</p>
+          <p>?? Return to recently viewed items.</p>
 
-          <p>❤️ Build a personal collection of interesting finds.</p>
+          <p>?? Build a personal collection of interesting finds.</p>
 
         </div>
 
@@ -1118,63 +1118,63 @@ function HarborRanks() {
         <div className="mt-10 grid gap-6 md:grid-cols-2">
 
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
-            ⚓ <span className="font-black text-amber-200">Swabby</span>
+            ? <span className="font-black text-amber-200">Swabby</span>
             <p className="mt-3 text-slate-300">
               New arrival. Learning the ropes.
             </p>
           </div>
 
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
-            🏮 <span className="font-black text-amber-200">Deckhand</span>
+            ?? <span className="font-black text-amber-200">Deckhand</span>
             <p className="mt-3 text-slate-300">
               First successful voyages.
             </p>
           </div>
 
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
-            🧭 <span className="font-black text-amber-200">Able Seaman</span>
+            ?? <span className="font-black text-amber-200">Able Seaman</span>
             <p className="mt-3 text-slate-300">
               Reliable and steady.
             </p>
           </div>
 
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
-            ⚓⚓ <span className="font-black text-amber-200">Boatswain</span>
+            ?? <span className="font-black text-amber-200">Boatswain</span>
             <p className="mt-3 text-slate-300">
               Trusted crew member.
             </p>
           </div>
 
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
-            💎 <span className="font-black text-amber-200">Quartermaster</span>
+            ?? <span className="font-black text-amber-200">Quartermaster</span>
             <p className="mt-3 text-slate-300">
               Keeper of cargo and trade.
             </p>
           </div>
 
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
-            🌟 <span className="font-black text-amber-200">First Mate</span>
+            ?? <span className="font-black text-amber-200">First Mate</span>
             <p className="mt-3 text-slate-300">
               Veteran sailor and trusted hand.
             </p>
           </div>
 
           <div className="rounded-[2rem] border border-amber-300/30 bg-amber-300/10 p-6">
-            🏴‍☠️ <span className="font-black text-amber-200">Captain</span>
+            ????? <span className="font-black text-amber-200">Captain</span>
             <p className="mt-3 text-slate-200">
               Master merchant and proven leader.
             </p>
           </div>
 
           <div className="rounded-[2rem] border border-cyan-300/30 bg-cyan-300/10 p-6">
-            ⚓⚓⚓ <span className="font-black text-cyan-200">Commodore</span>
+            ??? <span className="font-black text-cyan-200">Commodore</span>
             <p className="mt-3 text-slate-200">
               Distinguished among the fleet.
             </p>
           </div>
 
           <div className="rounded-[2rem] border border-purple-300/30 bg-purple-300/10 p-6">
-            👑 <span className="font-black text-purple-200">Admiral</span>
+            ?? <span className="font-black text-purple-200">Admiral</span>
             <p className="mt-3 text-slate-200">
               Hall of Legends status.
             </p>
@@ -1210,21 +1210,21 @@ function FeaturedCaptains() {
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           <div className="rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
-            <p className="text-5xl">⚒️</p>
+            <p className="text-5xl">??</p>
             <h3 className="mt-4 text-2xl font-black text-amber-200">Davey&apos;s Workshop</h3>
             <p className="mt-3 text-slate-300">Captain of handmade prospecting tools and field gear.</p>
             <p className="mt-4 font-bold text-cyan-200">Rank: First Mate</p>
           </div>
 
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
-            <p className="text-5xl">🏮</p>
+            <p className="text-5xl">??</p>
             <h3 className="mt-4 text-2xl font-black text-amber-200">Old Harbor Finds</h3>
             <p className="mt-3 text-slate-300">Keeper of brass, lanterns, relics, and maritime curiosities.</p>
             <p className="mt-4 font-bold text-cyan-200">Rank: Deckhand</p>
           </div>
 
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6">
-            <p className="text-5xl">🚐</p>
+            <p className="text-5xl">??</p>
             <h3 className="mt-4 text-2xl font-black text-amber-200">Road Dog Salvage</h3>
             <p className="mt-3 text-slate-300">Useful junk, RV parts, and road-life treasure from the long haul.</p>
             <p className="mt-4 font-bold text-cyan-200">Rank: Able Seaman</p>
@@ -1393,7 +1393,7 @@ function About() {
 function Footer() {
   return (
     <footer className="border-t border-white/10 bg-slate-950 px-4 py-10 text-center text-sm text-slate-400">
-      © {new Date().getFullYear()} Davey Jones Junk-N-Treasure
+      � {new Date().getFullYear()} Davey Jones Junk-N-Treasure
     </footer>
   );
 }
@@ -1427,4 +1427,5 @@ export default function Home() {
     </div>
   );
 }
+
 
