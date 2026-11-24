@@ -48,7 +48,7 @@ const sampleItems = [
     category: "Antiques",
     tag: "Captain's Pick",
     seller: "Old Harbor Finds",
-    description: "A weathered brass-style ship lantern with old harbor character, perfect for collectors, nautical décor, cabins, RVs, or treasure-room display.",
+    description: "A weathered brass-style ship lantern with old harbor character, perfect for collectors, nautical dÃ©cor, cabins, RVs, or treasure-room display.",
   },
   {
     title: "Desert Nugget Digger",
@@ -530,10 +530,10 @@ function ListingDetails() {
                 </h3>
 
                 <ul className="mt-4 space-y-2 text-slate-300">
-                  <li>• Handmade Tool</li>
-                  <li>• Arizona Built</li>
-                  <li>• Small Batch Production</li>
-                  <li>• Ships from Seller Location</li>
+                  <li>â€¢ Handmade Tool</li>
+                  <li>â€¢ Arizona Built</li>
+                  <li>â€¢ Small Batch Production</li>
+                  <li>â€¢ Ships from Seller Location</li>
                 </ul>
               </div>
 
@@ -635,7 +635,7 @@ function SellerProfiles() {
                         href={`#item-${item.slug}`}
                         className="block rounded-xl border border-white/10 bg-white/[0.04] p-3 font-bold text-white hover:bg-white/[0.08]"
                       >
-                        {item.title} — {item.price}
+                        {item.title} â€” {item.price}
                       </a>
                     ))}
                 </div>
@@ -695,7 +695,7 @@ function SellerHarbors() {
                         href={`#item-${item.slug}`}
                         className="block rounded-xl border border-white/10 bg-white/[0.04] p-4 font-bold text-white hover:bg-white/[0.08]"
                       >
-                        {item.title} — {item.price}
+                        {item.title} â€” {item.price}
                       </a>
                     ))}
                 </div>
@@ -791,7 +791,7 @@ function HarborRules() {
 
         <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
           <h3 className="font-black text-amber-200">
-            Captain’s Note
+            Captainâ€™s Note
           </h3>
           <p className="mt-3 text-slate-200">
             This is an early Harbor Alpha rules draft. Formal legal terms, privacy policy,
@@ -865,7 +865,7 @@ function CaptainsPromise() {
     >
       <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-8 shadow-xl">
         <p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">
-          Captain’s Promise
+          Captainâ€™s Promise
         </p>
 
         <h2 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
@@ -981,7 +981,7 @@ function ShippingReturns() {
 
         <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
           <h3 className="font-black text-amber-200">
-            Captain’s Reminder
+            Captainâ€™s Reminder
           </h3>
 
           <p className="mt-3 text-slate-200">
@@ -1393,7 +1393,7 @@ function About() {
 function Footer() {
   return (
     <footer className="border-t border-white/10 bg-slate-950 px-4 py-10 text-center text-sm text-slate-400">
-      © {new Date().getFullYear()} Davey Jones Junk-N-Treasure
+      Â© {new Date().getFullYear()} Davey Jones Junk-N-Treasure
     </footer>
   );
 }
