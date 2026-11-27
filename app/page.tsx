@@ -293,23 +293,23 @@ function Hero() {
     href="#join"
     className="w-full rounded-xl border border-amber-300/70 bg-slate-950/75 px-5 py-4 text-center font-bold text-amber-200 transition hover:-translate-y-1 hover:border-amber-200 hover:shadow-[0_0_24px_rgba(252,211,77,0.35)]"
   >
-    ? Become a Seller
+    &#9875; Become a Seller
   </a>
 
   <a
     href="/seller-chest"
     className="w-full rounded-xl border border-amber-300/70 bg-slate-950/75 px-5 py-4 text-center font-bold text-amber-200 transition hover:-translate-y-1 hover:border-amber-200 hover:shadow-[0_0_24px_rgba(252,211,77,0.35)]"
   >
-    ??? Open Seller Chest
+    &#128230; Open Seller Chest
   </a>
 
   <a
     href="/treasure-deck"
     className="w-full rounded-xl border border-cyan-200/50 bg-slate-950/75 px-5 py-4 text-center font-bold text-cyan-100 transition hover:-translate-y-1 hover:border-amber-300 hover:shadow-[0_0_24px_rgba(252,211,77,0.35)]"
   >
-    ?? Explore the Treasure Deck
+    &#128142; Explore the Treasure Deck
   </a>
-</div>``
+</div>
         </motion.div>
       </section>
 
@@ -355,12 +355,12 @@ function Marketplace() {
 >
       <div className="mx-auto max-w-7xl"></div><div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
         <div><p className="text-sm font-black uppercase tracking-[0.3em] text-amber-200">Marketplace Preview</p>
-          <h2 className="mt-0 text-xl font-black tracking-tight text-red-500"> Treasure by category</h2>
+          <h2 className="mt-0 text-xl font-black tracking-tight text-amber-200"> Treasure by category</h2>
           <p className="mt-4 max-w-2xl text-slate-300"></p></div>
         <div className="relative mt-6 w-full md:max-w-sm">
-          <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+          <Search className="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-amber-200" />
           <input value={query} onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search the Treasure deck..." className="relative -top-4 w-full rounded-2xl border border-white/10 bg-white/10 py-4 pl-12 pr-4 text-white placeholder:text-slate-400 outline-none focus:border-amber-200" /></div>
+            placeholder="Search the Treasure deck..." className="w-full rounded-2xl border border-amber-300/40 bg-slate-950/80 py-4 pl-12 pr-4 text-white placeholder:text-slate-400 outline-none focus:border-amber-200" /></div>
       </div>
       <div className="mt-2 flex flex-wrap gap-3">
         {["All Treasure", ...categories].map((category) => {
@@ -607,15 +607,15 @@ function SellerProfiles() {
                 Visit Seller Harbor
               </a>
               <div className="mt-4 space-y-2 text-slate-300">
-                <p>?? Arizona</p>
-                <p>?? Gold Prospecting Tools & Field Equipment</p>
-                <p>? Trusted Harbor Seller</p>
-                <p>?? Ships Throughout the United States</p>
-                <p>????? Harbor Member Since 2026</p>
+                <p>&#128205; Arizona</p>
+                <p>&#9874; Gold Prospecting Tools & Field Equipment</p>
+                <p>&#10003; Trusted Harbor Seller</p>
+                <p>&#128230; Ships Throughout the United States</p>
+                <p>&#9875; Harbor Member Since 2026</p>
               </div>
-              <p>????? 5.0 Harbor Rating</p>
-              <p>? Replies Within 24 Hours</p>
-              <p>?? Specialty: Curated Treasure Finds</p>
+              <p>&#9733;&#9733;&#9733;&#9733;&#9733; 5.0 Harbor Rating</p>
+              <p>&#9889; Replies Within 24 Hours</p>
+              <p>&#127919; Specialty: Curated Treasure Finds</p>
 
               <p className="mt-2 text-slate-300">
                 Listings: {sampleItems.filter((item) => item.seller === seller).length}
@@ -751,10 +751,10 @@ function MessageBottles() {
         <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6 text-slate-200">
           <h3 className="font-black text-amber-200">Harbor Communication Rules</h3>
           <ul className="mt-4 space-y-2">
-            <li>? All buyer-seller communication stays inside Harbor before purchase.</li>
-            <li>? No phone numbers, emails, outside payment links, or social handles before purchase.</li>
-            <li>? Buyer and seller information remains private until the transaction is completed.</li>
-            <li>? Harbor provides the message channel, but does not guarantee items, payments, delivery, or outcomes.</li>
+            <li>&#8226; All buyer-seller communication stays inside Harbor before purchase.</li>
+            <li>&#8226; No phone numbers, emails, outside payment links, or social handles before purchase.</li>
+            <li>&#8226; Buyer and seller information remains private until the transaction is completed.</li>
+            <li>&#8226; Harbor provides the message channel, but does not guarantee items, payments, delivery, or outcomes.</li>
           </ul>
         </div>
 
@@ -779,14 +779,14 @@ function HarborRules() {
         </h2>
 
         <div className="mt-8 space-y-5 text-slate-300">
-          <p>? All buyer and seller communication must remain inside Harbor until purchase is completed.</p>
-          <p>? No phone numbers, emails, payment links, social handles, or outside contact information before purchase.</p>
-          <p>? Buyer and seller information remains private until a transaction is completed.</p>
-          <p>? Davey Jones Junk-N-Treasure provides marketplace, listing, and communication tools only.</p>
-          <p>? Sellers are responsible for item condition, accuracy, shipping, pickup, fulfillment, and seller policies.</p>
-          <p>? Buyers are responsible for reading listings, asking questions, and understanding what they purchase.</p>
-          <p>? Harbor does not guarantee item authenticity, condition, delivery, refunds, payment outcomes, or seller claims.</p>
-          <p>? Harbor may remove listings, sellers, buyers, or messages that violate the Harbor Code.</p>
+          <p>&#8226; All buyer and seller communication must remain inside Harbor until purchase is completed.</p>
+          <p>&#8226; No phone numbers, emails, payment links, social handles, or outside contact information before purchase.</p>
+          <p>&#8226; Buyer and seller information remains private until a transaction is completed.</p>
+          <p>&#8226; Davey Jones Junk-N-Treasure provides marketplace, listing, and communication tools only.</p>
+          <p>&#8226; Sellers are responsible for item condition, accuracy, shipping, pickup, fulfillment, and seller policies.</p>
+          <p>&#8226; Buyers are responsible for reading listings, asking questions, and understanding what they purchase.</p>
+          <p>&#8226; Harbor does not guarantee item authenticity, condition, delivery, refunds, payment outcomes, or seller claims.</p>
+          <p>&#8226; Harbor may remove listings, sellers, buyers, or messages that violate the Harbor Code.</p>
         </div>
 
         <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
@@ -821,21 +821,21 @@ function SafeHarbor() {
 
         <div className="mt-8 space-y-5 text-slate-300">
 
-          <p>? Stolen property and fraudulent listings.</p>
+          <p>&#8226; Stolen property and fraudulent listings.</p>
 
-          <p>? Counterfeit goods and copyright violations.</p>
+          <p>&#8226; Counterfeit goods and copyright violations.</p>
 
-          <p>? Illegal items and prohibited materials.</p>
+          <p>&#8226; Illegal items and prohibited materials.</p>
 
-          <p>? Dangerous chemicals and hazardous substances.</p>
+          <p>&#8226; Dangerous chemicals and hazardous substances.</p>
 
-          <p>? Adult material and exploitative content.</p>
+          <p>&#8226; Adult material and exploitative content.</p>
 
-          <p>? Scam listings, deceptive practices, and misrepresentation.</p>
+          <p>&#8226; Scam listings, deceptive practices, and misrepresentation.</p>
 
-          <p>? Harassment, threats, and abusive behavior.</p>
+          <p>&#8226; Harassment, threats, and abusive behavior.</p>
 
-          <p>? Attempts to bypass Harbor communication and payment systems.</p>
+          <p>&#8226; Attempts to bypass Harbor communication and payment systems.</p>
 
         </div>
 
@@ -873,12 +873,12 @@ function CaptainsPromise() {
         </h2>
 
         <div className="mt-8 space-y-5 text-slate-300">
-          <p>? Buyer and seller contact information stays private before purchase.</p>
-          <p>? Harbor messages remain inside the site to protect both sides.</p>
-          <p>? Payment details are handled through secure payment providers, not stored openly by Harbor.</p>
-          <p>? Seller payout information should be handled by approved payment systems, not manually collected by Harbor.</p>
-          <p>? Harbor may review messages or listings when safety, fraud, or rule violations are suspected.</p>
-          <p>? Personal information should only be released when needed to complete a paid transaction.</p>
+          <p>&#8226; Buyer and seller contact information stays private before purchase.</p>
+          <p>&#8226; Harbor messages remain inside the site to protect both sides.</p>
+          <p>&#8226; Payment details are handled through secure payment providers, not stored openly by Harbor.</p>
+          <p>&#8226; Seller payout information should be handled by approved payment systems, not manually collected by Harbor.</p>
+          <p>&#8226; Harbor may review messages or listings when safety, fraud, or rule violations are suspected.</p>
+          <p>&#8226; Personal information should only be released when needed to complete a paid transaction.</p>
         </div>
 
         <div className="mt-8 rounded-[2rem] border border-cyan-300/20 bg-cyan-300/10 p-6">
@@ -916,23 +916,23 @@ function HarborFees() {
         <div className="mt-8 space-y-5 text-slate-300">
 
           <p>
-            ? Harbor keeps a simple percentage from completed sales.
+            &#8226; Harbor keeps a simple percentage from completed sales.
           </p>
 
           <p>
-            ? Sellers receive the remainder through approved payment systems.
+            &#8226; Sellers receive the remainder through approved payment systems.
           </p>
 
           <p>
-            ? No listing fees during Harbor Alpha.
+            &#8226; No listing fees during Harbor Alpha.
           </p>
 
           <p>
-            ? Premium seller features may be offered in future voyages.
+            &#8226; Premium seller features may be offered in future voyages.
           </p>
 
           <p>
-            ? Fees help support fraud prevention, development, and Harbor operations.
+            &#8226; Fees help support fraud prevention, development, and Harbor operations.
           </p>
 
         </div>
@@ -971,12 +971,12 @@ function ShippingReturns() {
         </h2>
 
         <div className="mt-8 space-y-5 text-slate-300">
-          <p>? Harbor does not own, store, inspect, pack, or ship seller items.</p>
-          <p>? Sellers are responsible for accurate descriptions, item condition, packaging, shipping, pickup, and fulfillment.</p>
-          <p>? Buyers should review listings carefully and ask questions through Message Bottles before purchase.</p>
-          <p>? Shipping costs, pickup options, timelines, and return policies are set by the individual seller unless Harbor later creates site-wide rules.</p>
-          <p>? Harbor does not issue refunds directly unless a future payment policy specifically allows it.</p>
-          <p>? Disputes may be reviewed by Harbor when fraud, misrepresentation, or Harbor Code violations are suspected.</p>
+          <p>&#8226; Harbor does not own, store, inspect, pack, or ship seller items.</p>
+          <p>&#8226; Sellers are responsible for accurate descriptions, item condition, packaging, shipping, pickup, and fulfillment.</p>
+          <p>&#8226; Buyers should review listings carefully and ask questions through Message Bottles before purchase.</p>
+          <p>&#8226; Shipping costs, pickup options, timelines, and return policies are set by the individual seller unless Harbor later creates site-wide rules.</p>
+          <p>&#8226; Harbor does not issue refunds directly unless a future payment policy specifically allows it.</p>
+          <p>&#8226; Disputes may be reviewed by Harbor when fraud, misrepresentation, or Harbor Code violations are suspected.</p>
         </div>
 
         <div className="mt-8 rounded-[2rem] border border-amber-300/20 bg-amber-300/10 p-6">
@@ -1012,23 +1012,23 @@ function HarborReputation() {
         <div className="mt-8 space-y-5 text-slate-300">
 
           <p>
-            ? Harbor Reputation is earned through honesty, communication, and successful voyages.
+            &#8226; Harbor Reputation is earned through honesty, communication, and successful voyages.
           </p>
 
           <p>
-            ? Buyers may someday leave ratings, reviews, and notes about their experience.
+            &#8226; Buyers may someday leave ratings, reviews, and notes about their experience.
           </p>
 
           <p>
-            ? Response times, completed sales, and repeat customers help build a seller's standing.
+            &#8226; Response times, completed sales, and repeat customers help build a seller's standing.
           </p>
 
           <p>
-            ? Harbor recognizes Trusted Harbor Sellers, Captain's Picks, and Featured Captains.
+            &#8226; Harbor recognizes Trusted Harbor Sellers, Captain's Picks, and Featured Captains.
           </p>
 
           <p>
-            ? Reputation takes time to earn and can be lost through dishonesty or Harbor Code violations.
+            &#8226; Reputation takes time to earn and can be lost through dishonesty or Harbor Code violations.
           </p>
 
         </div>
@@ -1070,15 +1070,15 @@ function TreasureChest() {
 
         <div className="mt-8 space-y-5 text-slate-300">
 
-          <p>?? Save favorite treasures for future voyages.</p>
+          <p>&#8226; Save favorite treasures for future voyages.</p>
 
-          <p>?? Follow trusted captains and their harbors.</p>
+          <p>&#8226; Follow trusted captains and their harbors.</p>
 
-          <p>?? Watch treasures before committing to purchase.</p>
+          <p>&#8226; Watch treasures before committing to purchase.</p>
 
-          <p>?? Return to recently viewed items.</p>
+          <p>&#8226; Return to recently viewed items.</p>
 
-          <p>?? Build a personal collection of interesting finds.</p>
+          <p>&#8226; Build a personal collection of interesting finds.</p>
 
         </div>
 
@@ -1256,7 +1256,7 @@ function Cards({ items }: { items: [string, string, React.ReactNode?][] }) {
 
 function IdentityAndBuild() {
   const tech = [["Frontend", "React/Next.js for the public site, marketplace pages, seller dashboard, admin panel, and mobile layout.", <MonitorSmartphone className="h-9 w-9 text-amber-200" key="a" />], ["Database", "PostgreSQL through Supabase or Neon for users, sellers, listings, images, orders, messages, and moderation.", <Database className="h-9 w-9 text-amber-200" key="b" />], ["Login System", "Supabase Auth, Clerk, or Auth.js for buyers, sellers, admins, dashboards, and permissions.", <LockKeyhole className="h-9 w-9 text-amber-200" key="c" />], ["Image Uploads", "Cloudinary, Supabase Storage, or S3-compatible storage for product photos and homepage artwork.", <UploadCloud className="h-9 w-9 text-amber-200" key="d" />], ["Payments", "Stripe Connect first for marketplace payment splitting and seller payouts; PayPal Commerce later.", <Gem className="h-9 w-9 text-amber-200" key="e" />], ["Admin Control", "Moderation queue, listing approval, seller flags, disputes, refunds, and prohibited item controls.", <ShieldCheck className="h-9 w-9 text-amber-200" key="f" />]] as [string, string, React.ReactNode][];
-  return <><Section id="identity" eyebrow="Official Identity System" title="The permanent h-40face of the harbor."><p className="mt-6 max-w-4xl text-lg leading-8 text-slate-300">A cinematic maritime marketplace identity built around discovery, mystery, forgotten valuables, and trustworthy seller culture.</p><div className="mt-8 flex flex-wrap gap-4">{brandButtons.map((button) => <button key={button} className="rounded-full border border-amber-200/20 bg-gradient-to-br from-slate-950 to-cyan-950 px-6 py-4 font-black text-amber-100 shadow-xl transition hover:scale-[1.03] hover:border-amber-200/40">{button}</button>)}</div></Section><Section id="build" eyebrow="Marketplace V2 Build Plan" title="The real engine underneath the Treasure deck."><Cards items={tech} /></Section></>;
+  return <><Section id="identity" eyebrow="Official Identity System" title="The permanent face of the harbor."><p className="mt-6 max-w-4xl text-lg leading-8 text-slate-300">A cinematic maritime marketplace identity built around discovery, mystery, forgotten valuables, and trustworthy seller culture.</p><div className="mt-8 flex flex-wrap gap-4">{brandButtons.map((button) => <button key={button} className="rounded-full border border-amber-200/20 bg-gradient-to-br from-slate-950 to-cyan-950 px-6 py-4 font-black text-amber-100 shadow-xl transition hover:scale-[1.03] hover:border-amber-200/40">{button}</button>)}</div></Section><Section id="build" eyebrow="Marketplace V2 Build Plan" title="The real engine underneath the Treasure deck."><Cards items={tech} /></Section></>;
 }
 
 function SellerInviteForm() {
