@@ -23,6 +23,9 @@ model User {
 }
 
 model Seller {
+  foundingCrewJoinedAt DateTime?
+  foundingFeeStartsAt  DateTime?
+  foundingFeeEndsAt    DateTime?
   id              String  @id
   name            String
   stripeAccountId String? @unique
@@ -158,4 +161,10 @@ model SavedSeller {
 
   @@unique([userId, sellerId])
   @@index([sellerId])
+}
+
+model HarborProgram {
+  id        String    @id
+  launchAt  DateTime?
+  createdAt DateTime  @default(now())
 }

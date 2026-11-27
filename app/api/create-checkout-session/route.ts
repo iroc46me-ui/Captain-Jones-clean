@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { randomUUID } from "node:crypto";
 import { createGuestCheckoutCredential } from "../../../lib/guest-checkout";
 
-const DEFAULT_HARBOR_FEE_PERCENT = 5;
+import { getHarborFeePercent } from "../../../lib/harbor-fees";
 const RESERVATION_MINUTES = 35;
 
 export async function POST(request: Request) {
@@ -286,7 +286,10 @@ export async function POST(request: Request) {
       SELECT
         "id",
         "name",
-        "stripeAccountId"
+        "stripeAccountId",
+        "foundingCrewJoinedAt",
+        "foundingFeeStartsAt",
+        "foundingFeeEndsAt"
       FROM "Seller"
       WHERE "id" = ${sellerId}
       LIMIT 1
@@ -319,8 +322,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const feePercent =
-      DEFAULT_HARBOR_FEE_PERCENT;
+    const feePercent = getHarborFeePercent({
+      foundingCrewJoinedAt: sellerRows[0].foundingCrewJoinedAt,
+      foundingFeeStartsAt: sellerRows[0].foundingFeeStartsAt,
+      foundingFeeEndsAt: sellerRows[0].foundingFeeEndsAt,
+    });
 
     const harborFeeInCents = Math.round(
       priceInCents * (feePercent / 100)
