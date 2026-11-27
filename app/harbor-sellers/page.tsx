@@ -1,9 +1,48 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { sellers } from "../../lib/sellers";
 
 export default function HarborSellersPage() {
+  const [stripeVerified, setStripeVerified] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadStripeStatuses() {
+      const results = await Promise.all(
+        sellers.map(async (seller) => {
+          try {
+            const response = await fetch(
+              `/api/seller-payment-status?sellerId=${encodeURIComponent(seller.id)}`,
+              { cache: "no-store" }
+            );
+
+            const data = await response.json();
+
+            return [
+              seller.id,
+              response.ok && data.ok === true &&
+              data.readyForPayouts === true
+            ] as const;
+          } catch {
+            return [seller.id, false] as const;
+          }
+        })
+      );
+
+      if (!cancelled) {
+        setStripeVerified(Object.fromEntries(results));
+      }
+    }
+
+    loadStripeStatuses();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
     const [savedSellerIds, setSavedSellerIds] = useState<string[]>([]);
   const [savingSellerId, setSavingSellerId] = useState<string | null>(null);
   const [saveSellerError, setSaveSellerError] = useState<string | null>(null);
@@ -146,9 +185,16 @@ export default function HarborSellersPage() {
                       {savingSellerId === seller.id
                         ? "Saving..."
                         : savedSellerIds.includes(seller.id)
-                          ? "â˜… Saved Seller"
-                          : "â˜† Save Seller"}
+                          ? "\u2605 Saved Seller"
+                          : "\u2606 Save Seller"}
                     </button>
+                    {stripeVerified[seller.id] === true && (
+                      <div className="mt-3">
+                        <span className="inline-flex max-w-full items-center rounded-full border border-emerald-400/50 bg-emerald-950/60 px-3 py-2 text-xs font-bold text-emerald-300 sm:text-sm">
+                          &#10003; Stripe Verified &mdash; Ready for Payouts
+                        </span>
+                      </div>
+                    )}
 
                     <p className="mt-4 text-sm text-slate-300">
   Explore this seller&apos;s treasures and available listings.
@@ -157,15 +203,15 @@ export default function HarborSellersPage() {
                 </div>
 
                 <div className="mt-7 space-y-2 text-slate-200">
-                  <p>ðŸ“ {seller.location}</p>
-                  <p>âš’ï¸ {seller.category}</p>
-                  <p>â­ Trusted Harbor Seller</p>
-                  <p>ðŸ“¦ Ships Throughout the United States</p>
-                  <p>ðŸ´â€â˜ ï¸ {seller.memberSince}</p>
-                  <p>â­â­â­â­â­ {seller.rating}</p>
-                  <p>âš¡ {seller.response}</p>
-                  <p>ðŸŽ¯ Specialty: {seller.specialty}</p>
-                  <p>Listings: {seller.listings}</p>
+                  <p>&#128205; {seller.location}</p>
+                  <p>&#9874; {seller.category}</p>
+                  <p>&#10003; Trusted Harbor Seller</p>
+                  <p>&#128230; Ships Throughout the United States</p>
+                  <p>&#9875; {seller.memberSince}</p>
+                  <p>&#9733;&#9733;&#9733;&#9733;&#9733; {seller.rating}</p>
+                  <p>&#9889; {seller.response}</p>
+                  <p>&#127919; Specialty: {seller.specialty}</p>
+                  <p>&#128230; {seller.listings} Active {seller.listings === 1 ? "Listing" : "Listings"}</p>
                 </div>
 
                 <div
@@ -186,7 +232,7 @@ export default function HarborSellersPage() {
                         href={item.href}
                         className="block rounded-xl border border-white/10 bg-black/35 p-4 font-bold text-white transition hover:border-amber-300/40 hover:bg-black/55"
                       >
-                        {item.title} â€” {item.price}
+                        {item.title} &mdash; {item.price}
                       </a>
                     ))}
                   </div>
@@ -199,7 +245,7 @@ export default function HarborSellersPage() {
             href="/"
             className="mt-10 inline-block rounded-full border border-amber-300/40 bg-slate-950/70 px-6 py-3 font-black text-amber-200 transition hover:bg-amber-300 hover:text-slate-950"
           >
-            â† Return to Harbor
+            &#8592; Return to Harbor
           </a>
         </section>
       </div>
